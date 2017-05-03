@@ -2,13 +2,13 @@ const firebase = require('firebase')
 
 // -- // -- // -- // Firebase Config // -- // -- // -- //
 const config = {
-  apiKey: 'AIzaSyBzz-Wq2dzMgM7E8cdSYnYoX5fbVUT-XQo',
-  authDomain: 'firebones-6bc2a.firebaseapp.com',
-  databaseURL: 'https://firebones-6bc2a.firebaseio.com',
-  projectId: 'firebones-6bc2a',
-  storageBucket: 'firebones-6bc2a.appspot.com',
-  messagingSenderId: '1030378391678'
-}
+  apiKey: "AIzaSyAA3BGumGYqFILRzyv-vye-lZ-AhneyYqU",
+  authDomain: "stackquest-b5399.firebaseapp.com",
+  databaseURL: "https://stackquest-b5399.firebaseio.com",
+  projectId: "stackquest-b5399",
+  storageBucket: "stackquest-b5399.appspot.com",
+  messagingSenderId: "873444861073"
+};
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 // Initialize the app, but make sure to do it only once.
