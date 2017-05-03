@@ -13,6 +13,3 @@ npm-debug.log
 
 # Firebase debug log
 firebase-debug.log
-
-#Firebase Api
-fire/index.js
