@@ -1,14 +1,13 @@
 const firebase = require('firebase')
 
 // -- // -- // -- // Firebase Config // -- // -- // -- //
-// Environment keys are in the '.stackquest.env.json' file in home folder
 const config = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: 'AIzaSyAA3BGumGYqFILRzyv-vye-lZ-AhneyYqU',
   authDomain: 'stackquest-b5399.firebaseapp.com',
   databaseURL: 'https://stackquest-b5399.firebaseio.com',
   projectId: 'stackquest-b5399',
   storageBucket: 'stackquest-b5399.appspot.com',
-  messagingSenderId: process.env.MESSAGING_SENDER_ID
+  messagingSenderId: '873444861073'
 }
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
