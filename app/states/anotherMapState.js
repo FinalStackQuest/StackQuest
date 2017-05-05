@@ -41,7 +41,7 @@ const anotherMapState = {
       this.state.start('mapState', true, false, CGuy.position.x+20, CGuy.position.y)
     }
     if (CGuy.body.down >= this.world.bounds.down) {
-      this.state.start('mapState', true, false, CGuy.position.x, CGuy.position.y+20)
+      this.state.start('mapState', true, false, CGuy.position.x, CGuy.position.y-20)
     }
     if (CGuy.body.right >= this.world.bounds.right) {
       this.state.start('mapState', true, false, CGuy.position.x-20, CGuy.position.y)

@@ -42,7 +42,7 @@ const mapState = {
       this.state.start('anotherMapState', true, false, AGuy.position.x+20, AGuy.position.y)
     }
     if (AGuy.body.down >= this.world.bounds.down) {
-      this.state.start('anotherMapState', true, false, AGuy.position.x, AGuy.position.y+20)
+      this.state.start('anotherMapState', true, false, AGuy.position.x, AGuy.position.y-20)
     }
     if (AGuy.body.right >= this.world.bounds.right) {
       this.state.start('anotherMapState', true, false, AGuy.position.x-20, AGuy.position.y)
