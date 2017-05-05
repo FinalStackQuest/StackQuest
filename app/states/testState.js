@@ -1,43 +1,55 @@
 import StackQuest from '../main'
 
-let cursors
-  , backgroundText
+let map
+  , layer
+  , cursors
   , fixedText
 
 const testState = {
   preload() {
-
+    StackQuest.load.tilemap('testmap', 'maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
+    StackQuest.load.image('tiles', 'maps/terrain.png')
   },
 
   create() {
-    //  Modify the world and camera bounds
-    StackQuest.world.setBounds(0, 0, 1920, 1080)
+    StackQuest.physics.startSystem(Phaser.Physics.P2JS)
 
-    backgroundText = StackQuest.add.text(StackQuest.world.width / 2, StackQuest.world.height / 2, 'X', { font: '32px Arial', fill: '#f26c4f', align: 'center' })
+    map = StackQuest.add.tilemap('testmap')
 
-    fixedText = StackQuest.add.text(0, 0, 'O', { font: '32px Arial', fill: '#ffffff', align: 'center' })
-    fixedText.fixedToCamera = true
-    fixedText.cameraOffset.setTo(StackQuest.width / 2, StackQuest.height / 2)
+    map.addTilesetImage('terrain', 'tiles')
+
+    layer = map.createLayer('terrainlayer')
+
+    layer.resizeWorld()
+
+    map.setCollisionBetween(278, 280)
+    map.setCollision(310)
+    map.setCollision(312)
+    map.setCollisionBetween(342, 344)
+
+    StackQuest.physics.p2.convertTilemap(map, layer)
+
+    fixedText = StackQuest.add.text(100, 100, 'O', { font: '32px Arial', fill: '#ffffff', align: 'center' })
+    StackQuest.physics.p2.enable(fixedText)
+
+    StackQuest.camera.follow(fixedText)
+
+    StackQuest.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
     cursors = StackQuest.input.keyboard.createCursorKeys()
-
-    StackQuest.physics.enable(backgroundText, Phaser.Physics.ARCADE)
-    StackQuest.physics.enable(fixedText, Phaser.Physics.ARCADE)
   },
 
   update() {
+    fixedText.body.setZeroVelocity()
+
     if (cursors.up.isDown) {
-      if (StackQuest.physics.arcade.collide(backgroundText, fixedText)) StackQuest.camera.y += 4
-      else StackQuest.camera.y -= 4
+      fixedText.body.moveUp(200)
     } else if (cursors.down.isDown) {
-      if (StackQuest.physics.arcade.collide(backgroundText, fixedText)) StackQuest.camera.y -= 4
-      else StackQuest.camera.y += 4
+      fixedText.body.moveDown(200)
     } if (cursors.left.isDown) {
-      if (StackQuest.physics.arcade.collide(backgroundText, fixedText)) StackQuest.camera.x += 4
-      else StackQuest.camera.x -= 4
+      fixedText.body.moveLeft(200)
     } else if (cursors.right.isDown) {
-      if (StackQuest.physics.arcade.collide(backgroundText, fixedText)) StackQuest.camera.x -= 4
-      else StackQuest.camera.x += 4
+      fixedText.body.moveRight(200)
     }
   },
 
