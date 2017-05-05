@@ -1,14 +1,20 @@
 require('pixi')
 require('p2')
-require('phaser')
+const Phaser = require('phaser')
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update })
+import testState from './states/testState'
+import mapState from './states/mapState'
+import anotherMapState from './states/anotherMapState'
 
-function preload() {
-}
+// Initialize game
+var StackQuest = new Phaser.Game(1280, 720, Phaser.AUTO, 'main')
 
-function create() {
-}
+// Add all the states
+StackQuest.state.add('testState', testState)
+StackQuest.state.add('mapState', mapState)
+StackQuest.state.add('anotherMapState', anotherMapState)
+// Start StackQuest Game
+// StackQuest.state.start('testState')
+StackQuest.state.start('mapState')
 
-function update() {
-}
+export default StackQuest
