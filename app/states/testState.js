@@ -7,8 +7,8 @@ let map
 
 const testState = {
   preload() {
-    StackQuest.load.tilemap('testmap', 'maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    StackQuest.load.image('tiles', 'maps/terrain.png')
+    StackQuest.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
+    StackQuest.load.image('tiles', 'assets/tilesets/LPC_Terrain/terrain.png')
   },
 
   create() {
