@@ -4,9 +4,12 @@ let cursors, CGuy, DGuy, ZGuy
 const anotherMapState = {
   init: function(x, y) {
     if (!x && !y) return
-    console.log('x', x)
-    console.log('y', y)
-    ZGuy = this.add.text(x, y, 'Z', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
+    // ZGuy = this.add.text(x, y, 'Z', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
+    CGuy = this.add.text(x, y, 'C', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
+    cursors = this.input.keyboard.createCursorKeys()
+    this.physics.enable(CGuy, Phaser.Physics.ARCADE)
+    CGuy.body.collideWorldBounds = true
+    this.camera.follow(CGuy)
   },
   preload: function() {
 
@@ -15,19 +18,33 @@ const anotherMapState = {
     this.world.setBounds(0, 0, 1920, 1080)
 
     // Mover
-    CGuy = this.add.text(200, 200, 'C', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
-    cursors = this.input.keyboard.createCursorKeys()
-    this.physics.enable(CGuy, Phaser.Physics.ARCADE)
-    CGuy.body.collideWorldBounds = true
-    this.camera.follow(CGuy)
+    if (!CGuy) {
+      CGuy = this.add.text(200, 200, 'C', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
+      cursors = this.input.keyboard.createCursorKeys()
+      this.physics.enable(CGuy, Phaser.Physics.ARCADE)
+      CGuy.body.collideWorldBounds = true
+      this.camera.follow(CGuy)
+    }
+
     // Transportation
     DGuy = this.add.text(400, 400, 'D', { font: '32px Arial', fill: '#f27c4f', align: 'center' })
     StackQuest.physics.enable(DGuy, Phaser.Physics.ARCADE)
-    console.log('A Guy Stuff', CGuy)
   },
   update: function() {
-    if (CGuy.body.blocked.up || CGuy.body.blocked.down || CGuy.body.blocked.left || CGuy.body.blocked.right){
-      this.state.start('mapState', true, false, CGuy.position.x, CGuy.position.y)
+    // if (CGuy.body.blocked.up || CGuy.body.blocked.down || CGuy.body.blocked.left || CGuy.body.blocked.right){
+    //   this.state.start('mapState', true, false, CGuy.position.x, CGuy.position.y)
+    // }
+    if (CGuy.body.top <= this.world.bounds.top) {
+      this.state.start('mapState', true, false, CGuy.position.x, CGuy.position.y+20)
+    }
+    if (CGuy.body.left <= this.world.bounds.left) {
+      this.state.start('mapState', true, false, CGuy.position.x+20, CGuy.position.y)
+    }
+    if (CGuy.body.down >= this.world.bounds.down) {
+      this.state.start('mapState', true, false, CGuy.position.x, CGuy.position.y+20)
+    }
+    if (CGuy.body.right >= this.world.bounds.right) {
+      this.state.start('mapState', true, false, CGuy.position.x-20, CGuy.position.y)
     }
     if (this.physics.arcade.collide(CGuy, DGuy)) {
       this.state.start('mapState')
