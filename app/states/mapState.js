@@ -17,11 +17,15 @@ const mapState = {
     // Transportation
     BGuy = this.add.text(400, 400, 'B', { font: '32px Arial', fill: '#f27c4f', align: 'center' })
     StackQuest.physics.enable(BGuy, Phaser.Physics.ARCADE)
-    console.log('A Guy Stuff', AGuy)
+    // console.log('A Guy Stuff initial', AGuy)
   },
   update: function() {
+    // console.log('A Guy Stuff', AGuy)
+    if (AGuy.body.blocked.up || AGuy.body.blocked.down || AGuy.body.blocked.left || AGuy.body.blocked.right){
+      this.state.start('anotherMapState')
+    }
     if (this.physics.arcade.collide(AGuy, BGuy)) {
-      this.state.start('testState')
+      this.state.start('anotherMapState')
     }
     if (cursors.up.isDown) {
       AGuy.position.y -= 2
@@ -34,7 +38,7 @@ const mapState = {
     }
   },
   render: function() {
-    StackQuest.debug.cameraInfo(StackQuest.camera, 32, 32)
+    this.game.debug.cameraInfo(StackQuest.camera, 32, 32)
   }
 }
 
