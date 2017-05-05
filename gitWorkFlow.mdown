@@ -1,0 +1,36 @@
+
+- Team comes up with issue
+- Team assigns person or pair (**A**) to issue
+
+FOR A NEW ISSUE:
+- **A** does `git checkout master`
+- **A** does `git pull origin  master` to sync up
+- **A** does `git checkout -b the-name-of-the-feature-or-whatever`
+- **A** does `git push --set-upstream origin the-name-of-the-feature-or-whatever` (DO HERE SO WAFFLE UPDATES)
+
+MULTIPLE TIME:
+  - **A** makes changes
+  - **A** does `git add -A`
+  - **A** does `git commit -m "Useful message goes here"`
+  - **A** does `git push origin the-name-of-the-feature-or-whatever`
+    - Use "imperative mood": `update documentation about dinosaur skull stuff` as opposed to `updated the documentation about dinosaur skull stuff` ([more here](https://chris.beams.io/posts/git-commit/))
+    - Use a label upfront, here are some good ones: `fix`, `perf`, `refactor`, `style`, `test`, `feat`, `chore`, `docs` ([more here](https://seesparkbox.com/foundry/semantic_commit_messages))
+
+WHEN READY TO MAKE YOUR PULL REQUEST
+- Eventually **A** feels the code is ready
+- **A** does `git checkout master`
+- **A** does `git pull origin master`
+- **A** does `git checkout the-name-of-the-feature-or-whatever`
+- **A** does `git merge master` to sync with existing code
+- **A** does `git push origin the-name-of-the-feature-or-whatever`
+- **A** clicks "COMPARE & PULL REQUEST" in Github.com/GraceShopper/LisasBikes
+- **A** adds a message "closes #issue-number-from-waffle" and presses "Create Pull Request"
+- **A** assigns some other person / people (**B**) to review it
+- **B** makes comments, suggests changes
+- **A** whines about it, but makes the changes
+- Eventually, **B** approves
+- **A** hits Merge Pull Request in github
+- **A** hits Delete Branch in github
+- **A** does `git checkout master`
+- **A** does `git branch -d the-name-of-the-feature-or-whatever` to delete the branch locally
+-Return to top!
