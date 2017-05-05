@@ -11,7 +11,7 @@ let map
 
 const testState = {
   preload() {
-    StackQuest.load.spritesheet('link', '../assets/link.png', 100, 100)
+    StackQuest.load.spritesheet('link', '../assets/link.png', 100, 50)
     StackQuest.load.tilemap('testmap', 'maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
     StackQuest.load.image('tiles', 'maps/terrain.png')
   },
@@ -61,16 +61,16 @@ const testState = {
     fixedText.body.setZeroVelocity()
     if (cursors.up.isDown) {
       fixedText.body.moveUp(200)
-      updateCoordinates(fixedText.position.x, fixedText.position.y, 0, dummyCharId)
+      updateCoordinates(fixedText.position.x, fixedText.position.y, fixedText.body.rotation, dummyCharId)
     } else if (cursors.down.isDown) {
       fixedText.body.moveDown(200)
-      updateCoordinates(fixedText.position.x, fixedText.position.y, 0, dummyCharId)
+      updateCoordinates(fixedText.position.x, fixedText.position.y, fixedText.body.rotation, dummyCharId)
     } if (cursors.left.isDown) {
       fixedText.body.moveLeft(200)
-      updateCoordinates(fixedText.position.x, fixedText.position.y, 0, dummyCharId)
+      updateCoordinates(fixedText.position.x, fixedText.position.y, fixedText.body.rotation, dummyCharId)
     } else if (cursors.right.isDown) {
       fixedText.body.moveRight(200)
-      updateCoordinates(fixedText.position.x, fixedText.position.y, 0, dummyCharId)
+      updateCoordinates(fixedText.position.x, fixedText.position.y, fixedText.body.rotation, dummyCharId)
     }
   },
 
