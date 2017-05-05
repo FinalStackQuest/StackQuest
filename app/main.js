@@ -2,7 +2,8 @@ require('pixi')
 require('p2')
 const Phaser = require('phaser')
 
-import testState from './states/testState'
+// import testState from './states/testState'
+import testState from './states/testMulti'
 import mapState from './states/mapState'
 import anotherMapState from './states/anotherMapState'
 
