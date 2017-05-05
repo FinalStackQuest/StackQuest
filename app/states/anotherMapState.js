@@ -1,7 +1,13 @@
 import StackQuest from '../main'
 
-let cursors, CGuy, DGuy
+let cursors, CGuy, DGuy, ZGuy
 const anotherMapState = {
+  init: function(x, y) {
+    if (!x && !y) return
+    console.log('x', x)
+    console.log('y', y)
+    ZGuy = this.add.text(x, y, 'Z', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
+  },
   preload: function() {
 
   },
@@ -21,7 +27,7 @@ const anotherMapState = {
   },
   update: function() {
     if (CGuy.body.blocked.up || CGuy.body.blocked.down || CGuy.body.blocked.left || CGuy.body.blocked.right){
-      this.state.start('mapState')
+      this.state.start('mapState', true, false, CGuy.position.x, CGuy.position.y)
     }
     if (this.physics.arcade.collide(CGuy, DGuy)) {
       this.state.start('mapState')
