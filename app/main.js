@@ -15,6 +15,6 @@ StackQuest.state.add('mapState', mapState)
 StackQuest.state.add('anotherMapState', anotherMapState)
 // Start StackQuest Game
 // StackQuest.state.start('testState')
-StackQuest.state.start('mapState')
+StackQuest.state.start('testState')
 
 export default StackQuest
