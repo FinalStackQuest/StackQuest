@@ -18,6 +18,7 @@ export function updateGame(characters) {
   for (const characterId in characters) {
     if (!GamePlayers[characterId]) {
       GamePlayers[characterId] = StackQuest.add.text(characters[characterId].position.x, characters[characterId].position.y, 'wizard', { font: '32px Arial', fill: '#ffffff', align: 'center' })
+      GamePlayers[characterId].anchor.setTo(5, 1)
     } else {
       const currentPlayer = GamePlayers[characterId]
       currentPlayer.position.x = characters[characterId].position.x
@@ -40,7 +41,7 @@ onCharacterUpdate.on('value', snapshot => {
 export function addCharacter(currentCharId, character) {
   GamePlayers[currentCharId] = StackQuest.add.text(character.position.x, character.position.y, 'wizard', { font: '32px Arial', fill: '#ffffff', align: 'center' })
   // GamePlayers[currentCharId] = StackQuest.add.sprite(character.position.x, character.position.y, 'link')
-  GamePlayers[currentCharId].frame = 0
+  GamePlayers[currentCharId].anchor.setTo(5, 1)
   database.ref('characters/' + currentCharId).set(character)
 }
 
