@@ -2,7 +2,8 @@ require('pixi')
 require('p2')
 const Phaser = require('phaser')
 
-import testState from './states/testState'
+// import testState from './states/testState'
+import testState from './states/testMulti'
 
 // Initialize game
 var StackQuest = new Phaser.Game(1280, 720, Phaser.AUTO, 'main')
