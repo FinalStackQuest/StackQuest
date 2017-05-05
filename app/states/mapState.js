@@ -7,7 +7,8 @@ const mapState = {
     // ZGuy = this.add.text(x, y, 'Z', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
     AGuy = this.add.text(x, y, 'A', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
     cursors = this.input.keyboard.createCursorKeys()
-    this.physics.enable(AGuy, Phaser.Physics.ARCADE)
+    this.physics.p2.enable(AGuy)
+    //this.physics.enable(AGuy, Phaser.Physics.PSJS)
     AGuy.body.collideWorldBounds = true
     this.camera.follow(AGuy)
   },
@@ -21,13 +22,15 @@ const mapState = {
     if (!AGuy) {
       AGuy = this.add.text(200, 200, 'A', { font: '18px Arial', fill: '#f26c4f', align: 'center' })
       cursors = this.input.keyboard.createCursorKeys()
-      this.physics.enable(AGuy, Phaser.Physics.ARCADE)
+      // this.physics.enable(AGuy, Phaser.Physics.PSJS)
+      this.physics.p2.enable(AGuy)
+      console.log(AGuy)
       AGuy.body.collideWorldBounds = true
       this.camera.follow(AGuy)
     }
     // Transportation
     BGuy = this.add.text(400, 400, 'B', { font: '32px Arial', fill: '#f27c4f', align: 'center' })
-    StackQuest.physics.enable(BGuy, Phaser.Physics.ARCADE)
+    StackQuest.physics.enable(BGuy)
     // console.log('A Guy Stuff initial', AGuy)
   },
   update: function() {
@@ -48,7 +51,7 @@ const mapState = {
       this.state.start('anotherMapState', true, false, AGuy.position.x-20, AGuy.position.y)
     }
     // if (AGuy.body.blocked.up) this.state.start('anotherMapState', true, false, AGuy.position.x, AGuy.position.y + 5)
-    if (this.physics.arcade.collide(AGuy, BGuy)) {
+    if (this.physics.p2.collide(AGuy, BGuy)) {
       this.state.start('anotherMapState')
     }
     if (cursors.up.isDown) {
