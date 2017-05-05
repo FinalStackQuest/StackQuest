@@ -1,5 +1,5 @@
 // import {addCharacter, onCharacterUpdate, updateCoordinates, updateOnCharacterMovement} from './firebase-database'
-// import {PlayerState} from './player'
+// import {PlayerState} from '../states/player'
 //
 // let map
 //   , layer

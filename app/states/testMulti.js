@@ -1,8 +1,16 @@
-import StackQuest from '../main'
-
 // Util functions for firebase database
 import {addCharacter, GamePlayers, onCharacterUpdate, updateCoordinates, updateOnCharacterMovement} from './firebase-database'
 const dummyCharId = `character${Math.floor(Math.random()*50)}`
+
+const testObj = {
+  class: 'wizard',
+  position: {
+    x: Math.random()*400,
+    y: Math.random()*400,
+    direction: 0,
+    rotation: 0,
+  }
+}
 
 let map
   , layer
@@ -11,15 +19,15 @@ let map
 
 const testState = {
   preload() {
-    StackQuest.load.spritesheet('link', '../assets/link.png', 100, 50)
-    StackQuest.load.tilemap('testmap', 'maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    StackQuest.load.image('tiles', 'maps/terrain.png')
+    this.load.spritesheet('link', '../assets/link.png', 100, 50)
+    this.load.tilemap('testmap', 'maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
+    this.load.image('tiles', 'maps/terrain.png')
   },
 
   create() {
-    StackQuest.physics.startSystem(Phaser.Physics.P2JS)
+    this.physics.startSystem(Phaser.Physics.P2JS)
 
-    map = StackQuest.add.tilemap('testmap')
+    map = this.add.tilemap('testmap')
 
     map.addTilesetImage('terrain', 'tiles')
 
@@ -32,33 +40,24 @@ const testState = {
     map.setCollision(312)
     map.setCollisionBetween(342, 344)
 
-    StackQuest.physics.p2.convertTilemap(map, layer)
+    this.physics.p2.convertTilemap(map, layer)
 
-    const testObj = {
-      class: 'wizard',
-      position: {
-        x: Math.random()*400,
-        y: Math.random()*400,
-        direction: 0,
-        rotation: 0,
-      }
-    }
+    this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
-    StackQuest.physics.p2.setBoundsToWorld(true, true, true, true, false)
-
-    cursors = StackQuest.input.keyboard.createCursorKeys()
+    cursors = this.input.keyboard.createCursorKeys()
 
     addCharacter(dummyCharId, testObj)
 
     fixedText = GamePlayers[dummyCharId]
 
-    StackQuest.physics.p2.enable(fixedText)
+    this.physics.p2.enable(fixedText)
 
-    StackQuest.camera.follow(fixedText)
+    this.camera.follow(fixedText)
   },
 
   update() {
     fixedText.body.setZeroVelocity()
+    fixedText.body.fixedRotation = true
     if (cursors.up.isDown) {
       fixedText.body.moveUp(200)
       updateCoordinates(fixedText.position.x, fixedText.position.y, fixedText.body.rotation, dummyCharId)
@@ -75,7 +74,7 @@ const testState = {
   },
 
   render() {
-    StackQuest.debug.cameraInfo(StackQuest.camera, 32, 32)
+    this.game.debug.cameraInfo(this.camera, 32, 32)
   }
 }
 

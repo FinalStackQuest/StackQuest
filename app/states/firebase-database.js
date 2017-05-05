@@ -46,6 +46,3 @@ export function addCharacter(currentCharId, character) {
 }
 
 // A listener for a new character
-export const addedCharacter = database.ref('characters/')
-addedCharacter.on('child_added', snapshot => {
-})

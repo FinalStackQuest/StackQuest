@@ -41,6 +41,6 @@
 //     }
 //   },
 //   render() {
-//     this.debug.cameraInfo(this.camera, 32, 32)
+//     this.game.debug.cameraInfo(this.camera, 32, 32)
 //   }
 // }
