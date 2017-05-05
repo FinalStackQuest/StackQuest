@@ -1,5 +1,3 @@
-import StackQuest from '../main'
-
 let map
   , grassLayer
   , waterLayer
@@ -11,15 +9,15 @@ let map
 
 const testState = {
   preload() {
-    StackQuest.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    StackQuest.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
-    StackQuest.load.image('terrainAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
+    this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
+    this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
+    this.load.image('terrainAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
   },
 
   create() {
-    StackQuest.physics.startSystem(Phaser.Physics.P2JS)
+    this.physics.startSystem(Phaser.Physics.P2JS)
 
-    map = StackQuest.add.tilemap('testmap')
+    map = this.add.tilemap('testmap')
 
     map.addTilesetImage('terrain', 'terrainTiles')
     map.addTilesetImage('terrain_atlas', 'terrainAtlasTiles')
@@ -40,21 +38,22 @@ const testState = {
     map.setCollisionBetween(187, 189, true, waterLayer)
     map.setCollision(1691, true, treeRootLayer)
 
-    StackQuest.physics.p2.convertTilemap(map, waterLayer)
-    StackQuest.physics.p2.convertTilemap(map, treeRootLayer)
+    this.physics.p2.convertTilemap(map, waterLayer)
+    this.physics.p2.convertTilemap(map, treeRootLayer)
 
-    fixedText = StackQuest.add.text(100, 100, 'O', { font: '32px Arial', fill: '#ffffff', align: 'center' })
-    StackQuest.physics.p2.enable(fixedText)
+    fixedText = this.add.text(100, 100, 'O', { font: '32px Arial', fill: '#ffffff', align: 'center' })
+    this.physics.p2.enable(fixedText)
 
-    StackQuest.camera.follow(fixedText)
+    this.camera.follow(fixedText)
 
-    StackQuest.physics.p2.setBoundsToWorld(true, true, true, true, false)
+    this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
-    cursors = StackQuest.input.keyboard.createCursorKeys()
+    cursors = this.input.keyboard.createCursorKeys()
   },
 
   update() {
     fixedText.body.setZeroVelocity()
+    fixedText.body.fixedRotation = true
 
     if (cursors.up.isDown) {
       fixedText.body.moveUp(200)
@@ -68,7 +67,7 @@ const testState = {
   },
 
   render() {
-    StackQuest.debug.cameraInfo(StackQuest.camera, 32, 32)
+    this.game.debug.cameraInfo(this.camera, 32, 32)
   }
 }
 
