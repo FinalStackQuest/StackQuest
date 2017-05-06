@@ -12,7 +12,7 @@ export class CharacterConstructor {
         defense: 4,
         speed: 6,
         weapon: {
-          name: 'staff',
+          weaponName: 'staff',
           type: 'projectile',
           damage: 4
         },
@@ -28,7 +28,7 @@ export class CharacterConstructor {
         defense: 5,
         speed: 4,
         weapon: {
-          name: 'iron fist',
+          weaponName: 'iron fist',
           type: 'melee',
           damage: 4,
         },
