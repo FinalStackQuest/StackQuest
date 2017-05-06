@@ -1,11 +1,12 @@
 import { socket } from '../main'
 import { GamePlayers } from '../sockets'
-
+import Player from './Player'
 let map
   , cursors
   , OGuy
   , xCoord = 100
   , yCoord = 100
+  , testPlayer
 
 const testState = {
   init(x, y) {
@@ -69,6 +70,9 @@ const testState = {
     this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
     cursors = this.input.keyboard.createCursorKeys()
+
+    // let testPlayer exist
+    testPlayer = new Player(OGuy, OGuy)
   },
 
   update() {

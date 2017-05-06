@@ -1,6 +1,7 @@
 require('pixi')
 require('p2')
-require('phaser')
+export const Phaser = require('phaser')
+console.log('Phaser in main', Phaser)
 import socketio from 'socket.io-client'
 import socketFunctions from './sockets'
 
