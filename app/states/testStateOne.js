@@ -1,6 +1,5 @@
 import { socket } from '../main'
 import { GamePlayers } from '../sockets'
-const Phaser = require('phaser')
 
 let map
   , cursors

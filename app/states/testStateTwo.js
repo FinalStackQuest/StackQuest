@@ -1,5 +1,3 @@
-const Phaser = require('phaser')
-
 let map
   , cursors
   , XGuy
