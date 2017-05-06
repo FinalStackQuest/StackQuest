@@ -2,7 +2,7 @@ import { Phaser, socket } from '../game'
 import { GamePlayers } from '../sockets'
 import { CharacterConstructor } from './staticClass'
 
-let charObj = new CharacterConstructor('wizard')
+const charObj = new CharacterConstructor('wizard')
 
 charObj.speak()
 
@@ -22,8 +22,8 @@ const testState = {
 
   preload(x, y) {
     this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('pirateSheet', 'assets/tilesets/Kenney Game Assets 2 version 20/2D assets/Pirate Pack (190 assets)/Tilesheet/tiles_sheet.png')
-    this.load.image('pirateSheet2', 'assets/tilesets/Kenney Game Assets 2 version 20/2D assets/Pirate Pack (190 assets)/Tilesheet/tiles_sheet@2.png')
+    this.load.image('pirateSheet', 'assets/tilesets/Kenney_Game_Assets_2_version_20/2D_assets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
+    this.load.image('pirateSheet2', 'assets/tilesets/Kenney_Game_Assets_2_version_20/2D_assets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
     // this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
     // this.load.image('baseOutAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
   },
@@ -76,7 +76,6 @@ const testState = {
     socket.emit('addPlayer', player)
     OGuy = this.add.text(xCoord, yCoord, 'O', { font: '32px Arial', fill: '#ffffff' })
 
-    // OGuy = this.add.text(xCoord, yCoord, 'O', { font: '32px Arial', fill: '#ffffff', align: 'center' })
     this.physics.p2.enable(OGuy)
 
     this.camera.follow(OGuy)

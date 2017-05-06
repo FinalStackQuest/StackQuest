@@ -8,7 +8,6 @@ export const socket = socketio.connect()
 
 socketFunctions(socket)
 
-// import testState from './states/testState'
 import testStateOne from './states/testStateOne'
 import testStateTwo from './states/testStateTwo'
 
