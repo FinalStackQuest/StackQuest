@@ -17,7 +17,7 @@ export class CharacterConstructor {
           damage: 4
         },
         armor: {
-          name: 'robe',
+          armorName: 'robe',
           block: 1
         }
       }
@@ -33,7 +33,7 @@ export class CharacterConstructor {
           damage: 4,
         },
         armor: {
-          name: 'aluminum',
+          armorName: 'aluminum',
           block: 2
         }
       }
