@@ -1,6 +1,11 @@
 import { socket } from '../main'
 import { GamePlayers } from '../sockets'
-import Player from './Player'
+import { CharacterConstructor } from './staticClass'
+
+let charObj = new CharacterConstructor('wizard')
+
+charObj.speak()
+
 let map
   , cursors
   , OGuy
