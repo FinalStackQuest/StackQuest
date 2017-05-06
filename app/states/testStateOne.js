@@ -5,10 +5,19 @@ let map
   , treeTrunkLayer
   , treeTopLayer
   , cursors
-  , fixedText
+  , OGuy
+  , xCoord = 100
+  , yCoord = 100
 
 const testState = {
-  preload() {
+  init(x, y) {
+    if (x && y) {
+      xCoord = x
+      yCoord = y
+    }
+  },
+
+  preload(x, y) {
     this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
     this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
     this.load.image('terrainAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
@@ -41,10 +50,10 @@ const testState = {
     this.physics.p2.convertTilemap(map, waterLayer)
     this.physics.p2.convertTilemap(map, treeRootLayer)
 
-    fixedText = this.add.text(100, 100, 'O', { font: '32px Arial', fill: '#ffffff', align: 'center' })
-    this.physics.p2.enable(fixedText)
+    OGuy = this.add.text(xCoord, yCoord, 'O', { font: '32px Arial', fill: '#ffffff', align: 'center' })
+    this.physics.p2.enable(OGuy)
 
-    this.camera.follow(fixedText)
+    this.camera.follow(OGuy)
 
     this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
@@ -52,17 +61,30 @@ const testState = {
   },
 
   update() {
-    fixedText.body.setZeroVelocity()
-    fixedText.body.fixedRotation = true
+    OGuy.body.setZeroVelocity()
+    OGuy.body.fixedRotation = true
+
+    if (OGuy.position.y <= this.world.bounds.top + OGuy.height) {
+      this.state.start('testStateTwo', true, false, OGuy.position.x, this.world.bounds.bottom - OGuy.height - 10)
+    }
+    if (OGuy.position.y >= this.world.bounds.bottom - OGuy.height) {
+      this.state.start('testStateTwo', true, false, OGuy.position.x, this.world.bounds.top + OGuy.height + 10)
+    }
+    if (OGuy.position.x <= this.world.bounds.left + OGuy.width) {
+      this.state.start('testStateTwo', true, false, this.world.bounds.right - OGuy.width - 10, OGuy.position.y)
+    }
+    if (OGuy.position.x >= this.world.bounds.right - OGuy.width) {
+      this.state.start('testStateTwo', true, false, this.world.bounds.left + OGuy.width + 10, OGuy.position.y)
+    }
 
     if (cursors.up.isDown) {
-      fixedText.body.moveUp(200)
+      OGuy.body.moveUp(200)
     } else if (cursors.down.isDown) {
-      fixedText.body.moveDown(200)
+      OGuy.body.moveDown(200)
     } if (cursors.left.isDown) {
-      fixedText.body.moveLeft(200)
+      OGuy.body.moveLeft(200)
     } else if (cursors.right.isDown) {
-      fixedText.body.moveRight(200)
+      OGuy.body.moveRight(200)
     }
   },
 
