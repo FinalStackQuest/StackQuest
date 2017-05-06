@@ -1,5 +1,10 @@
 import { Phaser, socket } from '../game'
 import { GamePlayers } from '../sockets'
+import { CharacterConstructor } from './staticClass'
+
+let charObj = new CharacterConstructor('wizard')
+
+charObj.speak()
 
 let map
   , cursors
