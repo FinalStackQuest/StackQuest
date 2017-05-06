@@ -1,4 +1,4 @@
-import StackQuest from './main'
+import { StackQuest } from './game'
 
 export const GamePlayers = {}
 

@@ -1,34 +1,34 @@
 'use strict'
 import React from 'react'
-import {Router, Route, IndexRedirect, browserHistory} from 'react-router'
-import {render} from 'react-dom'
-import {connect, Provider} from 'react-redux'
+import { Router, Route, IndexRedirect, browserHistory } from 'react-router'
+import { render } from 'react-dom'
+import { connect, Provider } from 'react-redux'
 
 import store from './store'
+import { startGame } from './game'
 import Jokes from './components/Jokes'
 import Login from './components/Login'
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
 
-const ExampleApp = connect(
+const Root = connect(
   ({ auth }) => ({ user: auth })
 )(
-  ({ user, children }) =>
+  ({ user }) =>
     <div>
       <nav>
-        {user ? <WhoAmI/> : <Login/>}
+        {user ? <WhoAmI /> : <Login />}
       </nav>
-      {children}
+      <div id="game_container">
+        {user && startGame()}
+      </div>
     </div>
-)
+  )
 
 render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={ExampleApp}>
-        <IndexRedirect to="/jokes" />
-        <Route path="/jokes" component={Jokes} />
-      </Route>
+      <Route path="/" component={Root} />
       <Route path='*' component={NotFound} />
     </Router>
   </Provider>,

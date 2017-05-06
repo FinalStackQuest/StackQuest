@@ -18,7 +18,7 @@ const LiveReloadPlugin = require('webpack-livereload-plugin')
   , p2 = path.join(phaserModule, 'build/custom/p2.js')
 
 module.exports = {
-  entry: './app/main.js',
+  entry: './app/main.jsx',
   output: {
     path: __dirname,
     filename: './public/bundle.js'

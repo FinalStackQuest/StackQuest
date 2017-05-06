@@ -1,0 +1,19 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Brick_Light
+Ka 0.000000 0.000000 0.000000
+Kd 0.858824 0.909804 0.858824
+Ks 0.330000 0.330000 0.330000
+
+newmtl Brick_Dark
+Ka 0.000000 0.000000 0.000000
+Kd 0.686275 0.729412 0.686275
+Ks 0.330000 0.330000 0.330000
+
+newmtl Brick
+Ka 0.000000 0.000000 0.000000
+Kd 0.756863 0.800000 0.756863
+Ks 0.330000 0.330000 0.330000
+

@@ -1,4 +1,4 @@
-import { Phaser, socket } from '../main'
+import { Phaser, socket } from '../game'
 import { GamePlayers } from '../sockets'
 
 let map
@@ -17,37 +17,47 @@ const testState = {
 
   preload(x, y) {
     this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
-    this.load.image('baseOutAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
+    this.load.image('pirateSheet', 'assets/tilesets/Kenney Game Assets 2 version 20/2D assets/Pirate Pack (190 assets)/Tilesheet/tiles_sheet.png')
+    this.load.image('pirateSheet2', 'assets/tilesets/Kenney Game Assets 2 version 20/2D assets/Pirate Pack (190 assets)/Tilesheet/tiles_sheet@2.png')
+    // this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
+    // this.load.image('baseOutAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
   },
 
   create() {
     this.physics.startSystem(Phaser.Physics.P2JS)
-
     map = this.add.tilemap('testmap')
 
-    map.addTilesetImage('terrain', 'terrainTiles')
-    map.addTilesetImage('base_out_atlas', 'baseOutAtlasTiles')
+    map.addTilesetImage('pirate_sheet', 'pirateSheet')
+    map.addTilesetImage('pirate_sheet2', 'pirateSheet2')
 
-    const grassLayer = map.createLayer('grass_terrain')
-    const waterLayer = map.createLayer('water_terrain')
-    const treeRootLayer = map.createLayer('tree_root_layer')
-    const treeTrunkLayer = map.createLayer('tree_trunk_layer')
-    const treeTopLayer = map.createLayer('tree_top_layer')
+    const grassLayer = map.createLayer('grass_layer')
+    const waterLayer = map.createLayer('water_layer')
+    const stuffLayer = map.createLayer('stuff_layer')
 
-    waterLayer.resizeWorld()
+    grassLayer.resizeWorld()
 
-    map.setCollisionBetween(29, 30, true, waterLayer)
-    map.setCollisionBetween(61, 62, true, waterLayer)
-    map.setCollisionBetween(92, 94, true, waterLayer)
-    map.setCollisionBetween(124, 126, true, waterLayer)
-    map.setCollisionBetween(156, 158, true, waterLayer)
-    map.setCollisionBetween(188, 190, true, waterLayer)
-    map.setCollision(2715, true, treeRootLayer)
-    map.setCollision(2718, true, treeRootLayer)
+    // map.addTilesetImage('terrain', 'terrainTiles')
+    // map.addTilesetImage('base_out_atlas', 'baseOutAtlasTiles')
 
-    this.physics.p2.convertTilemap(map, waterLayer)
-    this.physics.p2.convertTilemap(map, treeRootLayer)
+    // const grassLayer = map.createLayer('grass_terrain')
+    // const waterLayer = map.createLayer('water_terrain')
+    // const treeRootLayer = map.createLayer('tree_root_layer')
+    // const treeTrunkLayer = map.createLayer('tree_trunk_layer')
+    // const treeTopLayer = map.createLayer('tree_top_layer')
+
+    // waterLayer.resizeWorld()
+
+    // map.setCollisionBetween(29, 30, true, waterLayer)
+    // map.setCollisionBetween(61, 62, true, waterLayer)
+    // map.setCollisionBetween(92, 94, true, waterLayer)
+    // map.setCollisionBetween(124, 126, true, waterLayer)
+    // map.setCollisionBetween(156, 158, true, waterLayer)
+    // map.setCollisionBetween(188, 190, true, waterLayer)
+    // map.setCollision(2715, true, treeRootLayer)
+    // map.setCollision(2718, true, treeRootLayer)
+
+    // this.physics.p2.convertTilemap(map, waterLayer)
+    // this.physics.p2.convertTilemap(map, treeRootLayer)
 
     const player = {
       class: 'O',
@@ -76,7 +86,6 @@ const testState = {
     OGuy.body.fixedRotation = true
 
     if (cursors.up.isDown) {
-      console.log(OGuy)
       OGuy.body.moveUp(200)
       socket.emit('updatePlayer', OGuy.position)
     } else if (cursors.down.isDown) {

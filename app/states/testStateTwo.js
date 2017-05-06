@@ -1,4 +1,4 @@
-import { Phaser } from '../main'
+import { Phaser } from '../game'
 
 let map
   , cursors
