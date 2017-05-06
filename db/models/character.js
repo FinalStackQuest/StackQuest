@@ -5,8 +5,8 @@ const {ENUM, INTEGER, STRING} = require('sequelize')
 
 module.exports = db => db.define('characters', {
   hp: INTEGER,
-  weaponId: STRING,
-  armorId: STRING,
+  weaponName: STRING,
+  armorName: STRING,
   x: {
     type: STRING,
     set: (xCoord) => {

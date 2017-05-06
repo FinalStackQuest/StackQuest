@@ -6,6 +6,15 @@ const Character= db.model('characters')
 const {mustBeLoggedIn} = require('./auth.filters')
 
 module.exports = require('express').Router()
+  .get('/',
+    mustBeLoggedIn,
+    (req, res, next) =>
+      Character.findAll()
+      .then(characters => {
+        if (characters.length === 0) return res.sendStatus(404)
+        res.json(characters)
+      })
+      .catch(next))
   .get('/:id',
     mustBeLoggedIn,
     (req, res, next) =>
