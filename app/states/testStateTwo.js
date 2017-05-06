@@ -1,3 +1,5 @@
+import { Phaser } from '../main'
+
 let map
   , cursors
   , XGuy

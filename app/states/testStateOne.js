@@ -1,4 +1,4 @@
-import { socket } from '../main'
+import { Phaser, socket } from '../main'
 import { GamePlayers } from '../sockets'
 
 let map
