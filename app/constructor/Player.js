@@ -1,4 +1,4 @@
-import Prefab from './Prefab'
+import Prefab from '../states/entityPrefab'
 
 export default class Player extends Prefab {
   constructor(game, position, properties) {
@@ -13,17 +13,15 @@ export default class Player extends Prefab {
       armor: properties.stats.armor
     }
     this.loadControls()
-    this.loadAnimations()
-    this.game.physics.p2.enable(this)
-    this.name = properties.type
+    this.loadAnimations(properties.animationFrames)
   }
-  loadAnimations() {
+  loadAnimations(frames) {
     // TODO: fill in frame arrays with correct indices
-    this.animations.add('right', [], 5, true)
-    this.animations.add('left', [], 5, true)
-    this.animations.add('up', [], 5, true)
-    this.animations.add('down', [], 5, true)
-    this.animations.add('attack', [], 5, false)
+    this.animations.add('right', frames.right, 5, true)
+    this.animations.add('left', frames.left, 5, true)
+    this.animations.add('up', frames.up, 5, true)
+    this.animations.add('down', frames.down, 5, true)
+    this.animations.add('attack', frames.attack, 5, false)
   }
   loadControls() {
     this.cursors = {}
@@ -45,5 +43,30 @@ export default class Player extends Prefab {
   }
   inflictDamage() {
     return this.stats.totalAttack
+  }
+  // play animations
+  update() {
+    // so it doesn't float off into space...
+    this.body.setZeroVelocity()
+    if (this.cursors.up.isDown) {
+      this.animations.play('up')
+      this.body.moveUp(200)
+    }
+    if (this.cursors.down.isDown) {
+      this.animations.play('down')
+      this.body.moveDown(200)
+    }
+    if (this.cursors.left.isDown) {
+      this.animations.play('left')
+      this.body.moveLeft(200)
+    }
+    if (this.cursors.up.isDown) {
+      this.animations.play('right')
+      this.body.moveRight(200)
+    }
+    if (this.cursors.attack.isDown) {
+      this.animations.play('attack')
+      this.inflictDamage()
+    }
   }
 }
