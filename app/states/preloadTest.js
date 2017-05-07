@@ -12,18 +12,12 @@ let map
   , xCoord = 100
   , yCoord = 100
 
-export const testState = {
+export const preloadTest = {
   init(x, y) {
     if (x && y) {
       xCoord = x
       yCoord = y
     }
-  },
-
-  preload(x, y) {
-    this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
-    this.load.image('baseOutAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
   },
 
   create() {
@@ -116,4 +110,4 @@ export const testState = {
   }
 }
 
-export default testState
+export default preloadTest
