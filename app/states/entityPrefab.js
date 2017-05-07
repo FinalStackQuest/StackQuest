@@ -18,7 +18,7 @@ export default class entityPrefab extends Phaser.Sprite {
     this.gameState.add(this)
     // adds current prefab to the gameState
 
-    this.physics.p2.enable(this)
+    this.gameState.physics.p2.enable(this)
 
     this.gameState.prefabs[name] = this
     // gameState has prefabs object that allows access to current prefab
