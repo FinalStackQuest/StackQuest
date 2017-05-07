@@ -77,7 +77,7 @@ const testState = {
     cursors = this.input.keyboard.createCursorKeys()
 
     // let testPlayer exist
-    testPlayer = new Player(OGuy, OGuy)
+    //testPlayer = new Player(OGuy, OGuy)
   },
 
   update() {

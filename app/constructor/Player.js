@@ -14,6 +14,8 @@ export default class Player extends Prefab {
     }
     this.loadControls()
     this.loadAnimations()
+    this.game.physics.p2.enable(this)
+    this.name = properties.type
   }
   loadAnimations() {
     // TODO: fill in frame arrays with correct indices
@@ -40,5 +42,8 @@ export default class Player extends Prefab {
     if (this.hp <= 0) {
       this.destroy()
     }
+  }
+  inflictDamage() {
+    return this.stats.totalAttack
   }
 }
