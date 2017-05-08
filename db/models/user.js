@@ -2,7 +2,7 @@
 
 // bcrypt docs: https://www.npmjs.com/package/bcrypt
 const bcrypt = require('bcryptjs')
-    , {STRING, VIRTUAL} = require('sequelize')
+  , { STRING, VIRTUAL } = require('sequelize')
 
 module.exports = db => db.define('users', {
   userName: STRING,
@@ -18,7 +18,7 @@ module.exports = db => db.define('users', {
   password_digest: STRING, // This column stores the hashed password in the DB, via the beforeCreate/beforeUpdate hooks
   password: VIRTUAL // Note that this is a virtual, and not actually stored in DB
 }, {
-  indexes: [{fields: ['email'], unique: true}],
+  indexes: [{ fields: ['email'], unique: true }],
   hooks: {
     beforeCreate: setEmailAndPassword,
     beforeUpdate: setEmailAndPassword,
@@ -37,7 +37,7 @@ module.exports = db => db.define('users', {
   }
 })
 
-module.exports.associations = (User, {OAuth, Character}) => {
+module.exports.associations = (User, { OAuth, Character }) => {
   User.hasOne(OAuth)
   User.hasOne(Character)
 }

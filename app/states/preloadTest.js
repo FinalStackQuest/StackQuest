@@ -1,10 +1,4 @@
-import { socket } from '../main'
-import { GamePlayers } from '../sockets'
-import { CharacterConstructor } from './staticClass'
-
-let charObj = new CharacterConstructor('wizard')
-
-charObj.speak()
+import { GamePlayers, socket } from '../sockets'
 
 let map
   , cursors
