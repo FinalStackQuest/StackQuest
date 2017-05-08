@@ -8,7 +8,7 @@ export default class entityPrefab extends Phaser.Sprite {
     this.name = name
     this.attackTarget = null
 
-    this.addChild(this.nameHolder = game.add.text(position.x, position.y-30, `${name}`, {
+    this.addChild(this.nameHolder = game.add.text(0, -30, `${name}`, {
       font: '14px pixel',
       fill: '#ffffff',
       stroke: '#000000',
@@ -17,7 +17,6 @@ export default class entityPrefab extends Phaser.Sprite {
 
     game.add.existing(this)
     game.physics.p2.enable(this)
-    game.prefabs[name] = this
   }
 
   setAnimationFrames(targetObject) {
