@@ -8,13 +8,13 @@ export default class Player extends Prefab {
     // Send context as first argument!!
     this.anchor.set(0.25, 0.35)
     this.orientation = 4 // down
-    this.speed = this.this.game.playerSpeed
+    this.speed = this.game.playerSpeed
     // TODO create dialogue logic.. maybe
     // this.dialoguesMemory = {}
-    // this.maxLife = this.this.game.playerLife
-    // this.life = this.maxLife
+    this.maxLife = this.game.playerLife
+    this.life = this.maxLife
     this.inFight = false
-    this.defaultFrames = {
+    this.frames = {
         // the third value is the frame to come back to at the end of the animation
         // TODO reassign frame values based on the sprite.
       'attack_right': [0, 4, 9],
@@ -33,14 +33,8 @@ export default class Player extends Prefab {
     // TODO reassign these children based on our assets
     // this.addChild(this.weapon = this.this.game.add.sprite(0, 0, 'atlas3'))
     // this.addChild(this.shadow = this.this.game.add.sprite(0, 5, 'atlas1', 'shadow'))
-    this.addChild(this.nameHolder = this.this.game.add.text(0, -30, '', {
-      font: '14px pixel',
-      fill: '#ffffff',
-      stroke: '#000000',
-      strokeThickness: 1
-    }))
     this.events.onKilled.add(function(player) {
-      this.this.game.displayedPlayers.delete(player.id)
+      this.game.displayedPlayers.delete(player.id)
     }, this)
   }
   // changes color of name text if Player is the main Player
@@ -94,16 +88,6 @@ export default class Player extends Prefab {
     const armorInfo = Game.itemsInfo[key]
     this.def = armorInfo.def
     this.armorName = key
-    this.frameName = key+'_0'
-    if (this.isPlayer) {
-      Game.armorIcon.frameName = armorInfo.icon+'_0'
-      Client.setArmor(key)
-      Game.armorIcon.anchor.set(0,0)
-      if (armorInfo.iconAnchor) Game.armorIcon.anchor.set(armorInfo.iconAnchor.x,armorInfo.iconAnchor.y)
-    }
-    const animationFrames = (armorInfo.hasOwnProperty('frames')? armorInfo.frames : null)
-    this.frames = animationFrames
-    this.setAnimations(this)
     return true
   }
   // TODO reimplement this fn when we manage life
@@ -118,43 +102,19 @@ export default class Player extends Prefab {
     tweenEnd.start()
   }
 
-  fight() {
-    if (!this.target) return
-    this.inFight = true
-    this.fightTween = this.game.add.tween(this) // adds a tween to the game state
-    this.fightTween.to({}, Phaser.Timer.SECOND, null, false, 0, -1)
-    this.fightTween.onStart.add(function() { this.fightAction() }, this)
-    this.fightTween.onLoop.add(function() { this.fightAction() }, this)
-    this.fightTween.start()
-  }
-
-  fightAction() {
-    if (this.isPlayer) return // For the main player, attack animations are handled differently, see updateSelf()
-    const direction = Game.adjacent(this, this.target)
-    if (direction > 0){ //Target is on adjacent cell
-      if (this.tween) {
-        this.tween.stop()
-        this.tween = null
-      }
-      this.orientation = direction
-      this.attack()
-    }
-  }
-
   die(animate) {
     if (this.tween) this.stopMovement(false)
-    this.endFight()
     this.target = null
     this.life = 0
     if (this.isPlayer) {
-      Game.moveTarget.visible = false
+      // Game.moveTarget.visible = false
       this.updateLife()
-      setTimeout(Game.displayDeathScroll, Phaser.Timer.SECOND*2)
+      // setTimeout(Game.displayDeathScroll, Phaser.Timer.SECOND*2)
     }
     if (animate && this.inCamera) {
       this.frameName = 'death_0'
       this.animate('death', false)
-      Game.sounds.play('death')
+      // Game.sounds.play('death')
     }
     this.delayedKill(750)
   }
