@@ -11,6 +11,7 @@ let map
   , OGuy
   , xCoord = 100
   , yCoord = 100
+  , testPlayer
 
 export const testState = {
   init(x, y) {
@@ -74,6 +75,9 @@ export const testState = {
     this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
     cursors = this.input.keyboard.createCursorKeys()
+
+    // let testPlayer exist
+    //testPlayer = new Player(OGuy, OGuy)
   },
 
   update() {
