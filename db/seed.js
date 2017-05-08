@@ -18,11 +18,11 @@ function seedEverything() {
 const users = seed(User, {
   god: {
     email: 'god@example.com',
-    name: 'So many names',
+    userName: 'So many names',
     password: '1234',
   },
   barack: {
-    name: 'Barack Obama',
+    userName: 'Barack Obama',
     email: 'barack@example.gov',
     password: '1234'
   },

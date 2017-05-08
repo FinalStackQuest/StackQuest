@@ -12,6 +12,7 @@ socketFunctions(socket)
 // import testState from './states/testState'
 import loadingScreen from './states/loadingScreen'
 import preloadTest from './states/preloadTest'
+// preloadTest is a clone of testStateOne to test loadingScreen state
 import testStateOne from './states/testStateOne'
 import testStateTwo from './states/testStateTwo'
 

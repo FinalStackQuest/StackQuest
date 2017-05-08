@@ -75,7 +75,6 @@ export const preloadTest = {
     OGuy.body.fixedRotation = true
 
     if (cursors.up.isDown) {
-      console.log(OGuy)
       OGuy.body.moveUp(200)
       socket.emit('updatePlayer', OGuy.position)
     } else if (cursors.down.isDown) {
