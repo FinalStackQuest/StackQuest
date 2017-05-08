@@ -20,7 +20,9 @@ const getPlayers = players => {
 }
 
 const addPlayer = (socketId, player) => {
-  GamePlayers[socketId] = StackQuest.game.add.text(player.pos.x, player.pos.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+  if (StackQuest.game) {
+    GamePlayers[socketId] = StackQuest.game.add.text(player.pos.x, player.pos.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+  }
 }
 
 const updatePlayer = (socketId, playerPos) => {
@@ -32,8 +34,11 @@ const updatePlayer = (socketId, playerPos) => {
 }
 
 const removePlayer = socketId => {
-  GamePlayers[socketId].destroy()
-  delete GamePlayers[socketId]
+  const player = GamePlayers[socketId]
+  if (player) {
+    player.destroy()
+    delete GamePlayers[socketId]
+  }
 }
 
 socketFunctions(socket)
