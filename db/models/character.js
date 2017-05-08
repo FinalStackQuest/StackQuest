@@ -25,5 +25,5 @@ module.exports = db => db.define('characters', {
 })
 
 module.exports.associations = (Character, {User}) => {
-  Character.belongsTo(User)
+
 }
