@@ -6,21 +6,36 @@ const Character= db.model('characters')
 const {mustBeLoggedIn} = require('./auth.filters')
 
 module.exports = require('express').Router()
+  .param('id', (req, res, next, id) => {
+    Character.findById(id)
+    .then(character => {
+      if (!character) throw new Error('Character not found')
+      req.character = character
+      next()
+    })
+    .catch(next)
+  })
   .get('/',
     mustBeLoggedIn,
     (req, res, next) =>
       Character.findAll()
       .then(characters => {
-        if (characters.length === 0) return res.sendStatus(404)
+        if (characters.length === 0) throw new Error('Characters not found')
         res.json(characters)
+      })
+      .catch(next))
+  .post('/',
+    mustBeLoggedIn,
+    (req, res, next) =>
+      Character.create(req.body)
+      .then(character => {
+        res.json(character)
       })
       .catch(next))
   .get('/:id',
     mustBeLoggedIn,
     (req, res, next) =>
-      Character.findById(req.params.id)
-      .then(user => res.json(user))
-      .catch(next))
+      res.json(req.character))
   .put('/:id',
     mustBeLoggedIn,
     (req, res, next) =>
@@ -31,7 +46,7 @@ module.exports = require('express').Router()
         returning: true
       })
       .spread((numAffected, updatedCharacter) => {
-        if (updatedCharacter[0]) res.send(updatedCharacter[0])
-        else next('not found')
+        if (updatedCharacter.length === 0) throw Error('Character not found')
+        res.send(updatedCharacter[0])
       })
       .catch(next))
