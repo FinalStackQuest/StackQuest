@@ -3,7 +3,7 @@
 const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
-const {resolve} = require('path')
+const { resolve } = require('path')
 const passport = require('passport')
 const PrettyError = require('pretty-error')
 const finalHandler = require('finalhandler')
