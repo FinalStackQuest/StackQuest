@@ -1,5 +1,6 @@
-import { StackQuest } from './game'
+import socketio from 'socket.io-client'
 
+export const socket = socketio.connect()
 export const GamePlayers = {}
 
 const socketFunctions = socket => {
@@ -11,12 +12,15 @@ const socketFunctions = socket => {
 
 const getPlayers = players => {
   Object.keys(players).forEach(playerSocketId => {
-    GamePlayers[playerSocketId] = StackQuest.add.text(players[playerSocketId].pos.x, players[playerSocketId].pos.y, players[playerSocketId].class, { font: '32px Arial', fill: '#ffffff' })
+    const xPos = players[playerSocketId].pos.x
+    const yPos = players[playerSocketId].pos.y
+    const playerClass = players[playerSocketId].class
+    GamePlayers[playerSocketId] = StackQuest.game.add.text(xPos, yPos, playerClass, { font: '32px Arial', fill: '#ffffff' })
   })
 }
 
 const addPlayer = (socketId, player) => {
-  GamePlayers[socketId] = StackQuest.add.text(player.pos.x, player.pos.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+  GamePlayers[socketId] = StackQuest.game.add.text(player.pos.x, player.pos.y, player.class, { font: '32px Arial', fill: '#ffffff' })
 }
 
 const updatePlayer = (socketId, playerPos) => {
@@ -31,5 +35,7 @@ const removePlayer = socketId => {
   GamePlayers[socketId].destroy()
   delete GamePlayers[socketId]
 }
+
+socketFunctions(socket)
 
 export default socketFunctions

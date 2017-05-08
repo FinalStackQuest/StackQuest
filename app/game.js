@@ -1,23 +1,21 @@
+require('./sockets')
 require('pixi')
 require('p2')
 export const Phaser = require('phaser')
-import socketio from 'socket.io-client'
-import socketFunctions from './sockets'
-
-export const socket = socketio.connect()
-
-socketFunctions(socket)
 
 import testStateOne from './states/testStateOne'
 import testStateTwo from './states/testStateTwo'
 
-// Initialize game
-export const StackQuest = new Phaser.Game(1280, 720, Phaser.AUTO, 'game_container')
+class StackQuest extends Phaser.Game {
+  constructor() {
+    super(1280, 720, Phaser.AUTO, 'game_container')
+    this.state.add('testStateOne', testStateOne)
+    this.state.add('testStateTwo', testStateTwo)
+  }
 
-// Add all the states
-StackQuest.state.add('testStateOne', testStateOne)
-StackQuest.state.add('testStateTwo', testStateTwo)
+  startGame() {
+    this.state.start('testStateOne')
+  }
+}
 
-// Start StackQuest Game
-export const startGame = () =>
-  StackQuest.state.start('testStateOne')
+export default StackQuest

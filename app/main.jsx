@@ -6,26 +6,27 @@ import { connect, Provider } from 'react-redux'
 
 import store from './store'
 import Game from './components/Game'
-import Jokes from './components/Jokes'
+import LoginPage from './components/LoginPage'
 import Login from './components/Login'
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
 
-const Root = connect(
-  ({ auth }) => ({ user: auth })
-)(
-  ({ user }) =>
-    <div>
-      <nav>
-        {user ? <WhoAmI /> : <Login />}
-      </nav>
-    </div>
-  )
+const Root = ({ user, children }) =>
+  <div>
+    <nav>
+      {user ? <WhoAmI /> : <Login />}
+    </nav>
+    {children}
+  </div>
+
+const RootContainer = connect(({ auth }) => ({ user: auth }))(Root)
 
 render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={Root}>
+      <Route path="/" component={RootContainer}>
+        <IndexRedirect to="/login" />
+        <Route path="/login" component={LoginPage} />
         <Route path="/game" component={Game} />
       </Route>
       <Route path='*' component={NotFound} />

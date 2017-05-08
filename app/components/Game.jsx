@@ -1,10 +1,19 @@
 import React from 'react'
-// import { startGame } from '../game'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import StackQuestGame from '../game'
 
-const Game = ({ user }) => (
-  <div id="game_container">
-    {/* {user && startGame()} */}
+const Game = ({ user }) =>
+  <div>
+    {user
+      ? <div id="game_container">
+        {StackQuest.game = new StackQuestGame()}
+        {StackQuest.game.startGame()}
+      </div>
+      : browserHistory.push('/login')
+    }
   </div>
-)
 
-export default Game
+const GameContainer = connect(({ auth }) => ({ user: auth }))(Game)
+
+export default GameContainer

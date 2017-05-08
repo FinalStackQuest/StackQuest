@@ -1,5 +1,5 @@
-import { Phaser, socket } from '../game'
-import { GamePlayers } from '../sockets'
+import { Phaser } from '../game'
+import { GamePlayers, socket } from '../sockets'
 import { CharacterConstructor } from './staticClass'
 
 const charObj = new CharacterConstructor('wizard')
@@ -22,8 +22,8 @@ const testState = {
 
   preload(x, y) {
     this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('pirateSheet', 'assets/tilesets/Kenney_Game_Assets_2_version_20/2D_assets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
-    this.load.image('pirateSheet2', 'assets/tilesets/Kenney_Game_Assets_2_version_20/2D_assets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
+    this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
+    this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
     // this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
     // this.load.image('baseOutAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
   },
