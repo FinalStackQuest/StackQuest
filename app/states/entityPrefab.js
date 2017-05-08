@@ -37,6 +37,12 @@ export default class entityPrefab extends Phaser.Sprite {
     game.physics.p2.enable(this)
 
     game.prefabs[name] = this
+    this.orientationsDict = {
+      1: 'left',
+      2: 'up',
+      3: 'right',
+      4: 'down'
+    }
     // need this?
     // gameState has prefabs object that allows access to current prefab sprite?
   }
@@ -79,5 +85,28 @@ export default class entityPrefab extends Phaser.Sprite {
         // every character json or db information has a
       }
     }
+  }
+
+  idle(force) { // Start idling animation, in the appropriate orientation
+    // force is a boolean to indicate if the animation should be forced to play, or if it can depend from the situation (see animate() )
+    this.animate('idle_' + this.orientationsDict[this.orientation], force)
+  }
+
+  stopMovement(complete) {
+    // complete is a boolean indicating if the onComplete callback should be called
+    this.tween.stop(complete)
+    this.tween = null
+  }
+
+  delayedDeath(delay) {
+    setTimeout(function(character) {
+      character.die()
+    }, delay, this)
+  }
+
+  delayedKill(delay) {
+    setTimeout(function(character) {
+      character.kill()
+    }, delay, this)
   }
 }
