@@ -46,7 +46,7 @@ export default class Player extends Prefab {
   // changes color of name text if Player is the main Player
   setIsPlayer(flag) {
     this.isPlayer = flag
-    if (this.isPlayer) this.nameHolder.addColor("#f4d442", 0)
+    if (this.isPlayer) this.nameHolder.addColor('#f4d442', 0)
   }
   // sets the player's name
   setName(name) {
@@ -54,9 +54,9 @@ export default class Player extends Prefab {
     this.nameHolder.x = Math.floor(16 - (this.nameHolder.width/2))
   }
 
+  // TODO refactor this to use cursor keys (since we won't be using clicks for movement)
   prepareMovement(end, finalOrientation, action, delta, sendToServer) {
-    if (!this.alive) return
-    if (!end) return
+    if (!this.alive || !end) return
     let start = Game.computeTileCoords(this.x, this.y)
     if (start.x === end.x && start.y === end.y) {
       if (action.action === 1) this.finishMovement(finalOrientation, action)
@@ -64,23 +64,23 @@ export default class Player extends Prefab {
     }
     if (this.isPlayer) Game.manageMoveTarget(end.x,end.y)
     if (this.tween) {
-        this.stopMovement(false)
-        start = this.adjustStartPosition(start)
+      this.stopMovement(false)
+      start = this.adjustStartPosition(start)
     }
     if (this.isPlayer && this.inFight && action.action != 3) this.endFight()
     Game.easystar.findPath(start.x, start.y, end.x, end.y, this.pathfindingCallback.bind(this, finalOrientation, action, delta, sendToServer))
     Game.easystar.calculate()
   }
 
-  equipWeapon(key){
+  equipWeapon(key) {
     this.weapon.name = key
-    this.weapon.frameName = key + '_0' //sets initial weapon animation frame
-    this.weapon.absorbProperties(Game.itemsInfo[key]) //assigns stats to weapon
+    this.weapon.frameName = key + '_0' // sets initial weapon animation frame
+    this.weapon.absorbProperties(Game.itemsInfo[key]) // assigns stats to weapon
     this.atk = this.weapon.attack
-    this.adjustWeapon()
+    this.adjustWeapon() // will change weapons position on char sprite
     this.setAnimations(this.weapon)
     if (this.isPlayer) {
-      Game.weaponIcon.frameName = this.weapon.icon+'_0'
+      Game.weaponIcon.frameName = this.weapon.icon+'_0' // weapons icon on screen?
       Client.setWeapon(key)
     }
     return true
@@ -109,11 +109,11 @@ export default class Player extends Prefab {
   // TODO reimplement this fn when we manage life
   updateLife() {
     if (this.life < 0) this.life = 0
-    let width = Game.computeLifeBarWidth()
-    let tweenWidth = this.game.add.tween(Game.health.getChildAt(0)) // tween for the "body" of the bar
-    let tweenEnd = this.game.add.tween(Game.health.getChildAt(1)) // tween for the curved tip
-    tweenWidth.to({width: width }, 200,null, false, 200)
-    tweenEnd.to({x: width }, 200,null, false, 200)
+    const width = Game.computeLifeBarWidth()
+    const tweenWidth = this.game.add.tween(Game.health.getChildAt(0)) // tween for the "body" of the bar
+    const tweenEnd = this.game.add.tween(Game.health.getChildAt(1)) // tween for the curved tip
+    tweenWidth.to({ width: width }, 200, null, false, 200)
+    tweenEnd.to({ x: width }, 200, null, false, 200)
     tweenWidth.start()
     tweenEnd.start()
   }
@@ -121,23 +121,23 @@ export default class Player extends Prefab {
   fight() {
     if (!this.target) return
     this.inFight = true
-    this.fightTween = this.game.add.tween(this)
+    this.fightTween = this.game.add.tween(this) // adds a tween to the game state
     this.fightTween.to({}, Phaser.Timer.SECOND, null, false, 0, -1)
-    this.fightTween.onStart.add(function(){this.fightAction()}, this)
-    this.fightTween.onLoop.add(function(){this.fightAction()}, this)
+    this.fightTween.onStart.add(function() { this.fightAction() }, this)
+    this.fightTween.onLoop.add(function() { this.fightAction() }, this)
     this.fightTween.start()
   }
 
   fightAction() {
     if (this.isPlayer) return // For the main player, attack animations are handled differently, see updateSelf()
-    let direction = Game.adjacent(this,this.target)
-    if (direction > 0){ // Target is on adjacent cell
-        if (this.tween) {
-            this.tween.stop()
-            this.tween = null
-        }
-        this.orientation = direction
-        this.attack()
+    const direction = Game.adjacent(this, this.target)
+    if (direction > 0){ //Target is on adjacent cell
+      if (this.tween) {
+        this.tween.stop()
+        this.tween = null
+      }
+      this.orientation = direction
+      this.attack()
     }
   }
 
@@ -147,20 +147,20 @@ export default class Player extends Prefab {
     this.target = null
     this.life = 0
     if (this.isPlayer) {
-        Game.moveTarget.visible = false
-        this.updateLife()
-        setTimeout(Game.displayDeathScroll,Phaser.Timer.SECOND*2)
+      Game.moveTarget.visible = false
+      this.updateLife()
+      setTimeout(Game.displayDeathScroll, Phaser.Timer.SECOND*2)
     }
     if (animate && this.inCamera) {
-        this.frameName = 'death_0'
-        this.animate('death', false)
-        Game.sounds.play('death')
+      this.frameName = 'death_0'
+      this.animate('death', false)
+      Game.sounds.play('death')
     }
     this.delayedKill(750)
   }
   respawn() {
     this.revive() // method from the Phaser Sprite class
-    this.orientation = this.game.rnd.between(1,4)
+    this.orientation = this.game.rnd.between(1, 4)
     if (this.isPlayer) {
       this.life = this.maxLife
       this.updateLife()
