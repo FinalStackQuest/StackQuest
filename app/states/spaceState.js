@@ -41,8 +41,15 @@ export const testState = {
       }
     }
 
+    // remove player from previous map (room)
+    socket.emit('removePlayer')
+    // join new map
+    socket.emit('joinroom', 'spaceState')
+    // get all players on the same map
     socket.emit('getPlayers')
+    // add player to map
     socket.emit('addPlayer', player)
+
     XGuy = this.add.text(xCoord, yCoord, 'X', { font: '32px Arial', fill: '#ffffff' })
 
     this.physics.p2.enable(XGuy)
@@ -75,16 +82,12 @@ export const testState = {
 
     if (XGuy.position.y <= this.world.bounds.top + XGuy.height) {
       this.state.start('fantasyState', true, false, XGuy.position.x, this.world.bounds.bottom - XGuy.height - 10)
-      socket.emit('removePlayer')
     } else if (XGuy.position.y >= this.world.bounds.bottom - XGuy.height) {
       this.state.start('fantasyState', true, false, XGuy.position.x, this.world.bounds.top + XGuy.height + 10)
-      socket.emit('removePlayer')
     } else if (XGuy.position.x <= this.world.bounds.left + XGuy.width) {
       this.state.start('fantasyState', true, false, this.world.bounds.right - XGuy.width - 10, XGuy.position.y)
-      socket.emit('removePlayer')
     } else if (XGuy.position.x >= this.world.bounds.right - XGuy.width) {
       this.state.start('fantasyState', true, false, this.world.bounds.left + XGuy.width + 10, XGuy.position.y)
-      socket.emit('removePlayer')
     }
   },
 
