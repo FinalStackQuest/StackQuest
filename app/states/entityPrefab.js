@@ -24,6 +24,7 @@ export default class entityPrefab extends Phaser.Sprite {
       which is an object that stores multiple key value pairs where the key is animation type and value represents the frames array
       frames object - {'animationTypeOne': [frames], 'animationTypeTwo': [frames]}
     */
+
     super(game, position.x, position.y, properties.spriteKey, properties.initialFrame)
 
     // this.gameState = game
