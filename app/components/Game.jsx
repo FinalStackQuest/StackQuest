@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
+import { showGameDisplay } from 'APP/app/reducers/game'
 
 const Game = ({ loggedIn, gameExist, startGame }) =>
   <div id="game_container">
@@ -17,17 +18,18 @@ class LocalContainer extends React.Component {
     super(props)
     this.state = {
       loggedIn: props.user,
-      gameExist: false
+      gameExist: props.game
     }
     this.startGame = this.startGame.bind(this)
   }
 
-  componentWillReceiveProps({ user }) {
-    if (user !== this.state.user) this.setState({ loggedIn: user })
+  componentWillReceiveProps({ user, game }) {
+    if (user !== this.state.loggedIn) this.setState({ loggedIn: user })
+    if (game !== this.state.gameExist) this.setState({ gameExist: game })
   }
 
   startGame() {
-    this.setState({ gameExist: true })
+    this.props.showGameDisplay(true)
     StackQuest.game = new StackQuestGame()
     StackQuest.game.startGame()
   }
@@ -42,6 +44,9 @@ class LocalContainer extends React.Component {
   }
 }
 
-const GameContainer = connect(({ auth }) => ({ user: auth }))(LocalContainer)
+const GameContainer = connect(
+  ({ auth, game }) => ({ user: auth, game: game }),
+  { showGameDisplay }
+)(LocalContainer)
 
 export default GameContainer

@@ -14,7 +14,7 @@ render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={Root}>
-        <IndexRedirect to="/login" />
+        <IndexRedirect to="/game" />
         <Route path="/game" component={Game} />
       </Route>
       <Route path='*' component={NotFound} />
