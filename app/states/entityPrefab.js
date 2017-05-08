@@ -13,7 +13,7 @@
 // todo; displayHP function that shows numeric value upon hp change, different color for heal and damage
 
 export default class entityPrefab extends Phaser.Sprite {
-  constructor(game, name, position, properties) {
+  constructor(game, name, position, spriteKey) {
     /* property considerations:
       sprite - player class, monster npc type, friendly npc type,
       group - necessary?,
@@ -25,26 +25,19 @@ export default class entityPrefab extends Phaser.Sprite {
       frames object - {'animationTypeOne': [frames], 'animationTypeTwo': [frames]}
     */
 
-    super(game, position.x, position.y, properties.spriteKey, properties.initialFrame)
+    super(game, position.x, position.y, spriteKey)
 
     // this.gameState = game
     // may not need this
     this.name = name
-    this.initialFrame = properties.initalFrame
     this.attackTarget = null
-
-    if (properties.group) {
-      game.groups[properties.group].children.push(this)
-      // gameState has groups object that stores all group types
-    }
 
     game.add.existing(this)
     // adds current prefab to the gameState
-
     game.physics.p2.enable(this)
 
     game.prefabs[name] = this
-    // don't need this?
+    // need this?
     // gameState has prefabs object that allows access to current prefab sprite?
   }
 
@@ -53,7 +46,6 @@ export default class entityPrefab extends Phaser.Sprite {
     // add animations for 'idle' move' 'death' 'attack' to the sprite object entity
     // if playable character, the animation should be set to weapon as well
     const frames = this.frames
-
     // let deathFrames
     // if (frames.hasOwnProperty('death')) {
     //   deathFrames = Phaser.Animations.generateFrameNames(`${this.name}-death`, frames[death][0], frames[death][1])
