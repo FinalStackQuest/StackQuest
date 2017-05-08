@@ -24,7 +24,10 @@ module.exports = db => db.define('users', {
     beforeUpdate: setEmailAndPassword,
   },
   defaultScope: {
-    attributes: { exclude: ['password_digest'] }
+    attributes: {exclude: ['password_digest']},
+    include: [
+        {model: db.model('characters')},
+    ]
   },
   instanceMethods: {
     // This method is a Promisified bcrypt.compare
