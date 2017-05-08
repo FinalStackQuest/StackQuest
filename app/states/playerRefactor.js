@@ -107,7 +107,7 @@ export default class Player extends Prefab {
     this.target = null
     this.life = 0
     if (this.isPlayer) {
-      Game.moveTarget.visible = false
+      // Game.moveTarget.visible = false
       this.updateLife()
       // setTimeout(Game.displayDeathScroll, Phaser.Timer.SECOND*2)
     }
