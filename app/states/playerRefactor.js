@@ -36,6 +36,7 @@ export default class Player extends Prefab {
     this.events.onKilled.add(function(player) {
       this.game.displayedPlayers.delete(player.id)
     }, this)
+    this.loadControls()
   }
   // changes color of name text if Player is the main Player
   setIsPlayer(flag) {
@@ -46,24 +47,6 @@ export default class Player extends Prefab {
   setName(name) {
     this.nameHolder.text = name
     this.nameHolder.x = Math.floor(16 - (this.nameHolder.width/2))
-  }
-
-  // TODO refactor this to use cursor keys (since we won't be using clicks for movement)
-  prepareMovement(end, finalOrientation, action, delta, sendToServer) {
-    if (!this.alive || !end) return
-    let start = Game.computeTileCoords(this.x, this.y)
-    if (start.x === end.x && start.y === end.y) {
-      if (action.action === 1) this.finishMovement(finalOrientation, action)
-      return
-    }
-    if (this.isPlayer) Game.manageMoveTarget(end.x,end.y)
-    if (this.tween) {
-      this.stopMovement(false)
-      start = this.adjustStartPosition(start)
-    }
-    if (this.isPlayer && this.inFight && action.action != 3) this.endFight()
-    Game.easystar.findPath(start.x, start.y, end.x, end.y, this.pathfindingCallback.bind(this, finalOrientation, action, delta, sendToServer))
-    Game.easystar.calculate()
   }
 
   equipWeapon(key) {
@@ -89,6 +72,16 @@ export default class Player extends Prefab {
     this.def = armorInfo.def
     this.armorName = key
     return true
+  }
+
+  loadControls() {
+    this.cursors = {}
+    this.cursors.up = this.game.input.keyboard.addKey(Phaser.Keyboard.W)
+    this.cursors.down = this.game.input.keyboard.addKey(Phaser.Keyboard.S)
+    this.cursors.right = this.game.input.keyboard.addKey(Phaser.Keyboard.D)
+    this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
+    this.cursors.attack = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+    this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
   }
   // TODO reimplement this fn when we manage life
   updateLife() {
@@ -126,5 +119,37 @@ export default class Player extends Prefab {
       this.updateLife()
     }
     this.idle(true)
+  }
+  update() {
+    // so it doesn't float off into space...
+    this.body.setZeroVelocity()
+    if (this.cursors.up.isDown) {
+      this.animations.play('up')
+      this.body.moveUp(200)
+    }
+    if (this.cursors.down.isDown) {
+      this.animations.play('down')
+      this.body.moveDown(200)
+    }
+    if (this.cursors.left.isDown) {
+      this.animations.play('left')
+      this.body.moveLeft(200)
+    }
+    if (this.cursors.up.isDown) {
+      this.animations.play('right')
+      this.body.moveRight(200)
+    }
+    if (this.cursors.attack.isDown && this.orientation === 1) {
+      this.animations.play('attack_up')
+    }
+    if (this.cursors.attack.isDown && this.orientation === 2) {
+      this.animations.play('attack_left')
+    }
+    if (this.cursors.attack.isDown && this.orientation === 3) {
+      this.animations.play('attack_right')
+    }
+    if (this.cursors.attack.isDown && this.orientation === 4) {
+      this.animations.play('attack_down')
+    }
   }
 }
