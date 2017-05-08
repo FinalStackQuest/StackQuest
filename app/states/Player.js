@@ -2,9 +2,9 @@ import Prefab from './entityPrefab'
 
 // client side class for Playable Characters
 export default class Player extends Prefab {
-  constructor(x, y, key) {
+  constructor(game, name, position, spriteKey) {
     // call it's superclass constructor
-    super(x, y, key)
+    super(game, name, position, spriteKey)
     // Send context as first argument!!
     this.anchor.set(0.25, 0.35)
     this.orientation = 4 // down
