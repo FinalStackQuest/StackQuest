@@ -34,7 +34,7 @@ export default class entityPrefab extends Phaser.Sprite {
     this.attackTarget = null
 
     if (properties.group) {
-      this.gameState.groups[properties.group].children.push(this)
+      game.groups[properties.group].children.push(this)
       // gameState has groups object that stores all group types
     }
 
@@ -87,11 +87,5 @@ export default class entityPrefab extends Phaser.Sprite {
         // every character json or db information has a
       }
     }
-  }
-
-
-
-  displayHP() {
-
   }
 }
