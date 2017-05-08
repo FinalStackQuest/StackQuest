@@ -9,21 +9,26 @@ module.exports = db => db.define('characters', {
   armorName: STRING,
   x: {
     type: STRING,
-    set: (xCoord) => {
-      this.setDataValues('x', String(xCoord))
+    set: function(xCoord) {
+      return this.setDataValues('x', String(xCoord))
     },
-    get: () => String(this.getDataValue('x'))
+    get: function() {
+      return +this.getDataValue('x')
+    }
   },
   y: {
     type: STRING,
-    set: (yCoord) => {
-      this.setDataValues('y', String(yCoord))
+    set: function(yCoord) {
+      return this.setDataValues('y', String(yCoord))
     },
-    get: () => String(this.getDataValue('y'))
+    get: function() {
+      return +this.getDataValue('y')
+    }
   },
+  currentMap: STRING,
   class: ENUM('wizard', 'cyborg')
 })
 
 module.exports.associations = (Character, {User}) => {
-
+  Character.belongsTo(User)
 }
