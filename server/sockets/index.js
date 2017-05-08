@@ -1,37 +1,48 @@
 const GamePlayers = {}
 
-const socket = io => {
+const socketFunction = io => {
   io.on('connection', socket => {
     console.log('got a connection', socket.id)
 
+    let room = 'world'
+    socket.join(room)
+
     socket.on('disconnect', () => {
-      delete GamePlayers[socket.id]
-      socket.broadcast.emit('removePlayer', socket.id)
+      if (GamePlayers[room]) {
+        delete GamePlayers[room][socket.id]
+        socket.broadcast.to(room).emit('removePlayer', socket.id)
+      }
       console.log(socket.id, 'disconnected')
     })
 
+    socket.on('joinroom', newRoom => {
+      socket.leave(room)
+      room = newRoom
+      socket.join(room)
+      if (!GamePlayers[room]) GamePlayers[room] = {}
+    })
+
     socket.on('getPlayers', () => {
-      socket.emit('getPlayers', GamePlayers)
+      socket.emit('getPlayers', GamePlayers[room])
     })
 
     socket.on('addPlayer', player => {
-      GamePlayers[socket.id] = player
-      socket.broadcast.emit('addPlayer', socket.id, player)
+      GamePlayers[room][socket.id] = player
+      socket.broadcast.to(room).emit('addPlayer', socket.id, player)
     })
 
     socket.on('updatePlayer', playerPos => {
-      // GamePlayers[socket.id] = Object.assign({}, GamePlayers[socket.id], { pos: { x: playerPos.x, y: playerPos.y } })
-      if (GamePlayers[socket.id]) {
-        GamePlayers[socket.id] = { class: GamePlayers[socket.id].class, pos: { x: playerPos.x, y: playerPos.y } }
-        socket.broadcast.emit('updatePlayer', socket.id, playerPos)
-      }
+      GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { pos: { x: playerPos.x, y: playerPos.y } })
+      socket.broadcast.to(room).emit('updatePlayer', socket.id, playerPos)
     })
 
     socket.on('removePlayer', () => {
-      delete GamePlayers[socket.id]
-      socket.broadcast.emit('removePlayer', socket.id)
+      if (GamePlayers[room]) {
+        delete GamePlayers[room][socket.id]
+        socket.broadcast.to(room).emit('removePlayer', socket.id)
+      }
     })
   })
 }
 
-module.exports = socket
+module.exports = socketFunction

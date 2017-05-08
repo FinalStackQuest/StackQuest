@@ -11,6 +11,7 @@ const socketFunctions = socket => {
 }
 
 const getPlayers = players => {
+  for (const player in GamePlayers) delete GamePlayers[player]
   Object.keys(players).forEach(playerSocketId => {
     const xPos = players[playerSocketId].pos.x
     const yPos = players[playerSocketId].pos.y
@@ -20,17 +21,12 @@ const getPlayers = players => {
 }
 
 const addPlayer = (socketId, player) => {
-  if (StackQuest.game) {
-    GamePlayers[socketId] = StackQuest.game.add.text(player.pos.x, player.pos.y, player.class, { font: '32px Arial', fill: '#ffffff' })
-  }
+  GamePlayers[socketId] = StackQuest.game.add.text(player.pos.x, player.pos.y, player.class, { font: '32px Arial', fill: '#ffffff' })
 }
 
 const updatePlayer = (socketId, playerPos) => {
-  const player = GamePlayers[socketId]
-  if (player) {
-    player.position.x = playerPos.x
-    player.position.y = playerPos.y
-  }
+  GamePlayers[socketId].position.x = playerPos.x
+  GamePlayers[socketId].position.y = playerPos.y
 }
 
 const removePlayer = socketId => {
