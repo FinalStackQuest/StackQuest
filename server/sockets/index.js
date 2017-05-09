@@ -1,3 +1,5 @@
+const db = require('APP/db')
+const Character = db.model('characters')
 const GamePlayers = {}
 
 const socketFunction = io => {
@@ -59,6 +61,14 @@ const socketFunction = io => {
       // add player to map
       GamePlayers[room][socket.id] = player
       socket.broadcast.to(room).emit('addPlayer', socket.id, player)
+    })
+
+    socket.on('savePlayer', player => {
+      Character.update(player, {
+        where: {
+          id: player.id
+        },
+      })
     })
   })
 }
