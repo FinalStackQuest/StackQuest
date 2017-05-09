@@ -65,17 +65,17 @@ export default class entityPrefab extends Phaser.Sprite {
   }
 
   delayedDeath(delay) {
-    setTimeout(function(character) {
+    setTimeout(function (character) {
       character.die()
     }, delay, this)
   }
 
   delayedKill(delay) {
-    setTimeout(function(character) {
+    setTimeout(function (character) {
       character.kill()
     }, delay, this)
-    
-  absorbProperties(jsonObject) {
-    Object.assign(this, jsonObject)
+
+    absorbProperties(jsonObject) {
+      Object.assign(this, jsonObject)
+    }
   }
-}
