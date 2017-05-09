@@ -25,9 +25,9 @@ module.exports = db => db.define('users', {
   },
   defaultScope: {
     attributes: { exclude: ['password_digest'] },
-    // include: [
-    //     { model: db.model('characters') },
-    // ]
+    include: [
+        { model: db.model('characters') },
+    ]
   },
   instanceMethods: {
       // This method is a Promisified bcrypt.compare
@@ -40,6 +40,7 @@ module.exports = db => db.define('users', {
 module.exports.associations = (User, { OAuth, Character }) => {
   User.hasOne(OAuth)
   User.hasOne(Character)
+  Character.belongsTo(User)
 }
 
 function setEmailAndPassword(user) {

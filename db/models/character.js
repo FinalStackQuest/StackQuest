@@ -28,7 +28,3 @@ module.exports = db => db.define('characters', {
   currentMap: STRING,
   class: ENUM('wizard', 'cyborg')
 })
-
-module.exports.associations = (Character, {User}) => {
-  Character.belongsTo(User)
-}
