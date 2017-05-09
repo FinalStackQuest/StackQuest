@@ -2,23 +2,19 @@ import { GamePlayers, socket } from '../sockets'
 
 let map
   , cursors
-  , OGuy
-  , xCoord = 200
-  , yCoord = 200
+  , playerObject
+  , player
 
-export const testState = {
-  init(x, y) {
-    if (x && y) {
-      xCoord = x
-      yCoord = y
-    }
+export const fantasyState = {
+  init(character) {
+    if (character) player = character
   },
 
   preload(x, y) {
     this.load.tilemap('stackQuestFantasyMap', 'assets/maps/StackQuestFantasyTilemap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
-    this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
-    this.load.image('rtsSheet2', 'assets/tilesets/RTS_Medieval_(120 assets)/Tilesheet/RTS_medieval@2.png')
+    this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack/Tilesheet/tiles_sheet.png')
+    this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack/Tilesheet/tiles_sheet@2.png')
+    this.load.image('rtsSheet2', 'assets/tilesets/RTS_Medieval/Tilesheet/RTS_medieval@2.png')
   },
 
   create() {
@@ -35,12 +31,6 @@ export const testState = {
 
     grassLayer.resizeWorld()
 
-    const player = {
-      class: 'O',
-      x: xCoord,
-      y: yCoord
-    }
-
     // remove player from previous map (room)
     socket.emit('removePlayer')
     // join new map
@@ -50,11 +40,11 @@ export const testState = {
     // add player to map
     socket.emit('addPlayer', player)
 
-    OGuy = this.add.text(xCoord, yCoord, 'O', { font: '32px Arial', fill: '#ffffff' })
+    playerObject = this.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
 
-    this.physics.p2.enable(OGuy)
+    this.physics.p2.enable(playerObject)
 
-    this.camera.follow(OGuy)
+    this.camera.follow(playerObject)
 
     this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
@@ -62,32 +52,44 @@ export const testState = {
   },
 
   update() {
-    OGuy.body.setZeroVelocity()
-    OGuy.body.fixedRotation = true
+    playerObject.body.setZeroVelocity()
+    playerObject.body.fixedRotation = true
 
     if (cursors.up.isDown) {
-      OGuy.body.moveUp(200)
-      socket.emit('updatePlayer', OGuy.position)
+      playerObject.body.moveUp(200)
+      socket.emit('updatePlayer', playerObject.position)
     } else if (cursors.down.isDown) {
-      OGuy.body.moveDown(200)
-      socket.emit('updatePlayer', OGuy.position)
+      playerObject.body.moveDown(200)
+      socket.emit('updatePlayer', playerObject.position)
     }
     if (cursors.left.isDown) {
-      OGuy.body.moveLeft(200)
-      socket.emit('updatePlayer', OGuy.position)
+      playerObject.body.moveLeft(200)
+      socket.emit('updatePlayer', playerObject.position)
     } else if (cursors.right.isDown) {
-      OGuy.body.moveRight(200)
-      socket.emit('updatePlayer', OGuy.position)
+      playerObject.body.moveRight(200)
+      socket.emit('updatePlayer', playerObject.position)
     }
 
-    if (OGuy.position.y <= this.world.bounds.top + OGuy.height) {
-      this.state.start('spaceState', true, false, OGuy.position.x, this.world.bounds.bottom - OGuy.height - 10)
-    } else if (OGuy.position.y >= this.world.bounds.bottom - OGuy.height) {
-      this.state.start('spaceState', true, false, OGuy.position.x, this.world.bounds.top + OGuy.height + 10)
-    } else if (OGuy.position.x <= this.world.bounds.left + OGuy.width) {
-      this.state.start('spaceState', true, false, this.world.bounds.right - OGuy.width - 10, OGuy.position.y)
-    } else if (OGuy.position.x >= this.world.bounds.right - OGuy.width) {
-      this.state.start('spaceState', true, false, this.world.bounds.left + OGuy.width + 10, OGuy.position.y)
+    if (playerObject.position.y <= this.world.bounds.top + playerObject.height) {
+      player.x = playerObject.position.x
+      player.y = this.world.bounds.bottom - playerObject.height - 10
+      player.currentMap = 'spaceState'
+      this.state.start(player.currentMap, true, false, player)
+    } else if (playerObject.position.y >= this.world.bounds.bottom - playerObject.height) {
+      player.x = playerObject.position.x
+      player.y = this.world.bounds.top + playerObject.height + 10
+      player.currentMap = 'spaceState'
+      this.state.start(player.currentMap, true, false, player)
+    } else if (playerObject.position.x <= this.world.bounds.left + playerObject.width) {
+      player.x = this.world.bounds.right - playerObject.width - 10
+      player.y = playerObject.position.y
+      player.currentMap = 'spaceState'
+      this.state.start(player.currentMap, true, false, player)
+    } else if (playerObject.position.x >= this.world.bounds.right - playerObject.width) {
+      player.x = this.world.bounds.left + playerObject.width + 10
+      player.y = playerObject.position.y
+      player.currentMap = 'spaceState'
+      this.state.start(player.currentMap, true, false, player)
     }
   },
 
@@ -96,4 +98,4 @@ export const testState = {
   }
 }
 
-export default testState
+export default fantasyState

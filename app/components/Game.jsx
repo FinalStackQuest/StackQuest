@@ -5,6 +5,7 @@ import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
 import Character from './Character'
+import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
 import { createCharacter } from 'APP/app/reducers/user'
 
@@ -36,9 +37,13 @@ class LocalContainer extends React.Component {
   }
 
   startGame() {
+    // checks to make sure user and character information is updated in the store
+    this.props.whoami()
     this.props.showGameDisplay(true)
+    const character = this.props.user.character
+
     StackQuest.game = new StackQuestGame()
-    StackQuest.game.startGame()
+    StackQuest.game.startGame(character)
   }
 
   render() {
@@ -53,7 +58,7 @@ class LocalContainer extends React.Component {
 
 const GameContainer = connect(
   ({ auth, game }) => ({ user: auth, game: game }),
-  { showGameDisplay }
+  { showGameDisplay, whoami }
 )(LocalContainer)
 
 export default GameContainer

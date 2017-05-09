@@ -52,7 +52,7 @@ class LocalContainer extends React.Component {
         armorName: 'Basic Armor',
         x: 200,
         y: 200,
-        currentMap: 'fantasy',
+        currentMap: 'fantasyState',
         class: this.state.characterClass,
         user_id: this.props.user.id
       }
