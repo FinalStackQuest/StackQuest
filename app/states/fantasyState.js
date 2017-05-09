@@ -37,10 +37,8 @@ export const testState = {
 
     const player = {
       class: 'O',
-      pos: {
-        x: xCoord,
-        y: yCoord
-      }
+      x: xCoord,
+      y: yCoord
     }
 
     // remove player from previous map (room)
