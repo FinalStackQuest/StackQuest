@@ -49,7 +49,9 @@ export const testState = {
     }
 
     // create monster test
-    const monster = new Enemy(this.game, 'testMonster', {x: 100, y: 100}, 'soldier')
+    const monster = new Enemy(this.game, 'testMonster', {x: 400, y: 400}, 'soldier')
+    this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(xCoord / 60), Math.floor(yCoord / 60), monster.move)
+    this.easystar.calculate()
     console.log(monster)
     // remove player from previous map (room)
     socket.emit('removePlayer')
@@ -129,10 +131,10 @@ export const testState = {
     this.easystar = new Easystar.js()
     this.easystar.setGrid(collisionArray)
     this.easystar.setAcceptableTiles([0])
-    this.easystar.findPath(20, 20, 50, 50, (path) => {
-      console.log('path?', path)
-    })
-    this.easystar.calculate()
+    // this.easystar.findPath(20, 20, 50, 50, (path) => {
+    //   console.log('path?', path)
+    // })
+    // this.easystar.calculate()
   }
 
 }

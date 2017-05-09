@@ -8,7 +8,7 @@ import entityPrefab from './entityPrefab'
 export default class Enemy extends entityPrefab {
   constructor(game, name, position, spriteKey) {
     super(game, name, position, spriteKey)
-
+    console.log('game in enemy', this.game)
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     this.inputEnabled = true
@@ -27,6 +27,7 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
+    this.move = this.move.bind(this)
   }
 
   setup(monsterKey) {
@@ -73,11 +74,24 @@ export default class Enemy extends entityPrefab {
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
   move(path) {
-    path.forEach((step) => {
-      const tween = this.game.tween(this.position)
-      .to({x: step.x, y: step.y}, 32)
-      tween.start()
-    })
+    let count = 0
+    // const self = this
+    console.log('path', path)
+    for (let step of path) {
+      console.log('this count ', count)
+      // const tween = self.game.add.tween(self.position)
+      // tween.to({x: step.x * 60, y: step.y * 60}, 32)
+      // tween.start()
+      this.position.x = step.x
+      this.position.y = step.y
+      count++
+    }
+    console.log(this.position)
+    // path.forEach(function(step) {
+    //   const tween = this.game.tween(this.position)
+    //   .to({x: step.x * 60, y: step.y * 60}, 32)
+    //   tween.start()
+    // })
   }
   attackPlayer(player) {
     this.inFight = true
