@@ -18,9 +18,9 @@ class StackQuest extends Phaser.Game {
     this.state.add('spaceState', spaceState)
   }
 
-  startGame() {
+  startGame(character) {
     // Start StackQuest Game
-    this.state.start('fantasyState')
+    this.state.start(character.currentMap, true, false, character)
   }
 }
 
