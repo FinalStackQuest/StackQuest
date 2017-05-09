@@ -32,7 +32,7 @@ const socketFunction = io => {
     })
 
     socket.on('updatePlayer', playerPos => {
-      GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { pos: { x: playerPos.x, y: playerPos.y } })
+      GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: playerPos.x, y: playerPos.y })
       socket.broadcast.to(room).emit('updatePlayer', socket.id, playerPos)
     })
 
