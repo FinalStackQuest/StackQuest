@@ -14,8 +14,13 @@ const Root = ({ user, children }) =>
             <a className="navbar-brand" href="/">StackQuest</a>
           </div>
           <ul className="nav navbar-nav navbar-right">
-            <li><a href="/signup"><span className="glyphicon glyphicon-user"></span> Register</a></li>
-            <li>{user ? <WhoAmI /> : <Login />}</li>
+            {user
+              ? <li><WhoAmI /></li>
+              : <ul className="nav navbar-nav">
+                <li><a href="/signup"><span className="glyphicon glyphicon-user"></span> Register</a></li>
+                <li><Login /></li>
+              </ul>
+            }
           </ul>
         </div>
       </div>
