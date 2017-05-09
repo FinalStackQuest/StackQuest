@@ -1,4 +1,5 @@
 import { GamePlayers, socket } from '../sockets'
+const Easystar = require('easystarjs')
 
 let map
   , cursors
@@ -23,7 +24,8 @@ export const testState = {
   create() {
     this.physics.startSystem(Phaser.Physics.P2JS)
     map = this.add.tilemap('testmap')
-
+    // console.log('map', map)
+    // socket.emit('initializeMap', {tilemap: map.layers[0].data})
     map.addTilesetImage('pirate_sheet', 'pirateSheet')
     map.addTilesetImage('pirate_sheet2', 'pirateSheet2')
 
@@ -32,6 +34,9 @@ export const testState = {
     const stuffLayer = map.createLayer('stuff_layer')
 
     grassLayer.resizeWorld()
+    console.log('Easystar', Easystar)
+    this.makeCollisionMap()
+    console.log('did we create an easystar property on state?', this.easystar)
 
     const player = {
       class: 'O',
@@ -94,6 +99,25 @@ export const testState = {
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
   }
+  ,
+  makeCollisionMap() {
+    const collisionArray = []
+    for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
+      const rowArray = []
+      for (let colIdx = 0; colIdx < map.width; colIdx++) {
+        if (map.layers[0].data[rowIdx][colIdx].collides) {
+          rowArray.push(1)
+        } else {
+          rowArray.push(0)
+        }
+      }
+      collisionArray.push(rowArray)
+    }
+    this.easystar = new Easystar.js()
+    this.easystar.setGrid(Easystar, collisionArray)
+    this.easystar.setAcceptableTiles([0])
+  }
+
 }
 
 export default testState

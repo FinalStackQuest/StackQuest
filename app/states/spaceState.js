@@ -28,6 +28,7 @@ export const testState = {
     map.addTilesetImage('pirate_sheet2', 'pirateSheet2')
 
     const grassLayer = map.createLayer('grass_layer')
+    // console.log('grassLayer', grassLayer)
     const waterLayer = map.createLayer('water_layer')
     const stuffLayer = map.createLayer('stuff_layer')
 

@@ -42,6 +42,11 @@ const socketFunction = io => {
         socket.broadcast.to(room).emit('removePlayer', socket.id)
       }
     })
+
+    socket.on('initializeMap', (mapData) => {
+      // do stuff
+      console.log('mapData', mapData)
+    })
   })
 }
 
