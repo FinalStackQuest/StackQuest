@@ -36,7 +36,7 @@ export const testState = {
     grassLayer.resizeWorld()
     console.log('Easystar', Easystar)
     this.makeCollisionMap()
-    console.log('did we create an easystar property on state?', this.easystar)
+    // console.log('did we create an easystar property on state?', this.easystar)
 
     const player = {
       class: 'O',
@@ -105,17 +105,29 @@ export const testState = {
     for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
       const rowArray = []
       for (let colIdx = 0; colIdx < map.width; colIdx++) {
-        if (map.layers[0].data[rowIdx][colIdx].collides) {
-          rowArray.push(1)
-        } else {
-          rowArray.push(0)
+        let collision = false
+        for (const layer of map.layers) {
+          if (layer.data[rowIdx][colIdx].collides) {
+            collision = true
+            break
+            // rowArray.push(1)
+          }
+          // else {
+          //   // rowArray.push(0)
+          // }
         }
+        rowArray.push(Number(collision))
       }
       collisionArray.push(rowArray)
     }
+    console.log('collis array?', collisionArray)
     this.easystar = new Easystar.js()
-    this.easystar.setGrid(Easystar, collisionArray)
+    this.easystar.setGrid(collisionArray)
     this.easystar.setAcceptableTiles([0])
+    this.easystar.findPath(20, 20, 50, 50, (path) => {
+      console.log('path?', path)
+    })
+    this.easystar.calculate()
   }
 
 }
