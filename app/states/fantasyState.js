@@ -3,8 +3,8 @@ import { GamePlayers, socket } from '../sockets'
 let map
   , cursors
   , OGuy
-  , xCoord = 100
-  , yCoord = 100
+  , xCoord = 200
+  , yCoord = 200
 
 export const testState = {
   init(x, y) {
