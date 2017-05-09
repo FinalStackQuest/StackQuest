@@ -1,5 +1,6 @@
 import { GamePlayers, socket } from '../sockets'
 const Easystar = require('easystarjs')
+import Enemy from '../constructor/Enemy'
 
 let map
   , cursors
@@ -19,6 +20,7 @@ export const testState = {
     this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
     this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
     this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
+    this.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 80, 74, 36)
   },
 
   create() {
@@ -46,6 +48,9 @@ export const testState = {
       }
     }
 
+    // create monster test
+    const monster = new Enemy(this.game, 'testMonster', {x: 100, y: 100}, 'soldier')
+    console.log(monster)
     // remove player from previous map (room)
     socket.emit('removePlayer')
     // join new map

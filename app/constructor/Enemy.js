@@ -1,5 +1,4 @@
-import entityPrefab from '../states/entityPrefab'
-
+import entityPrefab from './entityPrefab'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -72,6 +71,13 @@ export default class Enemy extends entityPrefab {
     }
     //  pathFindingCallback needs to be on entityPrefab
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
+  }
+  move(path) {
+    path.forEach((step) => {
+      const tween = this.game.tween(this.position)
+      .to({x: step.x, y: step.y}, 32)
+      tween.start()
+    })
   }
   attackPlayer(player) {
     this.inFight = true
