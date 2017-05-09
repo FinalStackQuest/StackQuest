@@ -7,7 +7,7 @@ import WhoAmI from './WhoAmI'
 import { showGameDisplay } from 'APP/app/reducers/game'
 
 const Game = ({ loggedIn, gameExist, startGame }) =>
-  <div id="game_container">
+  <div id="game-container">
     {loggedIn && !gameExist &&
       <button onClick={startGame}>Start Game</button>
     }

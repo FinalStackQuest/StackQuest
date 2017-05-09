@@ -14,11 +14,8 @@ module.exports = require('express').Router()
         .catch(next))
   .post('/',
     (req, res, next) =>
-      User.create(req.body.user)
-      .then(newUser => {
-        newUser.setCharacter(req.body.character)
-        .then(() => res.status(201).json(newUser))
-      })
+      User.create(req.body)
+      .then(user => res.status(201).json(user))
       .catch(next))
   .get('/:id',
     mustBeLoggedIn,
