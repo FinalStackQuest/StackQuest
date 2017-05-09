@@ -12,9 +12,9 @@ export const fantasyState = {
 
   preload(x, y) {
     this.load.tilemap('stackQuestFantasyMap', 'assets/maps/StackQuestFantasyTilemap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
-    this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
-    this.load.image('rtsSheet2', 'assets/tilesets/RTS_Medieval_(120 assets)/Tilesheet/RTS_medieval@2.png')
+    this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack/Tilesheet/tiles_sheet.png')
+    this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack/Tilesheet/tiles_sheet@2.png')
+    this.load.image('rtsSheet2', 'assets/tilesets/RTS_Medieval/Tilesheet/RTS_medieval@2.png')
   },
 
   create() {
