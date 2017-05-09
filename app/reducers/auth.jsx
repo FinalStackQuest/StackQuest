@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { browserHistory } from 'react-router'
 
-const reducer = (state=null, action) => {
+const reducer = (state = null, action) => {
   switch (action.type) {
   case AUTHENTICATED:
     return action.user
@@ -16,8 +17,11 @@ export const authenticated = user => ({
 export const login = (username, password) =>
   dispatch =>
     axios.post('/api/auth/login/local',
-      {username, password})
-      .then(() => dispatch(whoami()))
+      { username, password })
+      .then(() => {
+        browserHistory.push('game')
+        return dispatch(whoami())
+      })
       .catch(() => dispatch(whoami()))
 
 export const logout = () =>

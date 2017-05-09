@@ -5,10 +5,10 @@ import { showGameDisplay } from 'APP/app/reducers/game'
 import { socket } from 'APP/app/sockets'
 
 const WhoAmI = ({ user, gameExist, logoutHandler }) => (
-  <div className="whoami">
-    <span className="whoami-user-name">{user && user.name}</span>
-    <button className="logout" onClick={logoutHandler}>Logout</button>
-  </div>
+  <form className="nav navbar-form navbar-right whoami">
+    <label className="col-sm-2 col-form-label col-form-label-sm whoami-user-name">{user && user.name}</label>
+    <button className="btn my-2 my-sm-0 logout" onClick={logoutHandler}>Logout</button>
+  </form>
 )
 
 class LocalContainer extends React.Component {

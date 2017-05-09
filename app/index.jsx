@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import Root from './components/Root'
 import Game from './components/Game'
+import Signup from './components/Signup'
 import NotFound from './components/NotFound'
 
 render(
@@ -16,6 +17,7 @@ render(
       <Route path="/" component={Root}>
         <IndexRedirect to="/game" />
         <Route path="/game" component={Game} />
+        <Route path="/signup" component={Signup} />
       </Route>
       <Route path='*' component={NotFound} />
     </Router>
