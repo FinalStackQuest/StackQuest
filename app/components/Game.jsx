@@ -9,7 +9,11 @@ import { showGameDisplay } from 'APP/app/reducers/game'
 const Game = ({ loggedIn, gameExist, startGame }) =>
   <div id="game-container">
     {loggedIn && !gameExist &&
-      <button className="btn btn-primary" onClick={startGame}>Start Game</button>
+      <div>
+        {loggedIn.character
+          ? <button className="btn btn-primary" onClick={startGame}>Start Game</button>
+          : <form>Create Character</form>}
+      </div>
     }
   </div>
 

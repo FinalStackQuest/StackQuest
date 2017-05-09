@@ -15,17 +15,19 @@ export const testState = {
   },
 
   preload(x, y) {
-    this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
+    this.load.tilemap('stackQuestFantasyMap', 'assets/maps/StackQuestFantasyTilemap.json', null, Phaser.Tilemap.TILED_JSON)
     this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
     this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
+    this.load.image('rtsSheet2', 'assets/tilesets/RTS_Medieval_(120 assets)/Tilesheet/RTS_medieval@2.png')
   },
 
   create() {
     this.physics.startSystem(Phaser.Physics.P2JS)
-    map = this.add.tilemap('testmap')
+    map = this.add.tilemap('stackQuestFantasyMap')
 
     map.addTilesetImage('pirate_sheet', 'pirateSheet')
     map.addTilesetImage('pirate_sheet2', 'pirateSheet2')
+    map.addTilesetImage('rts_medieval_sheet2', 'rtsSheet2')
 
     const grassLayer = map.createLayer('grass_layer')
     const waterLayer = map.createLayer('water_layer')
