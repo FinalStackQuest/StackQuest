@@ -42,6 +42,24 @@ const socketFunction = io => {
         socket.broadcast.to(room).emit('removePlayer', socket.id)
       }
     })
+
+    socket.on('setupState', (player, newRoom) => {
+      // remove player from previous map (room)
+      if (GamePlayers[room]) {
+        delete GamePlayers[room][socket.id]
+        socket.broadcast.to(room).emit('removePlayer', socket.id)
+      }
+      // join new map
+      socket.leave(room)
+      room = newRoom
+      socket.join(room)
+      if (!GamePlayers[room]) GamePlayers[room] = {}
+      // get all players on the same map
+      socket.emit('getPlayers', GamePlayers[room])
+      // add player to map
+      GamePlayers[room][socket.id] = player
+      socket.broadcast.to(room).emit('addPlayer', socket.id, player)
+    })
   })
 }
 
