@@ -4,12 +4,19 @@ import { browserHistory } from 'react-router'
 import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
+import Character from './Character'
 import { showGameDisplay } from 'APP/app/reducers/game'
+import { createCharacter } from 'APP/app/reducers/user'
 
 const Game = ({ loggedIn, gameExist, startGame }) =>
   <div id="game-container">
     {loggedIn && !gameExist &&
-      <button onClick={startGame}>Start Game</button>
+      <div>
+        {loggedIn.character
+          ? <button className="btn btn-primary" onClick={startGame}>Start Game</button>
+          : <Character />
+        }
+      </div>
     }
   </div>
 

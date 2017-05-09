@@ -11,3 +11,31 @@
 .login-input {
   margin-right: 10px;
 }
+
+.character-class-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.character-class-choice {
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.character-class-choice:hover {
+  border-style: dashed;
+  border-color: green;
+}
+
+.character-class-selected {
+  border-style: solid;
+  border-color: green;
+}
+
+.no-select {
+  pointer-events: none;
+}

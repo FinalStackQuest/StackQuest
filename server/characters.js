@@ -28,9 +28,7 @@ module.exports = require('express').Router()
   mustBeLoggedIn,
   (req, res, next) =>
     Character.create(req.body)
-      .then(character => {
-        res.json(character)
-      })
+      .then(character => res.json(character))
       .catch(next))
   .get('/:id',
   mustBeLoggedIn,
