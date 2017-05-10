@@ -10,6 +10,7 @@ const buildMap = {
     const stuffLayer = map.createLayer('stuff_layer')
 
     grassLayer.resizeWorld()
+    return map
   },
 
   space() {
@@ -24,6 +25,7 @@ const buildMap = {
     const treeLayer = map.createLayer('tree_layer')
 
     groundLayer.resizeWorld()
+    return map
   }
 }
 

@@ -1,4 +1,4 @@
-import entityPrefab from './Prefab'
+import entityPrefab from './entityPrefab'
 
 
 //  TO DO:

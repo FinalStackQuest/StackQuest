@@ -1,8 +1,16 @@
-import preloadTest from './preloadTest.js'
-
+import fantasyState from './fantasyState.js'
 let loadingText
+  , player
+  , nextMap
 
 export default {
+  init(character) {
+    if (character) {
+      nextMap = player.currentMap || 'fantasyState'
+      player = character
+    }
+  },
+
   preload() {
     loadingText = this.add.text(this.world.width/2, this.world.height/2, '0% / 100%', {
       font: '65px Arial',
@@ -18,6 +26,7 @@ export default {
     loadingText.setText(`${this.load.progress}% / 100%`)
   },
   create() {
-    this.state.start('preloadTest')
+  // this.state.start('preloadTest')
+    this.state.start(player.currentMap, true, false, player)
   },
 }
