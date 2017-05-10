@@ -76,12 +76,14 @@ export default class Enemy extends entityPrefab {
 
   move(path, state) {
     if (this.tween) this.tween.stop()
-    this.tween = this.game.tweens.create(this)
-    for (const step of path) {
-      const { x, y } = state.getPointFromGrid(step.y, step.x)
-      this.tween.to({ x: x, y: y }, 500)
+    if (this.game) {
+      this.tween = this.game.tweens.create(this)
+      for (const step of path) {
+        const { x, y } = state.getPointFromGrid(step.y, step.x)
+        this.tween.to({ x: x, y: y }, 500)
+      }
+      this.tween.start()
     }
-    this.tween.start()
   }
 
   attackPlayer(player) {

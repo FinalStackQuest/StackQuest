@@ -4,6 +4,7 @@ import throttle from 'lodash.throttle'
 import Enemy from '../constructor/Enemy'
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
+import createCursors from './utils/createCursors'
 import createPlayer from './utils/createPlayer'
 import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
@@ -14,10 +15,13 @@ let map
   , cursors
   , playerObject
   , player
+  , projectile
+  , graveyard = []
+  , enemyCounter = 0
 
 const localState = {
   players: [],
-  enemies: [],
+  enemies: {},
 }
 
 const fantasyState = {
@@ -32,36 +36,51 @@ const fantasyState = {
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
+    cursors = createCursors()
     map = buildMaps.fantasy()
-    this.makeCollisionMap()
 
     socket.emit('setupState', player, 'fantasyState')
 
     playerObject = createPlayer(player)
     localState.players.push(playerObject)
+    projectile = createProjectile.bullet(playerObject)
 
+    this.makeCollisionMap()
     this.spawnEnemy()
 
-    const projectile = createProjectile.bullet(playerObject)
-
     this.physics.setBoundsToWorld(true, true, true, true, false)
-
-    cursors = this.input.keyboard.createCursorKeys()
 
     StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
   },
 
   update() {
+    graveyard.forEach(enemy => enemy.destroy())
+    graveyard = []
+
+    if (Math.random() * 1000 <= 20) this.spawnEnemy()
+
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
-    localState.enemies.forEach(this.enemyPathFinding, this)
+
+    for (const enemyKey in localState.enemies) {
+      this.enemyPathFinding(enemyKey)
+    }
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
   },
 
-  enemyPathFinding(enemy) {
+  enemyPathFinding(enemyKey) {
+    const enemy = localState.enemies[enemyKey]
+    StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
+      graveyard.push(enemy)
+      delete localState.enemies[enemyKey]
+    })
+    StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
+      playerObject.position.x = 200
+      playerObject.position.y = 200
+    })
     const closestPlayer = enemy.findClosestPlayer(localState)
     this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), (path) => enemy.move(path, this))
     this.easystar.calculate()
@@ -96,8 +115,7 @@ const fantasyState = {
   },
 
   spawnEnemy() {
-    localState.enemies.push(new Enemy(this.game, 'testMonster', { x: Math.random() * 1920, y: Math.random() * 1920 }, 'soldier'))
-    localState.enemies.push(new Enemy(this.game, 'testMonster', { x: Math.random() * 1920, y: Math.random() * 1920 }, 'soldier'))
+    localState.enemies[enemyCounter++] = new Enemy(this.game, 'testMonster', { x: Math.random() * 1920, y: Math.random() * 1920 }, 'soldier')
   }
 }
 
