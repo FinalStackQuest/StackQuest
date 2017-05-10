@@ -47,7 +47,7 @@ export const fantasyState = {
       }, this)
     })
 
-    playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+    playerObject = this.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
     localState.players.push(playerObject)
 
     this.spawnEnemy()
@@ -67,7 +67,11 @@ export const fantasyState = {
     socket.on('enemyCreated', (enemy) => {
       localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
     })
+    this.moveAllEnemies()
 
+    socket.on('foundPath', ({path, name}) => {
+      localState.enemies[name].move(path, this)
+    })
   },
 
   render() {
