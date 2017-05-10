@@ -40,6 +40,9 @@ export const fantasyState = {
     playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
 
     localState.players = []
+    localState.players.push(playerObject)
+
+    localState.enemeis = []
     this.spawnEnemy()
 
     this.physics.p2.enable(playerObject)
