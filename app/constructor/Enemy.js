@@ -8,7 +8,6 @@ import entityPrefab from './entityPrefab'
 export default class Enemy extends entityPrefab {
   constructor(game, name, position, spriteKey) {
     super(game, name, position, spriteKey)
-    console.log('game in enemy', this.game)
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     this.inputEnabled = true
@@ -82,13 +81,6 @@ export default class Enemy extends entityPrefab {
       tween.start()
       count++
     }
-    console.log(this.position)
-    console.log('this', this)
-    // path.forEach(function(step) {
-    //   const tween = this.game.tween(this.position)
-    //   .to({x: step.x * 60, y: step.y * 60}, 32)
-    //   tween.start()
-    // })
   }
   attackPlayer(player) {
     this.inFight = true
