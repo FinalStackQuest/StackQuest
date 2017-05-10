@@ -55,7 +55,7 @@ export default class Enemy extends entityPrefab {
       Game.moveTarget.visible = false
       Game.marker.visible = true
     } else if (path !== null){
-      if (action.action == 3 || action.action == 4){ // fight or chest
+      if (action.action == 3 || action.action == 4) { // fight or chest
         finalOrientation = Game.computeFinalOrientation(path)
         path.pop() // The player should stop right before the target, not at its location
       }
@@ -78,8 +78,8 @@ export default class Enemy extends entityPrefab {
     // const self = this
     if (this.tween) this.tween.stop()
     this.tween = this.game.tweens.create(this)
-    for (let i = 0; i< path.length; i++) {
-      const {x, y} = fantasyState.getPointFromGrid(path[i].y, path[i].x)
+    for (const step of path) {
+      const {x, y} = fantasyState.getPointFromGrid(step.y, step.x)
       this.tween.to({x: x, y: y}, 200)
     }
     this.tween.start()

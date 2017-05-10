@@ -10,7 +10,10 @@ let map
   , yCoord = 100
   , monster
 
-const localState = {}
+const localState = {
+  players: [],
+  enemies: [],
+}
 
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
@@ -38,11 +41,8 @@ export const fantasyState = {
     socket.emit('setupState', player, 'fantasyState')
 
     playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
-
-    localState.players = []
     localState.players.push(playerObject)
 
-    localState.enemeis = []
     this.spawnEnemy()
 
     this.physics.p2.enable(playerObject)
