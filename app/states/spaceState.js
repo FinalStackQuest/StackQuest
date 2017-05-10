@@ -1,6 +1,10 @@
 import { GamePlayers, socket } from '../sockets'
+import Easystar from 'easystarjs'
+import throttle from 'lodash.throttle'
+import Enemy from '../constructor/Enemy'
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
+import createCursors from './utils/createCursors'
 import createPlayer from './utils/createPlayer'
 import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
@@ -33,7 +37,7 @@ const spaceState = {
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
-    cursors = this.input.keyboard.createCursorKeys()
+    cursors = createCursors()
 
     StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
   },

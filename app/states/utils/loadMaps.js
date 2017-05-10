@@ -6,7 +6,8 @@ const loadMaps = {
     StackQuest.game.load.image('rtsSheet2', 'assets/tilesets/RTS_Medieval/Tilesheet/RTS_medieval@2.png')
 
     StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
-    StackQuest.game.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 64, 72, 36)
+    StackQuest.game.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 64, 64)
+    StackQuest.game.load.spritesheet('soldieralt', 'assets/tilesets/LPC Base Assets/sprites/people/soldier_altcolor.png', 64, 64, 36)
   },
 
   space() {

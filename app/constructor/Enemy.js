@@ -78,9 +78,20 @@ export default class Enemy extends entityPrefab {
     if (this.tween) this.tween.stop()
     if (this.game) {
       this.tween = this.game.tweens.create(this)
+      this.tween.target.animations.add('walk_up', [0, 1, 2, 3, 4, 5, 6, 7, 8])
+      this.tween.target.animations.add('walk_left', [9, 10, 11, 12, 13, 14, 15, 16, 17])
+      this.tween.target.animations.add('walk_down', [18, 19, 20, 21, 22, 23, 24, 25, 26])
+      this.tween.target.animations.add('walk_right', [27, 28, 29, 30, 31, 32, 33, 34, 35])
       for (const step of path) {
         const { x, y } = state.getPointFromGrid(step.y, step.x)
         this.tween.to({ x: x, y: y }, 500)
+        const pos = this.tween.target.position
+        let walk
+        if (pos.x > x) walk = 'walk_left'
+        else if (pos.x < x) walk = 'walk_right'
+        else if (pos.y > y) walk = 'walk_up'
+        else if (pos.y < y) walk = 'walk_down'
+        this.tween.target.animations.play(walk, 20, true)
       }
       this.tween.start()
     }
