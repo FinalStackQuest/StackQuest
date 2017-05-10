@@ -74,19 +74,16 @@ export default class Enemy extends entityPrefab {
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
   move(path) {
-    let count = 0
+    let count = 1
     // const self = this
-    console.log('path', path)
-    for (let step of path) {
-      console.log('this count ', count)
-      // const tween = self.game.add.tween(self.position)
-      // tween.to({x: step.x * 60, y: step.y * 60}, 32)
-      // tween.start()
-      this.position.x = step.x
-      this.position.y = step.y
+    const tween = this.game.tweens.create(this.position)
+    for (const step of path) {
+      tween.to({x: step.x * 60, y: step.y * 60}, 7000)
+      tween.start()
       count++
     }
     console.log(this.position)
+    console.log('this', this)
     // path.forEach(function(step) {
     //   const tween = this.game.tween(this.position)
     //   .to({x: step.x * 60, y: step.y * 60}, 32)

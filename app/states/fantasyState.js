@@ -7,6 +7,7 @@ let map
   , OGuy
   , xCoord = 100
   , yCoord = 100
+  , monster
 
 export const testState = {
   init(x, y) {
@@ -49,10 +50,9 @@ export const testState = {
     }
 
     // create monster test
-    const monster = new Enemy(this.game, 'testMonster', {x: 400, y: 400}, 'soldier')
+    monster = new Enemy(this.game, 'testMonster', {x: 400, y: 400}, 'soldier')
     this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(xCoord / 60), Math.floor(yCoord / 60), monster.move)
     this.easystar.calculate()
-    console.log(monster)
     // remove player from previous map (room)
     socket.emit('removePlayer')
     // join new map
@@ -74,10 +74,14 @@ export const testState = {
   },
 
   update() {
+    // monster
     OGuy.body.setZeroVelocity()
     OGuy.body.fixedRotation = true
-
+    // monster.body.moveUp(200)
+    monster.y += 20
+    console.log('monster.body', monster.body)
     if (cursors.up.isDown) {
+      console.log('mon move up?', monster)
       OGuy.body.moveUp(200)
       socket.emit('updatePlayer', OGuy.position)
     } else if (cursors.down.isDown) {

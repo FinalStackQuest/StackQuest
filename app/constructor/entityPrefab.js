@@ -19,7 +19,7 @@ export default class entityPrefab extends Phaser.Sprite {
     }))
 
     game.add.existing(this)
-    game.physics.p2.enable(this)
+    game.physics.arcade.enable(this)
 
     // game.prefabs[name] = this
     this.orientationsDict = {
