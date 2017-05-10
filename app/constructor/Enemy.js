@@ -82,7 +82,7 @@ export default class Enemy extends entityPrefab {
     for (const step of path) {
       const {x, y} = fantasyState.getPointFromGrid(step.y, step.x)
       this.tween.to({x: x, y: y}, 200)
-      socket.emit('updateEnemy', {name: this.name, key: this.key, x: this.position.x, y: this.position.y})
+      socket.emit('updateEnemy', {name: this.name, key: this.key, x: x, y: y})
     }
     this.tween.start()
   }

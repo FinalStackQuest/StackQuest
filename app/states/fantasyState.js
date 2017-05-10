@@ -39,7 +39,14 @@ export const fantasyState = {
     this.makeCollisionMap()
 
     socket.emit('setupState', player, 'fantasyState')
-
+    socket.emit('getEnemies', {state: 'fantasyState'})
+    socket.on('sendEnemies', (enemies) => {
+      console.log('enemies', enemies)
+      Object.keys(enemies).forEach(enemyName => {
+        const enemy = enemies[enemyName]
+        localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
+      }, this)
+    })
     playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
     localState.players.push(playerObject)
 
@@ -56,7 +63,13 @@ export const fantasyState = {
     this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
     cursors = this.input.keyboard.createCursorKeys()
+  },
 
+  update() {
+    playerMovement(playerObject, cursors)
+    mapTransition(player, playerObject, 'spaceState')
+    // localState.enemies.forEach(this.enemyPathFinding, this)
+    this.moveAllEnemies()
     socket.on('enemyCreated', (enemy) => {
       localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
     })
@@ -65,13 +78,6 @@ export const fantasyState = {
       localState.enemies[enemy.name].position.x = enemy.x
       localState.enemies[enemy.name].position.y = enemy.y
     })
-  },
-
-  update() {
-    playerMovement(playerObject, cursors)
-    mapTransition(player, playerObject, 'spaceState')
-    // localState.enemies.forEach(this.enemyPathFinding, this)
-    this.moveAllEnemies()
   },
 
   render() {

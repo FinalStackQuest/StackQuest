@@ -59,6 +59,13 @@ const socketFunction = io => {
       socket.broadcast.to(room).emit('enemyUpdated', enemy)
     })
 
+    socket.on('getEnemies', ({state}) => {
+      console.log('did state get thru', state)
+      console.log('EnemiesState', Enemies[state])
+      // const EnemiesOnState = JSON.parse(Enemies[state])
+      socket.emit('sendEnemies', Enemies[state])
+    })
+
     socket.on('setupState', (player, newRoom) => {
       // remove player from previous map (room)
       if (GamePlayers[room]) {

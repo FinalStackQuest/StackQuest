@@ -1,13 +1,13 @@
 {
   "fantasyState" : {
     "testMonster1" : {
-      "name": "peter",
+      "name": "testMonster1",
       "key": "soldier",
       "x": "800",
       "y": "800"
     },
     "testMonster2" : {
-      "name": "peter",
+      "name": "testMonster2",
       "key": "soldier",
       "x": "400",
       "y": "400"
