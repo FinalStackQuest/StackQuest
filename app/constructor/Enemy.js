@@ -16,7 +16,8 @@ export default class Enemy extends entityPrefab {
     //  this.handlBeingAttack
 
     this.inFight = false
-    this.orientation = game.rnd.between(1, 4)
+    // this.orientation = game.rnd.between(1, 4)
+    this.orientation = ''
     this.initialPosition = new Phaser.Point(position.x, position.y)
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
@@ -27,7 +28,14 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
-    this.move = throttle(this.move.bind(this), 2000)
+
+    this.animations.add('walk_up', [0, 1, 2, 3, 4, 5, 6, 7, 8])
+    this.animations.add('walk_left', [9, 10, 11, 12, 13, 14, 15, 16, 17])
+    this.animations.add('walk_down', [18, 19, 20, 21, 22, 23, 24, 25, 26])
+    this.animations.add('walk_right', [27, 28, 29, 30, 31, 32, 33, 34, 35])
+
+    // this.move = throttle(this.move.bind(this), 2000)
+    this.move = this.move.bind(this)
     this.findClosestPlayer = this.findClosestPlayer.bind(this)
   }
 
@@ -75,14 +83,30 @@ export default class Enemy extends entityPrefab {
   }
 
   move(path, state) {
-    if (this.tween) this.tween.stop()
-    if (this.game) {
-      this.tween = this.game.tweens.create(this)
-      for (const step of path) {
-        const { x, y } = state.getPointFromGrid(step.y, step.x)
-        this.tween.to({ x: x, y: y }, 500)
-      }
-      this.tween.start()
+    const speed = 100
+    const xDirection = this.x - path[1].x * 60
+    const yDirection = this.y - path[1].y * 60
+    const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+    let newOrientation
+
+    if (yDirection >= 0) {
+      this.body.velocity.y = -speed
+      if (absDirection < 0) newOrientation = 'walk_up'
+    } else if (yDirection < 0) {
+      this.body.velocity.y = speed
+      if (absDirection < 0) newOrientation = 'walk_down'
+    }
+    if (xDirection >= 0) {
+      this.body.velocity.x = -speed
+      if (absDirection > 0) newOrientation = 'walk_left'
+    } else if (xDirection < 0) {
+      this.body.velocity.x = speed
+      if (absDirection > 0) newOrientation = 'walk_right'
+    }
+
+    if (newOrientation !== this.orientation) {
+      this.orientation = newOrientation
+      this.animations.play(this.orientation, 30, true)
     }
   }
 
