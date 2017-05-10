@@ -1,7 +1,7 @@
 import { GamePlayers, socket } from '../sockets'
-const Easystar = require('easystarjs')
-import Enemy from '../constructor/Enemy'
+import Easystar from 'easystarjs'
 import throttle from 'lodash.throttle'
+import Enemy from '../constructor/Enemy'
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
 import createPlayer from './utils/createPlayer'
@@ -96,8 +96,8 @@ const fantasyState = {
   },
 
   spawnEnemy() {
-    localState.enemies.push(new Enemy(this.game, 'testMonster', { x: Math.random(1200), y: Math.random(800) }, 'soldier'))
-    localState.enemies.push(new Enemy(this.game, 'testMonster', { x: Math.random(1200), y: Math.random(800) }, 'soldier'))
+    localState.enemies.push(new Enemy(this.game, 'testMonster', { x: Math.random() * 1920, y: Math.random() * 1920 }, 'soldier'))
+    localState.enemies.push(new Enemy(this.game, 'testMonster', { x: Math.random() * 1920, y: Math.random() * 1920 }, 'soldier'))
   }
 }
 

@@ -27,7 +27,7 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
-    this.move = throttle(this.move.bind(this), 800)
+    this.move = throttle(this.move.bind(this), 2000)
     this.findClosestPlayer = this.findClosestPlayer.bind(this)
   }
 
@@ -73,16 +73,17 @@ export default class Enemy extends entityPrefab {
     //  pathFindingCallback needs to be on entityPrefab
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
+
   move(path, state) {
-    // const self = this
     if (this.tween) this.tween.stop()
     this.tween = this.game.tweens.create(this)
     for (const step of path) {
       const { x, y } = state.getPointFromGrid(step.y, step.x)
-      this.tween.to({ x: x, y: y }, 200)
+      this.tween.to({ x: x, y: y }, 500)
     }
     this.tween.start()
   }
+
   attackPlayer(player) {
     this.inFight = true
     //  NOTE: where the tweens coming from here? What do they do?

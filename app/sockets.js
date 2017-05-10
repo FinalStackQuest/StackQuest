@@ -17,6 +17,7 @@ const getPlayers = players => {
     const yPos = players[playerSocketId].y
     const playerClass = players[playerSocketId].class
     GamePlayers[playerSocketId] = StackQuest.game.add.text(xPos, yPos, playerClass, { font: '32px Arial', fill: '#ffffff' })
+    GamePlayers[playerSocketId].anchor.setTo(0.5, 0.5)
   })
 }
 
