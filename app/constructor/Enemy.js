@@ -86,7 +86,7 @@ export default class Enemy extends entityPrefab {
     const speed = 100
     const xDirection = this.x - path[1].x * 60
     const yDirection = this.y - path[1].y * 60
-    const absDirection = Math.abs(xDirection) - Math.abs(yDirection)
+    const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
     let newOrientation
 
     if (yDirection >= 0) {
