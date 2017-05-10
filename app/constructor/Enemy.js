@@ -1,5 +1,4 @@
-import entityPrefab from '../states/entityPrefab'
-
+import entityPrefab from './entityPrefab'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -9,7 +8,6 @@ import entityPrefab from '../states/entityPrefab'
 export default class Enemy extends entityPrefab {
   constructor(game, name, position, spriteKey) {
     super(game, name, position, spriteKey)
-
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     this.inputEnabled = true
@@ -28,6 +26,7 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
+    this.move = this.move.bind(this)
   }
 
   setup(monsterKey) {
@@ -72,6 +71,15 @@ export default class Enemy extends entityPrefab {
     }
     //  pathFindingCallback needs to be on entityPrefab
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
+  }
+  move(path) {
+    // const self = this
+    const tween = this.game.tweens.create(this.position)
+    for (const step of path) {
+      tween.to({x: step.x * 32, y: step.y * 32}, 200)
+      console.log('step', step)
+    }
+    tween.start()
   }
   attackPlayer(player) {
     this.inFight = true

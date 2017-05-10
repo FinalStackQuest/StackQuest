@@ -1,13 +1,16 @@
 // USE
 // Top level of character hierarchy
 // all characters will share properties and methods defined in entityPrefab
+require('pixi')
+require('p2')
+require('phaser')
 
 export default class entityPrefab extends Phaser.Sprite {
   constructor(game, name, position, spriteKey) {
     super(game, position.x, position.y, spriteKey)
     this.name = name
     this.attackTarget = null
-
+    this.game = game
     this.addChild(this.nameHolder = game.add.text(0, -30, `${name}`, {
       font: '14px pixel',
       fill: '#ffffff',
@@ -16,9 +19,9 @@ export default class entityPrefab extends Phaser.Sprite {
     }))
 
     game.add.existing(this)
-    game.physics.p2.enable(this)
+    game.physics.arcade.enable(this)
 
-    game.prefabs[name] = this
+    // game.prefabs[name] = this
     this.orientationsDict = {
       1: 'left',
       2: 'up',
@@ -71,11 +74,11 @@ export default class entityPrefab extends Phaser.Sprite {
   }
 
   delayedKill(delay) {
-    setTimeout(function (character) {
+    setTimeout(function(character) {
       character.kill()
     }, delay, this)
-
-    absorbProperties(jsonObject) {
-      Object.assign(this, jsonObject)
-    }
   }
+  absorbProperties(jsonObject) {
+    Object.assign(this, jsonObject)
+  }
+}
