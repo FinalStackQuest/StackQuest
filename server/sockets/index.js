@@ -45,6 +45,10 @@ const socketFunction = io => {
       }
     })
 
+    socket.on('addEnemy', (enemies) => {
+      console.log('did we get the enemies?', enemies)
+    })
+
     socket.on('setupState', (player, newRoom) => {
       // remove player from previous map (room)
       if (GamePlayers[room]) {

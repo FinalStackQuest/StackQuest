@@ -103,8 +103,9 @@ export const fantasyState = {
   },
 
   spawnEnemy() {
-    localState.enemies.push(new Enemy(this.game, 'testMonster', {x: Math.random(1200), y: Math.random(800)}, 'soldier'))
-    localState.enemies.push(new Enemy(this.game, 'testMonster', {x: Math.random(1200), y: Math.random(800)}, 'soldier'))
+    localState.enemies.push(new Enemy(this.game, 'testMonster1', {x: Math.random()*1200, y: Math.random() * 800}, 'soldier'))
+    localState.enemies.push(new Enemy(this.game, 'testMonster2', {x: Math.random()*1200, y: Math.random()*800}, 'soldier'))
+    socket.emit('addEnemy', {enemies: localState.enemies.map(({name, position}) => ({name, x: position.x, y: position.y}))})
   }
 }
 
