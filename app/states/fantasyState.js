@@ -70,7 +70,8 @@ export const fantasyState = {
   update() {
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
-    localState.enemies.forEach(this.enemyPathFinding, this)
+    // localState.enemies.forEach(this.enemyPathFinding, this)
+    this.moveAllEnemies()
   },
 
   render() {
@@ -118,6 +119,9 @@ export const fantasyState = {
     localState.enemies[newEnemy.name] = newEnemy
     // socket.emit('addEnemy', {enemies: localState.enemies.map(({name, position}) => ({name, x: position.x, y: position.y}))})
     socket.emit('addEnemy', {name: newEnemy.name, key: newEnemy.key, x: newEnemy.position.x, y: newEnemy.position.y})
+  },
+  moveAllEnemies() {
+    Object.keys(localState.enemies).forEach((enemyName) => this.enemyPathFinding(localState.enemies[enemyName]), this)
   }
 }
 
