@@ -57,7 +57,7 @@ const socketFunction = io => {
         key: 'soldier'
       }
       Enemies.fantasyState[newEnemy.name] = newEnemy
-      socket.emit('enemyCreated', newEnemy)
+      io.sockets.to(room).emit('enemyCreated', newEnemy)
     })
 
     socket.on('updateEnemy', (enemy) => {
@@ -66,7 +66,6 @@ const socketFunction = io => {
     })
 
     socket.on('getEnemies', ({state}) => {
-      // const EnemiesOnState = JSON.parse(Enemies[state])
       socket.emit('sendEnemies', Enemies[state])
     })
 
