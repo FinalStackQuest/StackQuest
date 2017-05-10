@@ -1,15 +1,17 @@
 import { GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
+import createPlayer from './utils/createPlayer'
+import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
+import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 
-let map
-  , cursors
+let cursors
   , playerObject
   , player
 
-export const fantasyState = {
+const fantasyState = {
   init(character) {
     if (character) player = character
   },
@@ -19,21 +21,21 @@ export const fantasyState = {
   },
 
   create() {
-    this.physics.startSystem(Phaser.Physics.P2JS)
+    this.physics.startSystem(Phaser.Physics.ARCADE)
 
     buildMaps.fantasy()
 
     socket.emit('setupState', player, 'fantasyState')
 
-    playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+    playerObject = createPlayer(player)
 
-    this.physics.p2.enable(playerObject)
+    const projectile = createProjectile.bullet(playerObject)
 
-    this.camera.follow(playerObject)
-
-    this.physics.p2.setBoundsToWorld(true, true, true, true, false)
+    this.physics.setBoundsToWorld(true, true, true, true, false)
 
     cursors = this.input.keyboard.createCursorKeys()
+
+    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
   },
 
   update() {

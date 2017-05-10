@@ -4,6 +4,8 @@ const loadMaps = {
     StackQuest.game.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack/Tilesheet/tiles_sheet.png')
     StackQuest.game.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack/Tilesheet/tiles_sheet@2.png')
     StackQuest.game.load.image('rtsSheet2', 'assets/tilesets/RTS_Medieval/Tilesheet/RTS_medieval@2.png')
+
+    StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
   },
 
   space() {
