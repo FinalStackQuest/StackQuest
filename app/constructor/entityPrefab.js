@@ -11,13 +11,12 @@ export default class entityPrefab extends Phaser.Sprite {
     this.name = name
     this.attackTarget = null
     this.game = game
-    this.addChild(this.nameHolder = game.add.text(0, -30, `${name}`, {
+    this.addChild(this.nameHolder = game.add.text(0, 50, `${name}`, {
       font: '14px pixel',
       fill: '#ffffff',
       stroke: '#000000',
       strokeThickness: 1
     }))
-
     game.add.existing(this)
     game.physics.arcade.enable(this)
 
