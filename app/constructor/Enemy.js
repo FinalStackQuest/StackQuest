@@ -1,6 +1,5 @@
 import entityPrefab from './entityPrefab'
 import throttle from 'lodash.throttle'
-import {fantasyState} from '../states/fantasyState'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -28,14 +27,14 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
-    this.move = throttle(this.move.bind(this), 800)
+    this.move = throttle(this.move.bind(this), 2000)
     this.findClosestPlayer = this.findClosestPlayer.bind(this)
   }
 
   setup(monsterKey) {
-      // key is a string used as a key in Game.monstersInfo to fetch the necessary information about the monster to create
+    // key is a string used as a key in Game.monstersInfo to fetch the necessary information about the monster to create
     // it's also used as part of the frame names to use (e.g. rat, red_0, rat_1, ...)
-    this.frameName = monsterKey+'_0'
+    this.frameName = monsterKey + '_0'
     this.monsterName = monsterKey
     this.absorbProperties(Game.monstersInfo[monsterKey])
     this.maxLife = this.life
@@ -54,12 +53,12 @@ export default class Enemy extends entityPrefab {
     if (path === null && this.isPlayer) {
       Game.moveTarget.visible = false
       Game.marker.visible = true
-    } else if (path !== null){
+    } else if (path !== null) {
       if (action.action == 3 || action.action == 4) { // fight or chest
         finalOrientation = Game.computeFinalOrientation(path)
         path.pop() // The player should stop right before the target, not at its location
       }
-      var actionToSend = (action.action != 1 ? action : {action:0})
+      var actionToSend = (action.action != 1 ? action : { action: 0 })
       if (this.isPlayer && sendToServer && path.length) Client.sendPath(path, actionToSend, finalOrientation)
       this.move(path, finalOrientation, action, delta)
     }
@@ -74,16 +73,19 @@ export default class Enemy extends entityPrefab {
     //  pathFindingCallback needs to be on entityPrefab
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
-  move(path) {
-    // const self = this
+
+  move(path, state) {
     if (this.tween) this.tween.stop()
-    this.tween = this.game.tweens.create(this)
-    for (const step of path) {
-      const {x, y} = fantasyState.getPointFromGrid(step.y, step.x)
-      this.tween.to({x: x, y: y}, 200)
+    if (this.game) {
+      this.tween = this.game.tweens.create(this)
+      for (const step of path) {
+        const { x, y } = state.getPointFromGrid(step.y, step.x)
+        this.tween.to({ x: x, y: y }, 500)
+      }
+      this.tween.start()
     }
-    this.tween.start()
   }
+
   attackPlayer(player) {
     this.inFight = true
     //  NOTE: where the tweens coming from here? What do they do?
@@ -99,7 +101,7 @@ export default class Enemy extends entityPrefab {
     this.lastAttack = Date.now()
     if (!this.target) return
     if (this.target.isPlayer) return
-    let direction = Game.adjacent(this, this.target)
+    const direction = Game.adjacent(this, this.target)
     if (direction > 0) {
       if (this.tween) {
         this.tween.stop()
