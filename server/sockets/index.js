@@ -2,6 +2,9 @@ const db = require('APP/db')
 const Character = db.model('characters')
 const GamePlayers = {}
 const Enemies = require('./enemies.json')
+const EasystarConstructor = require('easystarjs')
+const Easystar = new EasystarConstructor.js()
+let collisionArray
 
 const socketFunction = io => {
   io.on('connection', socket => {
@@ -46,25 +49,47 @@ const socketFunction = io => {
       }
     })
 
-    socket.on('addEnemy', (enemy) => {
-      console.log('did we get the enemy?', enemy)
-      Enemies.fantasyState[enemy.name] = enemy
-      console.log('did it get added to JSON?', Enemies.fantasyState[enemy.name])
-      socket.broadcast.to(room).emit('enemyCreated', enemy)
+    socket.on('addEnemy', () => {
+      const newEnemy = {
+        name: `testMonster ${Object.keys(Enemies.fantasyState).length+1}`,
+        x: Math.random()*1200,
+        y: Math.random()*1200,
+        key: 'soldier'
+      }
+      Enemies.fantasyState[newEnemy.name] = newEnemy
+      socket.emit('enemyCreated', newEnemy)
     })
 
     socket.on('updateEnemy', (enemy) => {
-      console.log('did enemy update?', enemy)
       Enemies.fantasyState[enemy.name] = enemy
       socket.broadcast.to(room).emit('enemyUpdated', enemy)
     })
 
     socket.on('getEnemies', ({state}) => {
-      console.log('did state get thru', state)
-      console.log('EnemiesState', Enemies[state])
       // const EnemiesOnState = JSON.parse(Enemies[state])
       socket.emit('sendEnemies', Enemies[state])
     })
+
+    socket.on('createCollisionArray', ({array}) => {
+      collisionArray = array
+      Easystar.setGrid(collisionArray)
+      Easystar.setAcceptableTiles([0])
+      Easystar.enableDiagonals()
+    })
+
+    socket.on('moveEnemy', ({name, startPosition, targetPosition}) => {
+      Easystar.findPath(
+        Math.floor(startPosition.x / collisionArray[0].length),
+        Math.floor(startPosition.y / collisionArray.length),
+        Math.floor(targetPosition.x / collisionArray[0].length),
+        Math.floor(targetPosition.y / collisionArray.length),
+        path => findPathCallback(path, name))
+      Easystar.calculate()
+    })
+
+    function findPathCallback(path, name) {
+      socket.emit('foundPath', {path, name})
+    }
 
     socket.on('setupState', (player, newRoom) => {
       // remove player from previous map (room)

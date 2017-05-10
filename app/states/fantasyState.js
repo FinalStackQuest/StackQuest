@@ -1,5 +1,5 @@
 import { GamePlayers, socket } from '../sockets'
-const Easystar = require('easystarjs')
+// const Easystar = require('easystarjs')
 import Enemy from '../constructor/Enemy'
 import throttle from 'lodash.throttle'
 
@@ -47,6 +47,7 @@ export const fantasyState = {
         localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
       }, this)
     })
+
     playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
     localState.players.push(playerObject)
 
@@ -69,15 +70,20 @@ export const fantasyState = {
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
     // localState.enemies.forEach(this.enemyPathFinding, this)
-    this.moveAllEnemies()
+    // this.moveAllEnemies()
     socket.on('enemyCreated', (enemy) => {
+      console.log(enemy)
       localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
     })
 
-    socket.on('enemyUpdated', (enemy) => {
-      localState.enemies[enemy.name].position.x = enemy.x
-      localState.enemies[enemy.name].position.y = enemy.y
-    })
+    // socket.on('enemyUpdated', (enemy) => {
+    //   localState.enemies[enemy.name].position.x = enemy.x
+    //   localState.enemies[enemy.name].position.y = enemy.y
+    // })
+    //
+    // socket.on('foundPath', ({path, name}) => {
+    //   localState.enemies[name].move(path, this)
+    // })
   },
 
   render() {
@@ -86,8 +92,19 @@ export const fantasyState = {
 
   enemyPathFinding(enemy) {
     const closestPlayer = enemy.findClosestPlayer(localState)
-    this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), enemy.move)
-    this.easystar.calculate()
+    // this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), enemy.move)
+    // this.easystar.calculate()
+    socket.emit('moveEnemy', {
+      name: enemy.name,
+      startPosition: {
+        x: enemy.position.x,
+        y: enemy.position.y
+      },
+      targetPosition: {
+        x: closestPlayer.position.x,
+        y: closestPlayer.position.y
+      }
+    })
   },
 
   makeCollisionMap() {
@@ -106,10 +123,11 @@ export const fantasyState = {
       }
       collisionArray.push(rowArray)
     }
-    this.easystar = new Easystar.js()
-    this.easystar.setGrid(collisionArray)
-    this.easystar.setAcceptableTiles([0])
-    this.easystar.enableDiagonals()
+    socket.emit('createCollisionArray', {array: collisionArray})
+    // this.easystar = new Easystar.js()
+    // this.easystar.setGrid(collisionArray)
+    // this.easystar.setAcceptableTiles([0])
+    // this.easystar.enableDiagonals()
   },
 
   getPointFromGrid(rowIdx, colIdx) {
@@ -121,10 +139,10 @@ export const fantasyState = {
   spawnEnemy() {
     // localState.enemies.push(new Enemy(this.game, 'testMonster1', {x: Math.random()*1200, y: Math.random() * 800}, 'soldier'))
     // localState.enemies.push(new Enemy(this.game, 'testMonster2', {x: Math.random()*1200, y: Math.random()*800}, 'soldier'))
-    const newEnemy = new Enemy(this.game, 'testMonster3', {x: Math.random()*1200, y: Math.random()*800}, 'soldier')
-    localState.enemies[newEnemy.name] = newEnemy
+    // const newEnemy = new Enemy(this.game, 'testMonster3', {x: Math.random()*1200, y: Math.random()*800}, 'soldier')
+    // localState.enemies[newEnemy.name] = newEnemy
     // socket.emit('addEnemy', {enemies: localState.enemies.map(({name, position}) => ({name, x: position.x, y: position.y}))})
-    socket.emit('addEnemy', {name: newEnemy.name, key: newEnemy.key, x: newEnemy.position.x, y: newEnemy.position.y})
+    socket.emit('addEnemy')
   },
   moveAllEnemies() {
     Object.keys(localState.enemies).forEach((enemyName) => this.enemyPathFinding(localState.enemies[enemyName]), this)

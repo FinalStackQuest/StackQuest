@@ -75,14 +75,14 @@ export default class Enemy extends entityPrefab {
     //  pathFindingCallback needs to be on entityPrefab
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
-  move(path) {
+  move(path, state) {
     // const self = this
     if (this.tween) this.tween.stop()
     this.tween = this.game.tweens.create(this)
     for (const step of path) {
-      const {x, y} = fantasyState.getPointFromGrid(step.y, step.x)
+      const {x, y} = state.getPointFromGrid(step.y, step.x)
       this.tween.to({x: x, y: y}, 200)
-      socket.emit('updateEnemy', {name: this.name, key: this.key, x: x, y: y})
+      // socket.emit('updateEnemy', {name: this.name, key: this.key, x: x, y: y})
     }
     this.tween.start()
   }
