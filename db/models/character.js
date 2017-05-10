@@ -1,7 +1,7 @@
 'use strict'
 
 // bcrypt docs: https://www.npmjs.com/package/bcrypt
-const {ENUM, INTEGER, STRING} = require('sequelize')
+const { ENUM, INTEGER, STRING } = require('sequelize')
 
 module.exports = db => db.define('characters', {
   hp: INTEGER,
@@ -10,7 +10,8 @@ module.exports = db => db.define('characters', {
   x: {
     type: STRING,
     set: function(xCoord) {
-      return this.setDataValues('x', String(xCoord))
+      console.log(this)
+      return this.setDataValue('x', String(xCoord))
     },
     get: function() {
       return +this.getDataValue('x')
@@ -19,7 +20,7 @@ module.exports = db => db.define('characters', {
   y: {
     type: STRING,
     set: function(yCoord) {
-      return this.setDataValues('y', String(yCoord))
+      return this.setDataValue('y', String(yCoord))
     },
     get: function() {
       return +this.getDataValue('y')

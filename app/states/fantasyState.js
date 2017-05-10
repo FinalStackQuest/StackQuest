@@ -1,60 +1,35 @@
 import { GamePlayers, socket } from '../sockets'
+import loadMaps from './utils/loadMaps'
+import buildMaps from './utils/buildMaps'
+import playerMovement from './utils/playerMovement'
+import mapTransition from './utils/mapTransition'
 
 let map
   , cursors
-  , OGuy
-  , xCoord = 100
-  , yCoord = 100
+  , playerObject
+  , player
 
-export const testState = {
-  init(x, y) {
-    if (x && y) {
-      xCoord = x
-      yCoord = y
-    }
+export const fantasyState = {
+  init(character) {
+    if (character) player = character
   },
 
-  preload(x, y) {
-    this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('pirateSheet', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet.png')
-    this.load.image('pirateSheet2', 'assets/tilesets/Pirate_Pack_(190 assets)/Tilesheet/tiles_sheet@2.png')
+  preload() {
+    loadMaps.fantasy()
   },
 
   create() {
     this.physics.startSystem(Phaser.Physics.P2JS)
-    map = this.add.tilemap('testmap')
 
-    map.addTilesetImage('pirate_sheet', 'pirateSheet')
-    map.addTilesetImage('pirate_sheet2', 'pirateSheet2')
+    buildMaps.fantasy()
 
-    const grassLayer = map.createLayer('grass_layer')
-    const waterLayer = map.createLayer('water_layer')
-    const stuffLayer = map.createLayer('stuff_layer')
+    socket.emit('setupState', player, 'fantasyState')
 
-    grassLayer.resizeWorld()
+    playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
 
-    const player = {
-      class: 'O',
-      pos: {
-        x: xCoord,
-        y: yCoord
-      }
-    }
+    this.physics.p2.enable(playerObject)
 
-    // remove player from previous map (room)
-    socket.emit('removePlayer')
-    // join new map
-    socket.emit('joinroom', 'fantasyState')
-    // get all players on the same map
-    socket.emit('getPlayers')
-    // add player to map
-    socket.emit('addPlayer', player)
-
-    OGuy = this.add.text(xCoord, yCoord, 'O', { font: '32px Arial', fill: '#ffffff' })
-
-    this.physics.p2.enable(OGuy)
-
-    this.camera.follow(OGuy)
+    this.camera.follow(playerObject)
 
     this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
@@ -62,33 +37,8 @@ export const testState = {
   },
 
   update() {
-    OGuy.body.setZeroVelocity()
-    OGuy.body.fixedRotation = true
-
-    if (cursors.up.isDown) {
-      OGuy.body.moveUp(200)
-      socket.emit('updatePlayer', OGuy.position)
-    } else if (cursors.down.isDown) {
-      OGuy.body.moveDown(200)
-      socket.emit('updatePlayer', OGuy.position)
-    }
-    if (cursors.left.isDown) {
-      OGuy.body.moveLeft(200)
-      socket.emit('updatePlayer', OGuy.position)
-    } else if (cursors.right.isDown) {
-      OGuy.body.moveRight(200)
-      socket.emit('updatePlayer', OGuy.position)
-    }
-
-    if (OGuy.position.y <= this.world.bounds.top + OGuy.height) {
-      this.state.start('spaceState', true, false, OGuy.position.x, this.world.bounds.bottom - OGuy.height - 10)
-    } else if (OGuy.position.y >= this.world.bounds.bottom - OGuy.height) {
-      this.state.start('spaceState', true, false, OGuy.position.x, this.world.bounds.top + OGuy.height + 10)
-    } else if (OGuy.position.x <= this.world.bounds.left + OGuy.width) {
-      this.state.start('spaceState', true, false, this.world.bounds.right - OGuy.width - 10, OGuy.position.y)
-    } else if (OGuy.position.x >= this.world.bounds.right - OGuy.width) {
-      this.state.start('spaceState', true, false, this.world.bounds.left + OGuy.width + 10, OGuy.position.y)
-    }
+    playerMovement(playerObject, cursors)
+    mapTransition(player, playerObject, 'spaceState')
   },
 
   render() {
@@ -96,4 +46,4 @@ export const testState = {
   }
 }
 
-export default testState
+export default fantasyState
