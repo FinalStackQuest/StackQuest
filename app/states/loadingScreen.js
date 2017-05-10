@@ -1,5 +1,5 @@
 import preloadTest from './preloadTest.js'
-
+import fantasyState from './fantasyState.js'
 let loadingText
 
 export default {
@@ -18,6 +18,7 @@ export default {
     loadingText.setText(`${this.load.progress}% / 100%`)
   },
   create() {
-    this.state.start('preloadTest')
+  // this.state.start('preloadTest')
+    this.state.start('fantasyState')
   },
 }

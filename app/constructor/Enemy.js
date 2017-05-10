@@ -73,14 +73,13 @@ export default class Enemy extends entityPrefab {
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
   move(path) {
-    let count = 1
     // const self = this
     const tween = this.game.tweens.create(this.position)
     for (const step of path) {
-      tween.to({x: step.x * 60, y: step.y * 60}, 7000)
-      tween.start()
-      count++
+      tween.to({x: step.x * 32, y: step.y * 32}, 200)
+      console.log('step', step)
     }
+    tween.start()
   }
   attackPlayer(player) {
     this.inFight = true

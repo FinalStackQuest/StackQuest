@@ -28,7 +28,7 @@ export const fantasyState = {
   create() {
     this.physics.startSystem(Phaser.Physics.P2JS)
 
-    buildMaps.fantasy()
+    map = buildMaps.fantasy()
 
     socket.emit('setupState', player, 'fantasyState')
 
@@ -40,8 +40,8 @@ export const fantasyState = {
 
     // create monster test
     monster = new Enemy(this.game, 'testMonster', {x: 400, y: 400}, 'soldier')
-    this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(xCoord / 60), Math.floor(yCoord / 60), monster.move)
-    this.easystar.calculate()
+    // this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(xCoord / 60), Math.floor(yCoord / 60), monster.move)
+    // this.easystar.calculate()
 
     this.camera.follow(playerObject)
 
@@ -53,6 +53,8 @@ export const fantasyState = {
   update() {
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
+    this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(playerObject.position.x / 60), Math.floor(playerObject.position.y / 60), monster.move)
+    this.easystar.calculate()
   },
 
   render() {
