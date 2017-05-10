@@ -1,11 +1,12 @@
 const db = require('APP/db')
 const Character = db.model('characters')
 const GamePlayers = {}
+const Enemies = require('./enemies.json')
 
 const socketFunction = io => {
   io.on('connection', socket => {
     console.log('got a connection', socket.id)
-
+    // console.log('enemies', Enemies)
     let room = 'world'
     socket.join(room)
 
@@ -45,8 +46,17 @@ const socketFunction = io => {
       }
     })
 
-    socket.on('addEnemy', (enemies) => {
-      console.log('did we get the enemies?', enemies)
+    socket.on('addEnemy', (enemy) => {
+      console.log('did we get the enemy?', enemy)
+      Enemies.fantasyState[enemy.name] = enemy
+      console.log('did it get added to JSON?', Enemies.fantasyState[enemy.name])
+      socket.broadcast.to(room).emit('enemyCreated', enemy)
+    })
+
+    socket.on('updateEnemy', (enemy) => {
+      console.log('did enemy update?', enemy)
+      Enemies.fantasyState[enemy.name] = enemy
+      socket.broadcast.to(room).emit('enemyUpdated', enemy)
     })
 
     socket.on('setupState', (player, newRoom) => {

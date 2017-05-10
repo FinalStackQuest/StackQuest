@@ -12,7 +12,7 @@ let map
 
 const localState = {
   players: [],
-  enemies: [],
+  enemies: {},
 }
 
 import loadMaps from './utils/loadMaps'
@@ -56,6 +56,15 @@ export const fantasyState = {
     this.physics.p2.setBoundsToWorld(true, true, true, true, false)
 
     cursors = this.input.keyboard.createCursorKeys()
+
+    socket.on('enemyCreated', (enemy) => {
+      localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
+    })
+
+    socket.on('enemyUpdated', (enemy) => {
+      localState.enemies[enemy.name].position.x = enemy.x
+      localState.enemies[enemy.name].position.y = enemy.y
+    })
   },
 
   update() {
@@ -103,9 +112,12 @@ export const fantasyState = {
   },
 
   spawnEnemy() {
-    localState.enemies.push(new Enemy(this.game, 'testMonster1', {x: Math.random()*1200, y: Math.random() * 800}, 'soldier'))
-    localState.enemies.push(new Enemy(this.game, 'testMonster2', {x: Math.random()*1200, y: Math.random()*800}, 'soldier'))
-    socket.emit('addEnemy', {enemies: localState.enemies.map(({name, position}) => ({name, x: position.x, y: position.y}))})
+    // localState.enemies.push(new Enemy(this.game, 'testMonster1', {x: Math.random()*1200, y: Math.random() * 800}, 'soldier'))
+    // localState.enemies.push(new Enemy(this.game, 'testMonster2', {x: Math.random()*1200, y: Math.random()*800}, 'soldier'))
+    const newEnemy = new Enemy(this.game, 'testMonster3', {x: Math.random()*1200, y: Math.random()*800}, 'soldier')
+    localState.enemies[newEnemy.name] = newEnemy
+    // socket.emit('addEnemy', {enemies: localState.enemies.map(({name, position}) => ({name, x: position.x, y: position.y}))})
+    socket.emit('addEnemy', {name: newEnemy.name, key: newEnemy.key, x: newEnemy.position.x, y: newEnemy.position.y})
   }
 }
 

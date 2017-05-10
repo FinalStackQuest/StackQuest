@@ -1,6 +1,7 @@
 import entityPrefab from './entityPrefab'
 import throttle from 'lodash.throttle'
 import {fantasyState} from '../states/fantasyState'
+import {socket} from 'APP/app/sockets'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -81,6 +82,7 @@ export default class Enemy extends entityPrefab {
     for (const step of path) {
       const {x, y} = fantasyState.getPointFromGrid(step.y, step.x)
       this.tween.to({x: x, y: y}, 200)
+      socket.emit('updateEnemy', {name: this.name, key: this.key, x: this.position.x, y: this.position.y})
     }
     this.tween.start()
   }
