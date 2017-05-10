@@ -1,4 +1,6 @@
 import entityPrefab from './entityPrefab'
+import throttle from 'lodash.throttle'
+import {fantasyState} from '../states/fantasyState'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -17,7 +19,7 @@ export default class Enemy extends entityPrefab {
     this.inFight = false
     this.orientation = game.rnd.between(1, 4)
     this.initialPosition = new Phaser.Point(position.x, position.y)
-
+    this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
     this.stats = {
       hp: 10,
@@ -26,7 +28,8 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
-    this.move = this.move.bind(this)
+    this.move = throttle(this.move.bind(this), 800)
+    this.findClosestPlayer = this.findClosestPlayer.bind(this)
   }
 
   setup(monsterKey) {
@@ -34,7 +37,6 @@ export default class Enemy extends entityPrefab {
     // it's also used as part of the frame names to use (e.g. rat, red_0, rat_1, ...)
     this.frameName = monsterKey+'_0'
     this.monsterName = monsterKey
-    this.anchor.set(0.25, 0.2)
     this.absorbProperties(Game.monstersInfo[monsterKey])
     this.maxLife = this.life
     //  Make sure this adds to Game.entities
@@ -53,7 +55,7 @@ export default class Enemy extends entityPrefab {
       Game.moveTarget.visible = false
       Game.marker.visible = true
     } else if (path !== null){
-      if (action.action == 3 || action.action == 4){ // fight or chest
+      if (action.action == 3 || action.action == 4) { // fight or chest
         finalOrientation = Game.computeFinalOrientation(path)
         path.pop() // The player should stop right before the target, not at its location
       }
@@ -74,12 +76,13 @@ export default class Enemy extends entityPrefab {
   }
   move(path) {
     // const self = this
-    const tween = this.game.tweens.create(this.position)
+    if (this.tween) this.tween.stop()
+    this.tween = this.game.tweens.create(this)
     for (const step of path) {
-      tween.to({x: step.x * 32, y: step.y * 32}, 200)
-      console.log('step', step)
+      const {x, y} = fantasyState.getPointFromGrid(step.y, step.x)
+      this.tween.to({x: x, y: y}, 200)
     }
-    tween.start()
+    this.tween.start()
   }
   attackPlayer(player) {
     this.inFight = true
@@ -156,9 +159,22 @@ export default class Enemy extends entityPrefab {
     this.idle(true)
     Game.fadeInTween(this)
   }
+
   lootDrop() {
     if (!this.alive) {
       console.log(this.stats.loot[0])
     }
+  }
+
+  findClosestPlayer(state) {
+    return state.players.reduce((closestPlayer, player) => {
+      const closestDist = Math.sqrt(Math.pow(closestPlayer.position.x - this.position.x, 2) + Math.pow(closestPlayer.position.y - this.position.y, 2))
+      const dist = Math.sqrt(Math.pow(player.position.x - this.position.x, 2) + Math.pow(player.position.y - this.position.y, 2))
+      if (closestDist < dist) {
+        return closestPlayer
+      } else {
+        return player
+      }
+    })
   }
 }

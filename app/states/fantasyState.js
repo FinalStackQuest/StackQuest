@@ -1,6 +1,7 @@
 import { GamePlayers, socket } from '../sockets'
 const Easystar = require('easystarjs')
 import Enemy from '../constructor/Enemy'
+import throttle from 'lodash.throttle'
 
 let map
   , cursors
@@ -8,6 +9,12 @@ let map
   , xCoord = 100
   , yCoord = 100
   , monster
+
+const localState = {
+  players: [],
+  enemies: [],
+}
+
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
 import playerMovement from './utils/playerMovement'
@@ -29,17 +36,18 @@ export const fantasyState = {
     this.physics.startSystem(Phaser.Physics.P2JS)
 
     map = buildMaps.fantasy()
+    this.makeCollisionMap()
 
     socket.emit('setupState', player, 'fantasyState')
 
-    this.makeCollisionMap()
-
     playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+    localState.players.push(playerObject)
+
+    this.spawnEnemy()
 
     this.physics.p2.enable(playerObject)
 
     // create monster test
-    monster = new Enemy(this.game, 'testMonster', {x: 400, y: 400}, 'soldier')
     // this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(xCoord / 60), Math.floor(yCoord / 60), monster.move)
     // this.easystar.calculate()
 
@@ -53,14 +61,19 @@ export const fantasyState = {
   update() {
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
-    this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(playerObject.position.x / 60), Math.floor(playerObject.position.y / 60), monster.move)
-    this.easystar.calculate()
+    localState.enemies.forEach(this.enemyPathFinding, this)
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
-  }
-  ,
+  },
+
+  enemyPathFinding(enemy) {
+    const closestPlayer = enemy.findClosestPlayer(localState)
+    this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), enemy.move)
+    this.easystar.calculate()
+  },
+
   makeCollisionMap() {
     const collisionArray = []
     for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
@@ -80,6 +93,18 @@ export const fantasyState = {
     this.easystar = new Easystar.js()
     this.easystar.setGrid(collisionArray)
     this.easystar.setAcceptableTiles([0])
+    this.easystar.enableDiagonals()
+  },
+
+  getPointFromGrid(rowIdx, colIdx) {
+    const y = (rowIdx * map.height) + (map.height / 2)
+    const x = (colIdx * map.width) + (map.width / 2)
+    return new Phaser.Point(x, y)
+  },
+
+  spawnEnemy() {
+    localState.enemies.push(new Enemy(this.game, 'testMonster', {x: Math.random(1200), y: Math.random(800)}, 'soldier'))
+    localState.enemies.push(new Enemy(this.game, 'testMonster', {x: Math.random(1200), y: Math.random(800)}, 'soldier'))
   }
 }
 
