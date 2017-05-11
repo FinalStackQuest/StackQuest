@@ -71,8 +71,9 @@ const fantasyState = {
     }
     // get this guy out, need to detect collsion better
     this.physics.arcade.collide(playerObject, localState.loot[0], function(player, loot) {
-      console.log('collision ')
+      console.log('play obj ', playerObject)
       console.log('loot', loot)
+      // playerObject.
       loot.destroy()
     })
   },
