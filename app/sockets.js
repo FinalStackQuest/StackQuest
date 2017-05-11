@@ -44,20 +44,21 @@ const removePlayer = socketId => {
   }
 }
 //
-const enemyCreated = (enemy) => {
-  console.log(1, enemy)
-  localState.enemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
+const enemyCreated = ({enemy, state}) => {
+  if (!GameEnemies[state]) GameEnemies[state] = {}
+  GameEnemies[state][enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
 }
 
-const foundPath = ({path, name}) => {
-  localState.enemies[name].move(path, localState.state)
+const foundPath = ({path, name, state}) => {
+  GameEnemies[state][name].move(path, localState.state)
 }
 
-const sendEnemies = enemies => {
+const sendEnemies = ({enemies, state}) => {
+  if (!GameEnemies[state]) GameEnemies[state] = {}
   Object.keys(enemies).forEach(enemyName => {
     const enemy = enemies[enemyName]
-    if (!localState.enemies[enemy.name]) {
-      localState.enemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
+    if (GameEnemies[state][enemy.name]) {
+      GameEnemies[state][enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
     }
   })
 }

@@ -52,23 +52,25 @@ const socketFunction = io => {
     })
 
     socket.on('addEnemy', ({state}) => {
-      const newEnemy = {
+      const enemy = {
         name: `testMonster ${Object.keys(Enemies[state]).length+1}`,
         x: Math.random()*1200,
         y: Math.random()*1200,
         key: 'soldier'
       }
-      Enemies[state][newEnemy.name] = newEnemy
-      io.sockets.to(room).emit('enemyCreated', newEnemy)
+      Enemies[state][enemy.name] = enemy
+      io.sockets.to(room).emit('enemyCreated', {enemy, state})
     })
 
+    //SHOULD TAKE STATE
     socket.on('updateEnemy', (enemy) => {
       Enemies.fantasyState[enemy.name] = enemy
       socket.broadcast.to(room).emit('enemyUpdated', enemy)
     })
 
     socket.on('getEnemies', ({state}) => {
-      socket.emit('sendEnemies', Enemies[state])
+      console.log(Enemies[state])
+      socket.emit('sendEnemies', {enemies: Enemies[state], state})
     })
 
     socket.on('createCollisionArray', ({array}) => {
@@ -88,21 +90,11 @@ const socketFunction = io => {
             Math.floor(enemy.y / collisionArray.length),
             Math.floor(closestPlayer.x / collisionArray[0].length),
             Math.floor(closestPlayer.y / collisionArray.length),
-            path => io.sockets.to(room).emit('foundPath', {path, name}))
+            path => io.sockets.to(room).emit('foundPath', {path, name, state}))
           Easystar.calculate()
         }
       }
     })
-
-    // socket.on('moveEnemy', ({name, startingPos, targetPos}) => {
-    //   Easystar.findPath(
-    //     Math.floor(startingPos.x / collisionArray[0].length),
-    //     Math.floor(startingPos.y / collisionArray.length),
-    //     Math.floor(targetPos.x / collisionArray[0].length),
-    //     Math.floor(targetPos.y / collisionArray.length),
-    //     path => io.sockets.to(room).emit('foundPath', {path, name}))
-    //   Easystar.calculate()
-    // })
 
     socket.on('setupState', (player, newRoom) => {
       // remove player from previous map (room)

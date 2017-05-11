@@ -1,4 +1,4 @@
-import { GamePlayers, socket } from '../sockets'
+import { GameEnemies, GamePlayers, socket } from '../sockets'
 import throttle from 'lodash.throttle'
 import Enemy from '../constructor/Enemy'
 import loadMaps from './utils/loadMaps'
@@ -52,7 +52,7 @@ const fantasyState = {
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
     this.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
-    this.throttleMove = throttle(this.moveAllEnemies, 200)
+    this.throttleMove = throttle(this.moveAllEnemies, 500)
   },
 
   update() {
@@ -64,7 +64,7 @@ const fantasyState = {
 
     this.throttleMove()
 
-    for (const enemyKey in localState.enemies) {
+    for (const enemyKey in GameEnemies.fantasyState) {
       this.enemyPathFinding(enemyKey)
     }
   },
@@ -74,29 +74,16 @@ const fantasyState = {
   },
 
   enemyPathFinding(enemyKey) {
-    const enemy = localState.enemies[enemyKey]
+    const enemy = GameEnemies.fantasyState[enemyKey]
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
       graveyard.push(enemy)
-      delete localState.enemies[enemyKey]
+      delete GameEnemies.fantasyState[enemyKey]
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
       playerObject.position.x = 200
       playerObject.position.y = 200
     })
     if (enemy) {
-      // const closestPlayer = enemy.findClosestPlayer(localState.players)
-      // // socket.emit('moveEnemy', {name: enemy.name, state: 'fantasyState'})
-      // socket.emit('moveEnemy', {
-      //   name: enemy.name,
-      //   startingPos: {
-      //     x: enemy.position.x,
-      //     y: enemy.position.y
-      //   },
-      //   targetPos: {
-      //     x: closestPlayer.position.x,
-      //     y: closestPlayer.position.y,
-      //   }
-      // })
       socket.emit('moveEnemy', {
         name: enemy.name,
         state: 'fantasyState'
@@ -134,7 +121,10 @@ const fantasyState = {
   },
 
   moveAllEnemies() {
-    Object.keys(localState.enemies).forEach((enemyName) => this.enemyPathFinding(localState.enemies[enemyName]), this)
+    console.log(GameEnemies.fantasyState)
+    if (GameEnemies.fantasyState) {
+      Object.keys(GameEnemies.fantasyState).forEach((enemyName) => this.enemyPathFinding(GameEnemies.fantasyState), this)
+    }
   }
 }
 
