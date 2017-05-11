@@ -20,7 +20,6 @@ export default class entityPrefab extends Phaser.Sprite {
     game.add.existing(this)
     game.physics.arcade.enable(this)
 
-    // game.prefabs[name] = this
     this.orientationsDict = {
       1: 'left',
       2: 'up',
@@ -77,7 +76,8 @@ export default class entityPrefab extends Phaser.Sprite {
       character.kill()
     }, delay, this)
   }
-  absorbProperties(jsonObject) {
-    Object.assign(this, jsonObject)
+
+  absorbProperties(object) {
+    Object.assign(this, object)
   }
 }
