@@ -94,7 +94,7 @@ const fantasyState = {
         // current loot count
         lootTouched++
         const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
-        setTimeout(lootCount.destroy, 3000)
+        setTimeout(() => { lootCount.destroy() }, 3000)
         loot.destroy()
       })
     }
