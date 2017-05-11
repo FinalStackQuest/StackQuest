@@ -1,5 +1,6 @@
 import entityPrefab from './entityPrefab'
 import throttle from 'lodash.throttle'
+import { socket } from '../sockets'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -12,7 +13,6 @@ export default class Enemy extends entityPrefab {
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     this.inputEnabled = true
-
     //  this.handlBeingAttack
 
     this.inFight = false
@@ -36,7 +36,7 @@ export default class Enemy extends entityPrefab {
 
     // this.move = throttle(this.move.bind(this), 2000)
     this.move = this.move.bind(this)
-    this.findClosestPlayer = this.findClosestPlayer.bind(this)
+    console.log('confused', position)
   }
 
   setup(monsterKey) {
@@ -82,7 +82,7 @@ export default class Enemy extends entityPrefab {
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
 
-  move(path, state) {
+  move(path) {
     const speed = 100
     const xDirection = this.x - path[1].x * 60
     const yDirection = this.y - path[1].y * 60
@@ -193,17 +193,5 @@ export default class Enemy extends entityPrefab {
       console.log(this.stats.loot[0])
     }
   }
-
-  findClosestPlayer(localPlayers) {
-    let maxDist = Infinity
-    let closestPlayer
-    for (const player of localPlayers) {
-      const dist = Math.sqrt(Math.pow(player.position.x - this.position.x, 2) + Math.pow(player.position.y - this.position.y, 2))
-      if (dist < maxDist) {
-        closestPlayer = player
-        maxDist = dist
-      }
-    }
-    return closestPlayer
-  }
 }
+

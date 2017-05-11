@@ -1,13 +1,13 @@
 module.exports = {
-  findClosestPlayer: (currentMap, enemy) => findClosestPlayer(currentMap, enemy),
+  findClosestPlayer: (currentPlayers, enemy) => findClosestPlayer(currentPlayers, enemy),
 }
 
-function findClosestPlayer(currentMap, enemy) {
-  const playerIds = Object.keys(currentMap)
+function findClosestPlayer(currentPlayers, enemy) {
+  const playerIds = Object.keys(currentPlayers)
   let maxDist = Infinity
   let closestPlayer
   for (const playerId of playerIds) {
-    const player = currentMap[playerId]
+    const player = currentPlayers[playerId]
     const dist = Math.sqrt(Math.pow(player.x - enemy.x, 2) + Math.pow(player.y - enemy.y, 2))
     if (dist < maxDist) {
       closestPlayer = player
