@@ -1,5 +1,6 @@
 import entityPrefab from './entityPrefab'
 import throttle from 'lodash.throttle'
+import { socket } from '../sockets'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -12,7 +13,6 @@ export default class Enemy extends entityPrefab {
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     this.inputEnabled = true
-
     //  this.handlBeingAttack
 
     this.inFight = false
@@ -36,6 +36,7 @@ export default class Enemy extends entityPrefab {
 
     // this.move = throttle(this.move.bind(this), 2000)
     this.move = this.move.bind(this)
+
     this.findClosestPlayer = this.findClosestPlayer.bind(this)
     this.takeDamage = this.takeDamage.bind(this)
     this.attackPlayer = this.attackPlayer.bind(this)
@@ -86,32 +87,35 @@ export default class Enemy extends entityPrefab {
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
 
-  move(path, state) {
-    const speed = 100
-    const xDirection = this.x - path[1].x * 60
-    const yDirection = this.y - path[1].y * 60
-    const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-    let newOrientation
+  move(path) {
+    if (path[1]) {
+      const speed = 100
+      const xDirection = this.x - path[1].x * 60
+      const yDirection = this.y - path[1].y * 60
+      const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+      let newOrientation
 
-    if (yDirection >= 0) {
-      this.body.velocity.y = -speed
-      if (absDirection < 0) newOrientation = 'walk_up'
-    } else if (yDirection < 0) {
-      this.body.velocity.y = speed
-      if (absDirection < 0) newOrientation = 'walk_down'
-    }
-    if (xDirection >= 0) {
-      this.body.velocity.x = -speed
-      if (absDirection > 0) newOrientation = 'walk_left'
-    } else if (xDirection < 0) {
-      this.body.velocity.x = speed
-      if (absDirection > 0) newOrientation = 'walk_right'
-    }
+      if (yDirection >= 0) {
+        this.body.velocity.y = -speed
+        if (absDirection < 0) newOrientation = 'walk_up'
+      } else if (yDirection < 0) {
+        this.body.velocity.y = speed
+        if (absDirection < 0) newOrientation = 'walk_down'
+      }
+      if (xDirection >= 0) {
+        this.body.velocity.x = -speed
+        if (absDirection > 0) newOrientation = 'walk_left'
+      } else if (xDirection < 0) {
+        this.body.velocity.x = speed
+        if (absDirection > 0) newOrientation = 'walk_right'
+      }
 
-    if (newOrientation !== this.orientation) {
-      this.orientation = newOrientation
-      this.animations.play(this.orientation, 30, true)
+      if (newOrientation !== this.orientation) {
+        this.orientation = newOrientation
+        this.animations.play(this.orientation, 30, true)
+      }
     }
+    socket.emit('updatePosition', this.name, this.x, this.y)
   }
   takeDamage(damage) {
     console.log('damage taken is:', damage, 'armor:', this.stats.defense)
@@ -141,6 +145,7 @@ export default class Enemy extends entityPrefab {
     this.fightTween.onLoop.add(function() { this.attackAction() }, this)
     this.fightTween.start()
   }
+
   attackAction() {
     if (Date.now() - this.lastAttack < 900) return
     this.lastAttack = Date.now()
@@ -157,6 +162,7 @@ export default class Enemy extends entityPrefab {
       this.attack()
     }
   }
+
   adjacent(a, b) {
     if (!a || !b) return 0
     var Xdiff = a.position.x - b.position.x
@@ -212,16 +218,5 @@ export default class Enemy extends entityPrefab {
       console.log(this.stats.loot[0])
     }
   }
-
-  findClosestPlayer(state) {
-    return state.players.reduce((closestPlayer, player) => {
-      const closestDist = Math.sqrt(Math.pow(closestPlayer.position.x - this.position.x, 2) + Math.pow(closestPlayer.position.y - this.position.y, 2))
-      const dist = Math.sqrt(Math.pow(player.position.x - this.position.x, 2) + Math.pow(player.position.y - this.position.y, 2))
-      if (closestDist < dist) {
-        return closestPlayer
-      } else {
-        return player
-      }
-    })
-  }
 }
+
