@@ -11,6 +11,7 @@ import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
+import playerClass from '../constructor/Player'
 
 let map
   , cursors
@@ -29,7 +30,14 @@ const localState = {
 
 const fantasyState = {
   init(character) {
+    console.log(character)
     if (character) player = character
+    // if (character) player = new playerClass(this.game,
+    //                                         'player',
+    //                                         {x: 200, y: 200},
+    //                                         character.class,
+    //                                         character
+    //                                        )
     console.log('player set:', player)
   },
 
