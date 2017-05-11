@@ -1,4 +1,48 @@
 {
-  "fantasyState" : {
-  }
+  "fantasyState": [{
+    "name": "Soldier 1",
+    "x": 609,
+    "y": 430,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 2",
+    "x": 906,
+    "y": 257,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 3",
+    "x": 1075,
+    "y": 801,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 4",
+    "x": 745,
+    "y": 601,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 5",
+    "x": 843,
+    "y": 605,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 6",
+    "x": 369,
+    "y": 623,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 7",
+    "x": 1052,
+    "y": 570,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 8",
+    "x": 1447,
+    "y": 1508,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 9",
+    "x": 1606,
+    "y": 1112,
+    "key": "soldier"
+  }]
 }

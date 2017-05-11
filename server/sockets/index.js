@@ -2,7 +2,8 @@ const db = require('APP/db')
 const Character = db.model('characters')
 
 const GamePlayers = {}
-const Enemies = require('./enemies.json')
+const GameEnemies = {}
+const enemies = require('./enemies.json')
 const collisionArrays = {}
 let isUpdating = false
 
@@ -14,7 +15,6 @@ const findClosestPlayer = require('./utils').findClosestPlayer
 const socketFunction = io => {
   io.on('connection', socket => {
     console.log('got a connection', socket.id)
-    // console.log('enemies', Enemies)
     let room = 'world'
     socket.join(room)
 
@@ -58,24 +58,24 @@ const socketFunction = io => {
 
     socket.on('addEnemy', () => {
       const enemy = {
-        name: `Soldier ${Object.keys(Enemies[room]).length + 1}`,
+        name: `Soldier ${Object.keys(GameEnemies[room]).length + 1}`,
         x: Math.random() * 600,
         y: Math.random() * 600,
         key: `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`
       }
-      Enemies[room][enemy.name] = enemy
+      GameEnemies[room][enemy.name] = enemy
       io.sockets.to(room).emit('enemyCreated', enemy)
     })
 
     socket.on('killEnemy', name => {
-      delete Enemies[room][name]
+      delete GameEnemies[room][name]
       socket.broadcast.to(room).emit('removeEnemy', name)
     })
 
     function enemyMovement() {
       isUpdating = true
-      Object.keys(Enemies[room]).forEach(name => {
-        const enemy = Enemies[room][name]
+      Object.keys(GameEnemies[room]).forEach(name => {
+        const enemy = GameEnemies[room][name]
         const closestPlayer = findClosestPlayer(GamePlayers[room], enemy)
         if (closestPlayer) {
           Easystar.findPath(
@@ -90,9 +90,9 @@ const socketFunction = io => {
     }
 
     socket.on('updatePosition', (name, x, y) => {
-      if (Enemies[room][name] && isUpdating) {
-        Enemies[room][name].x = x
-        Enemies[room][name].y = y
+      if (GameEnemies[room][name] && isUpdating) {
+        GameEnemies[room][name].x = x
+        GameEnemies[room][name].y = y
         isUpdating = false
       }
     })
@@ -123,9 +123,9 @@ const socketFunction = io => {
       // add player to map
       GamePlayers[room][socket.id] = player
 
-      if (!Enemies[room]) Enemies[room] = {}
+      if (!GameEnemies[room]) GameEnemies[room] = {}
 
-      socket.emit('getEnemies', Enemies[room])
+      socket.emit('getEnemies', GameEnemies[room])
 
       if (collisionArrays[room]) {
         socket.emit('madeCollisionArray')
