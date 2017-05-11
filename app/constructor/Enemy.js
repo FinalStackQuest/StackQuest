@@ -38,6 +38,9 @@ export default class Enemy extends entityPrefab {
     this.move = this.move.bind(this)
     this.findClosestPlayer = this.findClosestPlayer.bind(this)
     this.takeDamage = this.takeDamage.bind(this)
+    this.attackPlayer = this.attackPlayer.bind(this)
+    this.attackAction = this.attackAction.bind(this)
+    this.attack = this.attack.bind(this)
   }
 
   setup(monsterKey) {
@@ -123,6 +126,11 @@ export default class Enemy extends entityPrefab {
     //  returns false because the enemy didn't die
     return false
   }
+  attack() {
+    console.log('made it here')
+    console.log('enemy attack damage:', this.stats.attack)
+    return this.stats.attack
+  }
   attackPlayer(player) {
     this.inFight = true
     //  NOTE: where the tweens coming from here? What do they do?
@@ -134,6 +142,7 @@ export default class Enemy extends entityPrefab {
     this.fightTween.start()
   }
   attackAction() {
+    console.log()
     if (Date.now() - this.lastAttack < 900) return
     this.lastAttack = Date.now()
     if (!this.target) return
@@ -168,18 +177,18 @@ export default class Enemy extends entityPrefab {
     }
   }
 
-  attack() {
-    if (!this.target) return
-    var direction = this.adjacent(this, this.target)
-    if (direction > 0) this.orientation = direction
-    this.animate('attack_' + this.orientationsDict[this.orientation], false)
-    if (this.target.deathmark) {
-      setTimeout(function(_target) {
-        _target.die(true)
-      }, 500, this.target)
-    }
-    this.idle()
-  }
+  // attack() {
+  //   if (!this.target) return
+  //   var direction = this.adjacent(this, this.target)
+  //   if (direction > 0) this.orientation = direction
+  //   this.animate('attack_' + this.orientationsDict[this.orientation], false)
+  //   if (this.target.deathmark) {
+  //     setTimeout(function(_target) {
+  //       _target.die(true)
+  //     }, 500, this.target)
+  //   }
+  //   this.idle()
+  // }
 
   die() {
     // this.endFight()

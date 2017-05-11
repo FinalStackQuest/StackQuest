@@ -1,4 +1,5 @@
 const createPlayer = (player) => {
+  console.log('checking stats', player)
   let playerObject
   //  load correct sprite
   if (player.class === 'wizard') {
@@ -21,6 +22,7 @@ const createPlayer = (player) => {
   playerObject.anchor.setTo(0.5, 0.5)
   playerObject.body.allowRotation = false
   playerObject.internalStats = player
+  // console.log('checking stats:', playerObject.internalStats)
 
   StackQuest.game.camera.follow(playerObject)
 

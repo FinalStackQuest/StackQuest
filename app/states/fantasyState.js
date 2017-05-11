@@ -35,7 +35,6 @@ const fantasyState = {
   },
 
   create() {
-    console.log('player in create:', player)
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
     cursors = createCursors()
@@ -44,7 +43,6 @@ const fantasyState = {
     socket.emit('setupState', player, 'fantasyState')
 
     playerObject = createPlayer(player)
-    console.log(playerObject)
     localState.players.push(playerObject)
     projectile = createProjectile.bullet(playerObject)
 
@@ -86,8 +84,15 @@ const fantasyState = {
       }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-      playerObject.position.x = 200
-      playerObject.position.y = 200
+      // console.log('player object hurt', playerObject, 'enemy:', enemy)
+      console.log('player hp:', playerObject, enemy)
+      let attack = enemy.attack()
+      console.log('attack before assigning', attack)
+      playerObject.internalStats.hp -= attack
+      if (playerObject.internalStats.hp <= 0) {
+        playerObject.position.x = 200
+        playerObject.position.y = 200
+      }
     })
     const closestPlayer = enemy.findClosestPlayer(localState)
     this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), (path) => enemy.move(path, this))
