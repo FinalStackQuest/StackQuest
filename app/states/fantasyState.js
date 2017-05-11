@@ -69,6 +69,12 @@ const fantasyState = {
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
     }
+    // get this guy out, need to detect collsion better
+    this.physics.arcade.collide(playerObject, localState.loot[0], function(player, loot) {
+      console.log('collision ')
+      console.log('loot', loot)
+      loot.destroy()
+    })
   },
 
   render() {
