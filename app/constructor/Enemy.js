@@ -142,7 +142,6 @@ export default class Enemy extends entityPrefab {
     this.fightTween.start()
   }
   attackAction() {
-    console.log()
     if (Date.now() - this.lastAttack < 900) return
     this.lastAttack = Date.now()
     if (!this.target) return

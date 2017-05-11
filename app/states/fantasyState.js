@@ -84,11 +84,14 @@ const fantasyState = {
       }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
+      console.log('health before:', playerObject.internalStats.hp)
       playerObject.internalStats.hp -= enemy.attack()
-      console.log('health', playerObject.internalStats.hp)
+      console.log('health afer:', playerObject.internalStats.hp)
       if (playerObject.internalStats.hp <= 0) {
         playerObject.position.x = 200
         playerObject.position.y = 200
+        //  reset internal health: TEMP
+        playerObject.internalStats.hp = 100
       }
     })
     const closestPlayer = enemy.findClosestPlayer(localState)
