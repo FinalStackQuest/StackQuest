@@ -41,7 +41,7 @@ const updatePlayer = (socketId, playerPos) => {
 const removePlayer = socketId => {
   const player = GamePlayers[socketId]
   if (player) {
-    player.kill()
+    player.destroy()
     delete GamePlayers[socketId]
   }
 }
@@ -63,7 +63,7 @@ const getEnemies = enemies => {
 }
 
 const removeEnemy = name => {
-  GameEnemies[name].kill()
+  GameEnemies[name].destroy()
   delete GameEnemies[name]
 }
 

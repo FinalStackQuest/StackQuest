@@ -1,4 +1,4 @@
-const buildMap = {
+const createMap = {
   fantasy() {
     const map = StackQuest.game.add.tilemap('stackQuestFantasyMap')
     map.addTilesetImage('pirate_sheet', 'pirateSheet')
@@ -29,4 +29,4 @@ const buildMap = {
   }
 }
 
-export default buildMap
+export default createMap

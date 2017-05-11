@@ -58,10 +58,10 @@ const socketFunction = io => {
 
     socket.on('addEnemy', () => {
       const enemy = {
-        name: `testMonster ${Object.keys(Enemies[room]).length + 1}`,
+        name: `Soldier ${Object.keys(Enemies[room]).length + 1}`,
         x: Math.random() * 600,
         y: Math.random() * 600,
-        key: 'soldier'
+        key: `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`
       }
       Enemies[room][enemy.name] = enemy
       io.sockets.to(room).emit('enemyCreated', enemy)
@@ -71,20 +71,6 @@ const socketFunction = io => {
       delete Enemies[room][name]
       socket.broadcast.to(room).emit('removeEnemy', name)
     })
-
-    // socket.on('moveEnemy', ({name}) => {
-    //   const enemy = Enemies[room][name]
-    //   const closestPlayer = findClosestPlayer(GamePlayers[room], enemy)
-    //   if (closestPlayer) {
-    //     Easystar.findPath(
-    //       Math.floor(enemy.x / collisionArrays[room][0].length),
-    //       Math.floor(enemy.y / collisionArrays[room].length),
-    //       Math.floor(closestPlayer.x / collisionArrays[room][0].length),
-    //       Math.floor(closestPlayer.y / collisionArrays[room].length),
-    //       path => io.sockets.to(room).emit('foundPath', {path, name}))
-    //     Easystar.calculate()
-    //   }
-    // })
 
     function enemyMovement() {
       isUpdating = true

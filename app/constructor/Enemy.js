@@ -42,6 +42,63 @@ export default class Enemy extends entityPrefab {
     this.attack = this.attack.bind(this)
   }
 
+  move(path) {
+    if (this.body && path[1]) {
+      const speed = 100
+      const xDirection = this.x - path[1].x * 60
+      const yDirection = this.y - path[1].y * 60
+      const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+      let newOrientation
+
+      if (yDirection >= 0) {
+        this.body.velocity.y = -speed
+        if (absDirection < 0) newOrientation = 'walk_up'
+      } else if (yDirection < 0) {
+        this.body.velocity.y = speed
+        if (absDirection < 0) newOrientation = 'walk_down'
+      }
+      if (xDirection >= 0) {
+        this.body.velocity.x = -speed
+        if (absDirection > 0) newOrientation = 'walk_left'
+      } else if (xDirection < 0) {
+        this.body.velocity.x = speed
+        if (absDirection > 0) newOrientation = 'walk_right'
+      }
+
+      if (newOrientation !== this.orientation) {
+        this.orientation = newOrientation
+        this.animations.play(this.orientation, 30, true)
+      }
+    }
+    socket.emit('updatePosition', this.name, this.x, this.y)
+  }
+
+  attack() {
+    if (Date.now() - this.lastAttack < 900) return 0
+    this.lastAttack = Date.now()
+    return this.stats.attack
+  }
+
+  takeDamage(damage) {
+    this.stats.hp -= (damage - this.stats.defense)
+    //  check if dead
+    if (this.stats.hp <= 0) {
+      this.die()
+      //  function returns true if the enemy is dead
+      return true
+    }
+    //  returns false because the enemy didn't die
+    return false
+  }
+
+  die() {
+    // this.endFight()
+    this.target = null
+    this.alive = false
+    // this.animate('death', false)
+    this.delayedKill(500)
+  }
+
   // setup(monsterKey) {
   //   // key is a string used as a key in Game.monstersInfo to fetch the necessary information about the monster to create
   //   // it's also used as part of the frame names to use (e.g. rat, red_0, rat_1, ...)
@@ -86,55 +143,6 @@ export default class Enemy extends entityPrefab {
   //   //  pathFindingCallback needs to be on entityPrefab
   //   this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   // }
-
-  move(path) {
-    if (path[1]) {
-      const speed = 100
-      const xDirection = this.x - path[1].x * 60
-      const yDirection = this.y - path[1].y * 60
-      const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-      let newOrientation
-
-      if (yDirection >= 0) {
-        this.body.velocity.y = -speed
-        if (absDirection < 0) newOrientation = 'walk_up'
-      } else if (yDirection < 0) {
-        this.body.velocity.y = speed
-        if (absDirection < 0) newOrientation = 'walk_down'
-      }
-      if (xDirection >= 0) {
-        this.body.velocity.x = -speed
-        if (absDirection > 0) newOrientation = 'walk_left'
-      } else if (xDirection < 0) {
-        this.body.velocity.x = speed
-        if (absDirection > 0) newOrientation = 'walk_right'
-      }
-
-      if (newOrientation !== this.orientation) {
-        this.orientation = newOrientation
-        this.animations.play(this.orientation, 30, true)
-      }
-    }
-    socket.emit('updatePosition', this.name, this.x, this.y)
-  }
-
-  takeDamage(damage) {
-    this.stats.hp -= (damage - this.stats.defense)
-    //  check if dead
-    if (this.stats.hp <= 0) {
-      this.die()
-      //  function returns true if the enemy is dead
-      return true
-    }
-    //  returns false because the enemy didn't die
-    return false
-  }
-
-  attack() {
-    if (Date.now() - this.lastAttack < 900) return 0
-    this.lastAttack = Date.now()
-    return this.stats.attack
-  }
 
   // attackPlayer(player) {
   //   this.inFight = true
@@ -195,14 +203,6 @@ export default class Enemy extends entityPrefab {
   //   }
   //   this.idle()
   // }
-
-  die() {
-    // this.endFight()
-    this.target = null
-    this.alive = false
-    // this.animate('death', false)
-    this.delayedKill(500)
-  }
 
   // respawn() {
   //   //  method from the Phaser Sprite class

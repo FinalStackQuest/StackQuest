@@ -1,6 +1,6 @@
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
-import buildMaps from './utils/buildMaps'
+import createMap from './utils/createMap'
 import createCursors from './utils/createCursors'
 import createPlayer from './utils/createPlayer'
 import createProjectile from './utils/createProjectile'
@@ -29,7 +29,7 @@ const spaceState = {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
     cursors = createCursors()
-    map = buildMaps.space()
+    map = createMap.space()
 
     socket.emit('setupState', player, 'spaceState')
 
@@ -49,7 +49,7 @@ const spaceState = {
 
   update() {
     graveyard.forEach(enemy => {
-      enemy.kill()
+      enemy.destroy()
       delete GameEnemies[enemy.name]
       socket.emit('killEnemy', enemy.name)
     })
