@@ -4,6 +4,8 @@ const GamePlayers = {}
 const Enemies = require('./enemies.json')
 const EasystarConstructor = require('easystarjs')
 const Easystar = new EasystarConstructor.js()
+
+const findClosestPlayer = require('./utils')
 let collisionArray
 
 const socketFunction = io => {
@@ -49,14 +51,14 @@ const socketFunction = io => {
       }
     })
 
-    socket.on('addEnemy', () => {
+    socket.on('addEnemy', ({state}) => {
       const newEnemy = {
-        name: `testMonster ${Object.keys(Enemies.fantasyState).length+1}`,
+        name: `testMonster ${Object.keys(Enemies[state]).length+1}`,
         x: Math.random()*1200,
         y: Math.random()*1200,
         key: 'soldier'
       }
-      Enemies.fantasyState[newEnemy.name] = newEnemy
+      Enemies[state][newEnemy.name] = newEnemy
       io.sockets.to(room).emit('enemyCreated', newEnemy)
     })
 
@@ -76,18 +78,34 @@ const socketFunction = io => {
       Easystar.enableDiagonals()
     })
 
-    socket.on('moveEnemy', ({name, startPosition, targetPosition}) => {
+    // socket.on('moveEnemy', ({name, state}) => {
+    //   if (GamePlayers[state] && Enemies[state]) {
+    //     const enemy = Enemies[state][name]
+    //     const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
+    //     if (closestPlayer) {
+    //       Easystar.findPath(
+    //         Math.floor(enemy.x / collisionArray[0].length),
+    //         Math.floor(enemy.y / collisionArray.length),
+    //         Math.floor(closestPlayer.x / collisionArray[0].length),
+    //         Math.floor(closestPlayer.y / collisionArray.length),
+    //         path => findPathCallback(path, name))
+    //       Easystar.calculate()
+    //     }
+    //   }
+    // })
+
+    socket.on('moveEnemy', ({name, startingPos, targetPos}) => {
       Easystar.findPath(
-        Math.floor(startPosition.x / collisionArray[0].length),
-        Math.floor(startPosition.y / collisionArray.length),
-        Math.floor(targetPosition.x / collisionArray[0].length),
-        Math.floor(targetPosition.y / collisionArray.length),
+        Math.floor(startingPos.x / collisionArray[0].length),
+        Math.floor(startingPos.y / collisionArray.length),
+        Math.floor(targetPos.x / collisionArray[0].length),
+        Math.floor(targetPos.y / collisionArray.length),
         path => findPathCallback(path, name))
       Easystar.calculate()
     })
 
     function findPathCallback(path, name) {
-      socket.emit('foundPath', {path, name})
+      io.sockets.to(room).emit('foundPath', {path, name})
     }
 
     socket.on('setupState', (player, newRoom) => {

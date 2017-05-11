@@ -10,7 +10,6 @@ module.exports = db => db.define('characters', {
   x: {
     type: STRING,
     set: function(xCoord) {
-      console.log(this)
       return this.setDataValue('x', String(xCoord))
     },
     get: function() {

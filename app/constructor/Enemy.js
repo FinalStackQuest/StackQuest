@@ -1,7 +1,5 @@
 import entityPrefab from './entityPrefab'
 import throttle from 'lodash.throttle'
-import {fantasyState} from '../states/fantasyState'
-import {socket} from 'APP/app/sockets'
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -18,7 +16,8 @@ export default class Enemy extends entityPrefab {
     //  this.handlBeingAttack
 
     this.inFight = false
-    this.orientation = game.rnd.between(1, 4)
+    // this.orientation = game.rnd.between(1, 4)
+    this.orientation = ''
     this.initialPosition = new Phaser.Point(position.x, position.y)
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
@@ -29,14 +28,21 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
-    this.move = throttle(this.move.bind(this), 800)
+
+    this.animations.add('walk_up', [0, 1, 2, 3, 4, 5, 6, 7, 8])
+    this.animations.add('walk_left', [9, 10, 11, 12, 13, 14, 15, 16, 17])
+    this.animations.add('walk_down', [18, 19, 20, 21, 22, 23, 24, 25, 26])
+    this.animations.add('walk_right', [27, 28, 29, 30, 31, 32, 33, 34, 35])
+
+    // this.move = throttle(this.move.bind(this), 2000)
+    this.move = this.move.bind(this)
     this.findClosestPlayer = this.findClosestPlayer.bind(this)
   }
 
   setup(monsterKey) {
-      // key is a string used as a key in Game.monstersInfo to fetch the necessary information about the monster to create
+    // key is a string used as a key in Game.monstersInfo to fetch the necessary information about the monster to create
     // it's also used as part of the frame names to use (e.g. rat, red_0, rat_1, ...)
-    this.frameName = monsterKey+'_0'
+    this.frameName = monsterKey + '_0'
     this.monsterName = monsterKey
     this.absorbProperties(Game.monstersInfo[monsterKey])
     this.maxLife = this.life
@@ -55,12 +61,12 @@ export default class Enemy extends entityPrefab {
     if (path === null && this.isPlayer) {
       Game.moveTarget.visible = false
       Game.marker.visible = true
-    } else if (path !== null){
+    } else if (path !== null) {
       if (action.action == 3 || action.action == 4) { // fight or chest
         finalOrientation = Game.computeFinalOrientation(path)
         path.pop() // The player should stop right before the target, not at its location
       }
-      var actionToSend = (action.action != 1 ? action : {action:0})
+      var actionToSend = (action.action != 1 ? action : { action: 0 })
       if (this.isPlayer && sendToServer && path.length) Client.sendPath(path, actionToSend, finalOrientation)
       this.move(path, finalOrientation, action, delta)
     }
@@ -75,17 +81,35 @@ export default class Enemy extends entityPrefab {
     //  pathFindingCallback needs to be on entityPrefab
     this.pathfindingCallback(0, action, delta, false, path) // false : send to server
   }
+
   move(path, state) {
-    // const self = this
-    if (this.tween) this.tween.stop()
-    this.tween = this.game.tweens.create(this)
-    for (const step of path) {
-      const {x, y} = state.getPointFromGrid(step.y, step.x)
-      this.tween.to({x: x, y: y}, 200)
-      // socket.emit('updateEnemy', {name: this.name, key: this.key, x: x, y: y})
+    const speed = 100
+    const xDirection = this.x - path[1].x * 60
+    const yDirection = this.y - path[1].y * 60
+    const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+    let newOrientation
+
+    if (yDirection >= 0) {
+      this.body.velocity.y = -speed
+      if (absDirection < 0) newOrientation = 'walk_up'
+    } else if (yDirection < 0) {
+      this.body.velocity.y = speed
+      if (absDirection < 0) newOrientation = 'walk_down'
     }
-    this.tween.start()
+    if (xDirection >= 0) {
+      this.body.velocity.x = -speed
+      if (absDirection > 0) newOrientation = 'walk_left'
+    } else if (xDirection < 0) {
+      this.body.velocity.x = speed
+      if (absDirection > 0) newOrientation = 'walk_right'
+    }
+
+    if (newOrientation !== this.orientation) {
+      this.orientation = newOrientation
+      this.animations.play(this.orientation, 30, true)
+    }
   }
+
   attackPlayer(player) {
     this.inFight = true
     //  NOTE: where the tweens coming from here? What do they do?
@@ -101,7 +125,7 @@ export default class Enemy extends entityPrefab {
     this.lastAttack = Date.now()
     if (!this.target) return
     if (this.target.isPlayer) return
-    let direction = Game.adjacent(this, this.target)
+    const direction = Game.adjacent(this, this.target)
     if (direction > 0) {
       if (this.tween) {
         this.tween.stop()
@@ -168,15 +192,16 @@ export default class Enemy extends entityPrefab {
     }
   }
 
-  findClosestPlayer(state) {
-    return state.players.reduce((closestPlayer, player) => {
-      const closestDist = Math.sqrt(Math.pow(closestPlayer.position.x - this.position.x, 2) + Math.pow(closestPlayer.position.y - this.position.y, 2))
+  findClosestPlayer(localPlayers) {
+    let maxDist = Infinity
+    let closestPlayer
+    for (const player of localPlayers) {
       const dist = Math.sqrt(Math.pow(player.position.x - this.position.x, 2) + Math.pow(player.position.y - this.position.y, 2))
-      if (closestDist < dist) {
-        return closestPlayer
-      } else {
-        return player
+      if (dist < maxDist) {
+        closestPlayer = player
+        maxDist = dist
       }
-    })
+    }
+    return closestPlayer
   }
 }

@@ -94,7 +94,16 @@ export default class Player extends Prefab {
     tweenWidth.start()
     tweenEnd.start()
   }
-
+  takeDamage(attack) {
+    if (this.life <= 0 || (this.life - attack) <= 0) {
+      //  what is animate parameter that should be passed in?
+      this.die()
+    } else {
+      this.life -= attack
+      //  updates life HUD
+      this.updateLife()
+    }
+  }
   die(animate) {
     if (this.tween) this.stopMovement(false)
     this.target = null

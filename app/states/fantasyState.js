@@ -1,29 +1,29 @@
 import { GamePlayers, socket } from '../sockets'
-// const Easystar = require('easystarjs')
-import Enemy from '../constructor/Enemy'
 import throttle from 'lodash.throttle'
+import Enemy from '../constructor/Enemy'
+import loadMaps from './utils/loadMaps'
+import buildMaps from './utils/buildMaps'
+import createCursors from './utils/createCursors'
+import createPlayer from './utils/createPlayer'
+import createProjectile from './utils/createProjectile'
+import playerMovement from './utils/playerMovement'
+import playerAttack from './utils/playerAttack'
+import mapTransition from './utils/mapTransition'
 
 let map
   , cursors
-  , OGuy
-  , xCoord = 100
-  , yCoord = 100
-  , monster
+  , playerObject
+  , player
+  , projectile
+  , graveyard = []
+  , counter = 0
 
-const localState = {
+export const localState = {
   players: [],
   enemies: {},
 }
 
-import loadMaps from './utils/loadMaps'
-import buildMaps from './utils/buildMaps'
-import playerMovement from './utils/playerMovement'
-import mapTransition from './utils/mapTransition'
-
-let playerObject
-  , player
-
-export const fantasyState = {
+const fantasyState = {
   init(character) {
     if (character) player = character
   },
@@ -33,65 +33,90 @@ export const fantasyState = {
   },
 
   create() {
-    this.physics.startSystem(Phaser.Physics.P2JS)
+    localState.state = this
+    this.physics.startSystem(Phaser.Physics.ARCADE)
 
+    cursors = createCursors()
     map = buildMaps.fantasy()
-    this.makeCollisionMap()
 
     socket.emit('setupState', player, 'fantasyState')
     socket.emit('getEnemies', {state: 'fantasyState'})
     socket.on('sendEnemies', (enemies) => {
       Object.keys(enemies).forEach(enemyName => {
         const enemy = enemies[enemyName]
-        localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
+        if (!localState.enemies[enemy.name]) {
+          localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
+        }
       }, this)
     })
 
-    playerObject = this.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+    playerObject = createPlayer(player)
     localState.players.push(playerObject)
+    projectile = createProjectile.bullet(playerObject)
 
+    this.makeCollisionMap()
     this.spawnEnemy()
 
-    this.physics.p2.enable(playerObject)
+    this.physics.setBoundsToWorld(true, true, true, true, false)
 
-    this.camera.follow(playerObject)
-
-    this.physics.p2.setBoundsToWorld(true, true, true, true, false)
-
-    cursors = this.input.keyboard.createCursorKeys()
+    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
+    this.throttleMove = throttle(this.moveAllEnemies, 200)
   },
 
   update() {
+    graveyard.forEach(enemy => enemy.destroy())
+    graveyard = []
+
+    // if (Math.random() * 1000 <= 20) this.spawnEnemy()
+
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
-    socket.on('enemyCreated', (enemy) => {
-      localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
-    })
-    this.moveAllEnemies()
 
-    socket.on('foundPath', ({path, name}) => {
-      localState.enemies[name].move(path, this)
-    })
+    // socket.on('enemyCreated', (enemy) => {
+    //   console.log(counter++, new Date())
+    //   localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
+    // })
+
+    // socket.on('foundPath', ({path, name}) => {
+    //   localState.enemies[name].move(path, this)
+    // })
+
+    this.throttleMove()
+
+    for (const enemyKey in localState.enemies) {
+      this.enemyPathFinding(enemyKey)
+    }
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
   },
 
-  enemyPathFinding(enemy) {
-    const closestPlayer = enemy.findClosestPlayer(localState)
-
-    socket.emit('moveEnemy', {
-      name: enemy.name,
-      startPosition: {
-        x: enemy.position.x,
-        y: enemy.position.y
-      },
-      targetPosition: {
-        x: closestPlayer.position.x,
-        y: closestPlayer.position.y
-      }
+  enemyPathFinding(enemyKey) {
+    const enemy = localState.enemies[enemyKey]
+    StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
+      graveyard.push(enemy)
+      delete localState.enemies[enemyKey]
     })
+    StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
+      playerObject.position.x = 200
+      playerObject.position.y = 200
+    })
+    if (enemy) {
+      const closestPlayer = enemy.findClosestPlayer(localState.players)
+      // socket.emit('moveEnemy', {name: enemy.name, state: 'fantasyState'})
+      socket.emit('moveEnemy', {
+        name: enemy.name,
+        startingPos: {
+          x: enemy.position.x,
+          y: enemy.position.y
+        },
+        targetPos: {
+          x: closestPlayer.position.x,
+          y: closestPlayer.position.y,
+        }
+      })
+    }
   },
 
   makeCollisionMap() {
@@ -111,7 +136,6 @@ export const fantasyState = {
       collisionArray.push(rowArray)
     }
     socket.emit('createCollisionArray', {array: collisionArray})
-
   },
 
   getPointFromGrid(rowIdx, colIdx) {
@@ -121,8 +145,10 @@ export const fantasyState = {
   },
 
   spawnEnemy() {
-    socket.emit('addEnemy')
+    // localState.enemies[enemyCounter++] = new Enemy(this.game, 'Soldier', { x: Math.random() * 1920, y: Math.random() * 1920 }, `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`)
+    socket.emit('addEnemy', {state: 'fantasyState'})
   },
+
   moveAllEnemies() {
     Object.keys(localState.enemies).forEach((enemyName) => this.enemyPathFinding(localState.enemies[enemyName]), this)
   }

@@ -1,13 +1,18 @@
 import socketio from 'socket.io-client'
+import Enemy from './constructor/Enemy'
+import {localState} from './states/fantasyState'
 
 export const socket = socketio.connect()
 export const GamePlayers = {}
+export const GameEnemies = {}
 
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
   socket.on('addPlayer', addPlayer)
   socket.on('updatePlayer', updatePlayer)
   socket.on('removePlayer', removePlayer)
+  socket.on('enemyCreated', enemyCreated)
+  socket.on('foundPath', foundPath)
 }
 
 const getPlayers = players => {
@@ -17,6 +22,7 @@ const getPlayers = players => {
     const yPos = players[playerSocketId].y
     const playerClass = players[playerSocketId].class
     GamePlayers[playerSocketId] = StackQuest.game.add.text(xPos, yPos, playerClass, { font: '32px Arial', fill: '#ffffff' })
+    GamePlayers[playerSocketId].anchor.setTo(0.5, 0.5)
   })
 }
 
@@ -35,6 +41,15 @@ const removePlayer = socketId => {
     player.destroy()
     delete GamePlayers[socketId]
   }
+}
+//
+const enemyCreated = (enemy) => {
+  console.log(1, enemy)
+  localState.enemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
+}
+
+const foundPath = ({path, name}) => {
+  localState.enemies[name].move(path, localState.state)
 }
 
 socketFunctions(socket)
