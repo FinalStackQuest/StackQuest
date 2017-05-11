@@ -1,5 +1,4 @@
 import { GamePlayers, socket } from '../sockets'
-import Easystar from 'easystarjs'
 import throttle from 'lodash.throttle'
 import Enemy from '../constructor/Enemy'
 import loadMaps from './utils/loadMaps'
@@ -17,9 +16,9 @@ let map
   , player
   , projectile
   , graveyard = []
-  , enemyCounter = 0
+  , counter = 0
 
-const localState = {
+export const localState = {
   players: [],
   enemies: {},
 }
@@ -35,12 +34,14 @@ const fantasyState = {
   },
 
   create() {
+    localState.state = this
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
     cursors = createCursors()
     map = buildMaps.fantasy()
 
     socket.emit('setupState', player, 'fantasyState')
+    socket.emit('getEnemies', {state: 'fantasyState'})
 
     playerObject = createPlayer(player)
     localState.players.push(playerObject)
@@ -51,17 +52,18 @@ const fantasyState = {
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
-    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
+    this.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
+    this.throttleMove = throttle(this.moveAllEnemies, 200)
   },
 
   update() {
     graveyard.forEach(enemy => enemy.destroy())
     graveyard = []
 
-    if (Math.random() * 1000 <= 20) this.spawnEnemy()
-
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
+
+    this.throttleMove()
 
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
@@ -92,9 +94,25 @@ const fantasyState = {
         playerObject.internalStats.hp = 100
       }
     })
-    const closestPlayer = enemy.findClosestPlayer(localState)
-    this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), (path) => enemy.move(path, this))
-    this.easystar.calculate()
+    if (enemy) {
+      // const closestPlayer = enemy.findClosestPlayer(localState.players)
+      // // socket.emit('moveEnemy', {name: enemy.name, state: 'fantasyState'})
+      // socket.emit('moveEnemy', {
+      //   name: enemy.name,
+      //   startingPos: {
+      //     x: enemy.position.x,
+      //     y: enemy.position.y
+      //   },
+      //   targetPos: {
+      //     x: closestPlayer.position.x,
+      //     y: closestPlayer.position.y,
+      //   }
+      // })
+      socket.emit('moveEnemy', {
+        name: enemy.name,
+        state: 'fantasyState'
+      })
+    }
   },
 
   makeCollisionMap() {
@@ -113,10 +131,7 @@ const fantasyState = {
       }
       collisionArray.push(rowArray)
     }
-    this.easystar = new Easystar.js()
-    this.easystar.setGrid(collisionArray)
-    this.easystar.setAcceptableTiles([0])
-    this.easystar.enableDiagonals()
+    socket.emit('createCollisionArray', {array: collisionArray})
   },
 
   getPointFromGrid(rowIdx, colIdx) {
@@ -126,7 +141,11 @@ const fantasyState = {
   },
 
   spawnEnemy() {
-    localState.enemies[enemyCounter++] = new Enemy(this.game, 'Soldier', { x: Math.random() * 1920, y: Math.random() * 1920 }, `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`)
+    socket.emit('addEnemy', {state: 'fantasyState'})
+  },
+
+  moveAllEnemies() {
+    Object.keys(localState.enemies).forEach((enemyName) => this.enemyPathFinding(localState.enemies[enemyName]), this)
   }
 }
 

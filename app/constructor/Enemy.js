@@ -141,6 +141,7 @@ export default class Enemy extends entityPrefab {
     this.fightTween.onLoop.add(function() { this.attackAction() }, this)
     this.fightTween.start()
   }
+
   attackAction() {
     if (Date.now() - this.lastAttack < 900) return
     this.lastAttack = Date.now()
@@ -157,6 +158,7 @@ export default class Enemy extends entityPrefab {
       this.attack()
     }
   }
+
   adjacent(a, b) {
     if (!a || !b) return 0
     var Xdiff = a.position.x - b.position.x
@@ -213,15 +215,16 @@ export default class Enemy extends entityPrefab {
     }
   }
 
-  findClosestPlayer(state) {
-    return state.players.reduce((closestPlayer, player) => {
-      const closestDist = Math.sqrt(Math.pow(closestPlayer.position.x - this.position.x, 2) + Math.pow(closestPlayer.position.y - this.position.y, 2))
+  findClosestPlayer(localPlayers) {
+    let maxDist = Infinity
+    let closestPlayer
+    for (const player of localPlayers) {
       const dist = Math.sqrt(Math.pow(player.position.x - this.position.x, 2) + Math.pow(player.position.y - this.position.y, 2))
-      if (closestDist < dist) {
-        return closestPlayer
-      } else {
-        return player
+      if (dist < maxDist) {
+        closestPlayer = player
+        maxDist = dist
       }
-    })
+    }
+    return closestPlayer
   }
 }
