@@ -50,10 +50,8 @@ const enemyCreated = enemy => {
   GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
 }
 
-const foundPath = ({path, name}) => {
-  if (GameEnemies[name]) {
-    GameEnemies[name].move(path)
-  }
+const foundPath = (path, name) => {
+  GameEnemies[name].move(path)
 }
 
 const getEnemies = enemies => {

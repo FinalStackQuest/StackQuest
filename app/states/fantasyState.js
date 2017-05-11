@@ -74,6 +74,7 @@ const fantasyState = {
       StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
         playerObject.position.x = 200
         playerObject.position.y = 200
+        socket.emit('updatePlayer', playerObject.position)
       })
     })
   },

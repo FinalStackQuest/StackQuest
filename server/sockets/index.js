@@ -4,6 +4,7 @@ const Character = db.model('characters')
 const GamePlayers = {}
 const Enemies = require('./enemies.json')
 const collisionArrays = {}
+let isUpdating = false
 
 const EasystarConstructor = require('easystarjs')
 const Easystar = new EasystarConstructor.js()
@@ -84,6 +85,7 @@ const socketFunction = io => {
     // })
 
     function enemyMovement() {
+      isUpdating = true
       Object.keys(Enemies[room]).forEach(name => {
         const enemy = Enemies[room][name]
         const closestPlayer = findClosestPlayer(GamePlayers[room], enemy)
@@ -93,12 +95,19 @@ const socketFunction = io => {
             Math.floor(enemy.y / collisionArrays[room].length),
             Math.floor(closestPlayer.x / collisionArrays[room][0].length),
             Math.floor(closestPlayer.y / collisionArrays[room].length),
-            path => socket.emit('foundPath', {path, name}))
+            path => socket.emit('foundPath', path, name))
           Easystar.calculate()
         }
       })
     }
 
+    socket.on('updatePosition', (name, x, y) => {
+      if(Enemies[room][name] && isUpdating) {
+      Enemies[room][name].x = x
+      Enemies[room][name].y = y
+      isUpdating = false
+      }
+    })
 
     socket.on('createCollisionArray', ({array}) => {
       if (!collisionArrays[room]) {
@@ -135,7 +144,7 @@ const socketFunction = io => {
       }
 
       socket.broadcast.to(room).emit('addPlayer', socket.id, player)
-      setInterval(enemyMovement, 200)
+      setInterval(enemyMovement, 33)
     })
 
     socket.on('savePlayer', player => {

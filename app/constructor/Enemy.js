@@ -83,31 +83,34 @@ export default class Enemy extends entityPrefab {
   }
 
   move(path) {
-    const speed = 100
-    const xDirection = this.x - path[1].x * 60
-    const yDirection = this.y - path[1].y * 60
-    const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-    let newOrientation
+    if (path[1]) {
+      const speed = 100
+      const xDirection = this.x - path[1].x * 60
+      const yDirection = this.y - path[1].y * 60
+      const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+      let newOrientation
 
-    if (yDirection >= 0) {
-      this.body.velocity.y = -speed
-      if (absDirection < 0) newOrientation = 'walk_up'
-    } else if (yDirection < 0) {
-      this.body.velocity.y = speed
-      if (absDirection < 0) newOrientation = 'walk_down'
-    }
-    if (xDirection >= 0) {
-      this.body.velocity.x = -speed
-      if (absDirection > 0) newOrientation = 'walk_left'
-    } else if (xDirection < 0) {
-      this.body.velocity.x = speed
-      if (absDirection > 0) newOrientation = 'walk_right'
-    }
+      if (yDirection >= 0) {
+        this.body.velocity.y = -speed
+        if (absDirection < 0) newOrientation = 'walk_up'
+      } else if (yDirection < 0) {
+        this.body.velocity.y = speed
+        if (absDirection < 0) newOrientation = 'walk_down'
+      }
+      if (xDirection >= 0) {
+        this.body.velocity.x = -speed
+        if (absDirection > 0) newOrientation = 'walk_left'
+      } else if (xDirection < 0) {
+        this.body.velocity.x = speed
+        if (absDirection > 0) newOrientation = 'walk_right'
+      }
 
-    if (newOrientation !== this.orientation) {
-      this.orientation = newOrientation
-      this.animations.play(this.orientation, 30, true)
+      if (newOrientation !== this.orientation) {
+        this.orientation = newOrientation
+        this.animations.play(this.orientation, 30, true)
+      }
     }
+    socket.emit('updatePosition', this.name, this.x, this.y)
   }
 
   attackPlayer(player) {
