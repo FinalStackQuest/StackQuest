@@ -21,6 +21,7 @@ let map
   , graveyard = []
   , enemyCounter = 0
   , lootCounter = 0
+  , lootTouched = 0
 
 const localState = {
   players: [],
@@ -72,17 +73,38 @@ const fantasyState = {
 
     if (Math.random() * 1000 <= 20) this.spawnEnemy()
 
+    // spawn loot
+    if (Math.random() * 1000 <= 25) this.spawnLoot()
+
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
 
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
     }
+
+    // should abstract into different fn
+    for (const itemKey in localState.loot) {
+      let self = this
+      const item = localState.loot[itemKey]
+      this.physics.arcade.collide(playerObject, item, function(player, loot) {
+        console.log('play obj ', playerObject)
+        console.log('loot' + itemKey + ' touched', loot)
+        // playerObject.
+        // current loot count
+        lootTouched++
+        const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
+        setTimeout(lootCount.destory, 3000)
+        loot.destroy()
+      })
+    }
     // get this guy out, need to detect collsion better
     this.physics.arcade.collide(playerObject, localState.loot[0], function(player, loot) {
       console.log('play obj ', playerObject)
       console.log('loot', loot)
       // playerObject.
+
+
       loot.destroy()
     })
   },
@@ -148,7 +170,7 @@ const fantasyState = {
     localState.enemies[enemyCounter++] = new Enemy(this.game, 'Soldier', { x: Math.random() * 1920, y: Math.random() * 1920 }, `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`)
   },
   spawnLoot() {
-    localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 400, y: Math.random() * 400 }, 'item')
+    localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }
 }
 
