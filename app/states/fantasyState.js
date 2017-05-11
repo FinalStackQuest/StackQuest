@@ -84,9 +84,7 @@ const fantasyState = {
       }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-      console.log('health before:', playerObject.internalStats.hp)
       playerObject.internalStats.hp -= enemy.attack()
-      console.log('health afer:', playerObject.internalStats.hp)
       if (playerObject.internalStats.hp <= 0) {
         playerObject.position.x = 200
         playerObject.position.y = 200
