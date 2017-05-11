@@ -1,5 +1,4 @@
 import entityPrefab from './entityPrefab'
-import throttle from 'lodash.throttle'
 import { socket } from '../sockets'
 
 // To Do:
@@ -12,10 +11,10 @@ export default class Enemy extends entityPrefab {
     super(game, name, position, spriteKey)
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
-    this.inputEnabled = true
+    // this.inputEnabled = true
     //  this.handlBeingAttack
 
-    this.inFight = false
+    // this.inFight = false
     // this.orientation = game.rnd.between(1, 4)
     this.orientation = ''
     this.initialPosition = new Phaser.Point(position.x, position.y)
@@ -38,53 +37,55 @@ export default class Enemy extends entityPrefab {
     this.move = this.move.bind(this)
 
     this.takeDamage = this.takeDamage.bind(this)
-    this.attackPlayer = this.attackPlayer.bind(this)
-    this.attackAction = this.attackAction.bind(this)
+    // this.attackPlayer = this.attackPlayer.bind(this)
+    // this.attackAction = this.attackAction.bind(this)
     this.attack = this.attack.bind(this)
   }
 
-  setup(monsterKey) {
-    // key is a string used as a key in Game.monstersInfo to fetch the necessary information about the monster to create
-    // it's also used as part of the frame names to use (e.g. rat, red_0, rat_1, ...)
-    this.frameName = monsterKey + '_0'
-    this.monsterName = monsterKey
-    this.absorbProperties(Game.monstersInfo[monsterKey])
-    this.maxLife = this.life
-    //  Make sure this adds to Game.entities
-    Game.entities.add(this)
-    this.setAnimations(this)
-    this.idle(false)
-  }
-  pathfindingCallback(finalOrientation, action, delta, sendToServer, path) {
-    // This function is called when the pathfinding algorithm has successfully found a path to navigate
-    // finalOrientation is a value between 1 and 4 indicatinh the orientation the player should have at the end of the path
-    // action is a small object containing data about what to do once the path is ended (talk to NPC, fight monster, ...)
-    // delta is some value based on latency, that will slightly adjust the speed of the movement to compensate for the latency
-    // sendToServer is a boolean indicating if the computed path should be sent to the server (because it's the path that the player wants to follow)
-    // path is an array of 2-tuples of coordinates
-    if (path === null && this.isPlayer) {
-      Game.moveTarget.visible = false
-      Game.marker.visible = true
-    } else if (path !== null) {
-      if (action.action == 3 || action.action == 4) { // fight or chest
-        finalOrientation = Game.computeFinalOrientation(path)
-        path.pop() // The player should stop right before the target, not at its location
-      }
-      var actionToSend = (action.action != 1 ? action : { action: 0 })
-      if (this.isPlayer && sendToServer && path.length) Client.sendPath(path, actionToSend, finalOrientation)
-      this.move(path, finalOrientation, action, delta)
-    }
-  }
-  setupMovement(path, action, delta) {
-    //  NOTE: Delta is used by Easy Star pathfinding
-    if (!path) return
-    if (this.tween) {
-      //  NOTE: WHAT IS TWEEN IN THIS CONTEXT?
-      this.stopMovement(false)
-    }
-    //  pathFindingCallback needs to be on entityPrefab
-    this.pathfindingCallback(0, action, delta, false, path) // false : send to server
-  }
+  // setup(monsterKey) {
+  //   // key is a string used as a key in Game.monstersInfo to fetch the necessary information about the monster to create
+  //   // it's also used as part of the frame names to use (e.g. rat, red_0, rat_1, ...)
+  //   this.frameName = monsterKey + '_0'
+  //   this.monsterName = monsterKey
+  //   this.absorbProperties(Game.monstersInfo[monsterKey])
+  //   this.maxLife = this.life
+  //   //  Make sure this adds to Game.entities
+  //   Game.entities.add(this)
+  //   this.setAnimations(this)
+  //   this.idle(false)
+  // }
+
+  // pathfindingCallback(finalOrientation, action, delta, sendToServer, path) {
+  //   // This function is called when the pathfinding algorithm has successfully found a path to navigate
+  //   // finalOrientation is a value between 1 and 4 indicatinh the orientation the player should have at the end of the path
+  //   // action is a small object containing data about what to do once the path is ended (talk to NPC, fight monster, ...)
+  //   // delta is some value based on latency, that will slightly adjust the speed of the movement to compensate for the latency
+  //   // sendToServer is a boolean indicating if the computed path should be sent to the server (because it's the path that the player wants to follow)
+  //   // path is an array of 2-tuples of coordinates
+  //   if (path === null && this.isPlayer) {
+  //     Game.moveTarget.visible = false
+  //     Game.marker.visible = true
+  //   } else if (path !== null) {
+  //     if (action.action == 3 || action.action == 4) { // fight or chest
+  //       finalOrientation = Game.computeFinalOrientation(path)
+  //       path.pop() // The player should stop right before the target, not at its location
+  //     }
+  //     var actionToSend = (action.action != 1 ? action : { action: 0 })
+  //     if (this.isPlayer && sendToServer && path.length) Client.sendPath(path, actionToSend, finalOrientation)
+  //     this.move(path, finalOrientation, action, delta)
+  //   }
+  // }
+
+  // setupMovement(path, action, delta) {
+  //   //  NOTE: Delta is used by Easy Star pathfinding
+  //   if (!path) return
+  //   if (this.tween) {
+  //     //  NOTE: WHAT IS TWEEN IN THIS CONTEXT?
+  //     this.stopMovement(false)
+  //   }
+  //   //  pathFindingCallback needs to be on entityPrefab
+  //   this.pathfindingCallback(0, action, delta, false, path) // false : send to server
+  // }
 
   move(path) {
     if (path[1]) {
@@ -116,10 +117,9 @@ export default class Enemy extends entityPrefab {
     }
     socket.emit('updatePosition', this.name, this.x, this.y)
   }
+
   takeDamage(damage) {
-    console.log('damage taken is:', damage, 'armor:', this.stats.defense)
     this.stats.hp -= (damage - this.stats.defense)
-    console.log('health reduced to:', this.stats.hp)
     //  check if dead
     if (this.stats.hp <= 0) {
       this.die()
@@ -129,57 +129,59 @@ export default class Enemy extends entityPrefab {
     //  returns false because the enemy didn't die
     return false
   }
+
   attack() {
     if (Date.now() - this.lastAttack < 900) return 0
     this.lastAttack = Date.now()
     return this.stats.attack
   }
-  attackPlayer(player) {
-    this.inFight = true
-    //  NOTE: where the tweens coming from here? What do they do?
-    this.fightTween = game.add.tween(this)
-    //  NOTE: // Small delay to allow the player to finish his movement, -1 for looping
-    this.fightTween.to({}, Phaser.Timer.SECOND, null, false, 150, -1)
-    this.fightTween.onStart.add(function() { this.attackAction() }, this)
-    this.fightTween.onLoop.add(function() { this.attackAction() }, this)
-    this.fightTween.start()
-  }
 
-  attackAction() {
-    if (Date.now() - this.lastAttack < 900) return
-    this.lastAttack = Date.now()
-    if (!this.target) return
-    if (this.target.isPlayer) return
-    const direction = Game.adjacent(this, this.target)
-    if (direction > 0) {
-      if (this.tween) {
-        this.tween.stop()
-        this.tween = null
-      }
-      this.orientation = direction
-      //  this.attack is contained in entityPrefab
-      this.attack()
-    }
-  }
+  // attackPlayer(player) {
+  //   this.inFight = true
+  //   //  NOTE: where the tweens coming from here? What do they do?
+  //   this.fightTween = game.add.tween(this)
+  //   //  NOTE: // Small delay to allow the player to finish his movement, -1 for looping
+  //   this.fightTween.to({}, Phaser.Timer.SECOND, null, false, 150, -1)
+  //   this.fightTween.onStart.add(function() { this.attackAction() }, this)
+  //   this.fightTween.onLoop.add(function() { this.attackAction() }, this)
+  //   this.fightTween.start()
+  // }
 
-  adjacent(a, b) {
-    if (!a || !b) return 0
-    var Xdiff = a.position.x - b.position.x
-    var Ydiff = a.position.y - b.position.y
-    if (Xdiff === 1 && Ydiff === 0) {
-      return 1
-    } else if (Xdiff === 0 && Ydiff === 1) {
-      return 2
-    } else if (Xdiff === -1 && Ydiff === 0) {
-      return 3
-    } else if (Xdiff === 0 && Ydiff === -1) {
-      return 4
-    } else if (Xdiff === 0 && Ydiff === 0) { // The two entities are on the same cell
-      return -1
-    } else { // The two entities are not on adjacent cells, nor on the same one
-      return 0
-    }
-  }
+  // attackAction() {
+  //   if (Date.now() - this.lastAttack < 900) return
+  //   this.lastAttack = Date.now()
+  //   if (!this.target) return
+  //   if (this.target.isPlayer) return
+  //   const direction = Game.adjacent(this, this.target)
+  //   if (direction > 0) {
+  //     if (this.tween) {
+  //       this.tween.stop()
+  //       this.tween = null
+  //     }
+  //     this.orientation = direction
+  //     //  this.attack is contained in entityPrefab
+  //     this.attack()
+  //   }
+  // }
+
+  // adjacent(a, b) {
+  //   if (!a || !b) return 0
+  //   var Xdiff = a.position.x - b.position.x
+  //   var Ydiff = a.position.y - b.position.y
+  //   if (Xdiff === 1 && Ydiff === 0) {
+  //     return 1
+  //   } else if (Xdiff === 0 && Ydiff === 1) {
+  //     return 2
+  //   } else if (Xdiff === -1 && Ydiff === 0) {
+  //     return 3
+  //   } else if (Xdiff === 0 && Ydiff === -1) {
+  //     return 4
+  //   } else if (Xdiff === 0 && Ydiff === 0) { // The two entities are on the same cell
+  //     return -1
+  //   } else { // The two entities are not on adjacent cells, nor on the same one
+  //     return 0
+  //   }
+  // }
 
   // attack() {
   //   if (!this.target) return
@@ -202,19 +204,19 @@ export default class Enemy extends entityPrefab {
     this.delayedKill(500)
   }
 
-  respawn() {
-    //  method from the Phaser Sprite class
-    this.revive()
-    this.orientation = game.rnd.between(1, 4)
-    this.position.set(this.initialPosition.x, this.initialPosition.y)
-    this.life = this.maxLife
-    this.idle(true)
-    Game.fadeInTween(this)
-  }
+  // respawn() {
+  //   //  method from the Phaser Sprite class
+  //   this.revive()
+  //   this.orientation = game.rnd.between(1, 4)
+  //   this.position.set(this.initialPosition.x, this.initialPosition.y)
+  //   this.life = this.maxLife
+  //   this.idle(true)
+  //   Game.fadeInTween(this)
+  // }
 
-  lootDrop() {
-    if (!this.alive) {
-      console.log(this.stats.loot[0])
-    }
-  }
+  // lootDrop() {
+  //   if (!this.alive) {
+  //     console.log(this.stats.loot[0])
+  //   }
+  // }
 }

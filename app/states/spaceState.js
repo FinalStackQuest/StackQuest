@@ -7,6 +7,7 @@ import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
+import enemyCollision from './utils/enemyCollision'
 
 let map
   , cursors
@@ -48,45 +49,19 @@ const spaceState = {
 
   update() {
     graveyard.forEach(enemy => {
-      enemy.destroy()
+      enemy.kill()
       delete GameEnemies[enemy.name]
       socket.emit('killEnemy', enemy.name)
     })
     graveyard = []
 
+    enemyCollision(playerObject, projectile, graveyard)
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'fantasyState')
-
-    this.enemyCollision()
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
-  },
-
-  enemyCollision() {
-    Object.keys(GameEnemies).forEach(enemyKey => {
-      const enemy = GameEnemies[enemyKey]
-      StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
-        let didDie = enemy.takeDamage(projectile.damage)
-  
-        if (didDie) {
-          graveyard.push(enemy)
-          delete GameEnemies[enemyKey]
-        }
-      })
-      StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-        playerObject.internalStats.hp -= enemy.attack()
-        
-        if (playerObject.internalStats.hp <= 0) {
-          playerObject.position.x = 200
-          playerObject.position.y = 200
-          //  reset internal health: TEMP
-          playerObject.internalStats.hp = 100
-          socket.emit('updatePlayer', playerObject.position)
-        }
-      })
-    })
   },
 
   makeCollisionMap() {
