@@ -27,6 +27,7 @@ const localState = {
 const fantasyState = {
   init(character) {
     if (character) player = character
+    console.log('player set:', player)
   },
 
   preload() {
@@ -34,6 +35,7 @@ const fantasyState = {
   },
 
   create() {
+    console.log('player in create:', player)
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
     cursors = createCursors()
@@ -42,6 +44,7 @@ const fantasyState = {
     socket.emit('setupState', player, 'fantasyState')
 
     playerObject = createPlayer(player)
+    console.log(playerObject)
     localState.players.push(playerObject)
     projectile = createProjectile.bullet(playerObject)
 
@@ -74,8 +77,13 @@ const fantasyState = {
   enemyPathFinding(enemyKey) {
     const enemy = localState.enemies[enemyKey]
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
-      graveyard.push(enemy)
-      delete localState.enemies[enemyKey]
+      // console.log('enemy in fantasy state is:', enemy)
+      //make sure projectile stops AS SOON AS it hits target
+      let didDie = enemy.takeDamage(projectile.damage)
+      if (didDie) {
+        graveyard.push(enemy)
+        delete localState.enemies[enemyKey]
+      }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
       playerObject.position.x = 200

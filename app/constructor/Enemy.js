@@ -22,7 +22,7 @@ export default class Enemy extends entityPrefab {
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
     this.stats = {
-      hp: 10,
+      hp: 30,
       attack: 10,
       defense: 4,
       speed: 10,
@@ -37,6 +37,7 @@ export default class Enemy extends entityPrefab {
     // this.move = throttle(this.move.bind(this), 2000)
     this.move = this.move.bind(this)
     this.findClosestPlayer = this.findClosestPlayer.bind(this)
+    this.takeDamage = this.takeDamage.bind(this)
   }
 
   setup(monsterKey) {
@@ -109,7 +110,19 @@ export default class Enemy extends entityPrefab {
       this.animations.play(this.orientation, 30, true)
     }
   }
-
+  takeDamage(damage) {
+    console.log('damage taken is:', damage, 'armor:', this.stats.defense)
+    this.stats.hp -= (damage - this.stats.defense)
+    console.log('health reduced to:', this.stats.hp)
+    //  check if dead
+    if (this.stats.hp <= 0) {
+      this.die()
+      //  function returns true if the enemy is dead
+      return true
+    }
+    //  returns false because the enemy didn't die
+    return false
+  }
   attackPlayer(player) {
     this.inFight = true
     //  NOTE: where the tweens coming from here? What do they do?
@@ -169,10 +182,10 @@ export default class Enemy extends entityPrefab {
   }
 
   die() {
-    this.endFight()
+    // this.endFight()
     this.target = null
     this.alive = false
-    this.animate('death', false)
+    // this.animate('death', false)
     this.delayedKill(500)
   }
 

@@ -26,5 +26,5 @@ module.exports = db => db.define('characters', {
     }
   },
   currentMap: STRING,
-  class: ENUM('wizard', 'cyborg')
+  class: ENUM('wizard', 'cyborg'),
 })

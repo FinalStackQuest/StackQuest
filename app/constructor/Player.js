@@ -12,6 +12,17 @@ export default class Player extends Prefab {
     // TODO create dialogue logic.. maybe
     // this.dialoguesMemory = {}
     this.maxLife = this.game.playerLife
+
+    this.stats = {
+      attack: 7,
+      // totalAttack: properties.stats.attack + properties.stats.weapon.damage,
+      // Hp: properties.stats.hp,
+      // totalDefense: properties.stats.defense + properties.stats.armor.block,
+      // speed: properties.stats.speed,
+      // weapon: properties.stats.weapon,
+      // armor: properties.stats.armor
+    }
+
     this.life = this.maxLife
     this.inFight = false
     this.frames = {
@@ -37,11 +48,15 @@ export default class Player extends Prefab {
       this.game.displayedPlayers.delete(player.id)
     }, this)
     this.loadControls()
+    this.getStats = this.getStats.bind(this)
   }
   // changes color of name text if Player is the main Player
   setIsPlayer(flag) {
     this.isPlayer = flag
     if (this.isPlayer) this.nameHolder.addColor('#f4d442', 0)
+  }
+  getStats() {
+    return this.stats;
   }
   // sets the player's name
   setName(name) {

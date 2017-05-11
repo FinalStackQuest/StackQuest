@@ -26,7 +26,7 @@ const Root = ({ user, children }) =>
       </div>
     </nav>
     {children}
-  </div >
+  </div>
 
 const RootContainer = connect(({ auth }) => ({ user: auth }))(Root)
 
