@@ -5,7 +5,7 @@ const Enemies = require('./enemies.json')
 const EasystarConstructor = require('easystarjs')
 const Easystar = new EasystarConstructor.js()
 
-const findClosestPlayer = require('./utils')
+const findClosestPlayer = require('./utils').findClosestPlayer
 let collisionArray
 
 const socketFunction = io => {
@@ -78,35 +78,31 @@ const socketFunction = io => {
       Easystar.enableDiagonals()
     })
 
-    // socket.on('moveEnemy', ({name, state}) => {
-    //   if (GamePlayers[state] && Enemies[state]) {
-    //     const enemy = Enemies[state][name]
-    //     const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
-    //     if (closestPlayer) {
-    //       Easystar.findPath(
-    //         Math.floor(enemy.x / collisionArray[0].length),
-    //         Math.floor(enemy.y / collisionArray.length),
-    //         Math.floor(closestPlayer.x / collisionArray[0].length),
-    //         Math.floor(closestPlayer.y / collisionArray.length),
-    //         path => findPathCallback(path, name))
-    //       Easystar.calculate()
-    //     }
-    //   }
-    // })
-
-    socket.on('moveEnemy', ({name, startingPos, targetPos}) => {
-      Easystar.findPath(
-        Math.floor(startingPos.x / collisionArray[0].length),
-        Math.floor(startingPos.y / collisionArray.length),
-        Math.floor(targetPos.x / collisionArray[0].length),
-        Math.floor(targetPos.y / collisionArray.length),
-        path => findPathCallback(path, name))
-      Easystar.calculate()
+    socket.on('moveEnemy', ({name, state}) => {
+      if (GamePlayers[state] && Enemies[state]) {
+        const enemy = Enemies[state][name]
+        const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
+        if (closestPlayer) {
+          Easystar.findPath(
+            Math.floor(enemy.x / collisionArray[0].length),
+            Math.floor(enemy.y / collisionArray.length),
+            Math.floor(closestPlayer.x / collisionArray[0].length),
+            Math.floor(closestPlayer.y / collisionArray.length),
+            path => io.sockets.to(room).emit('foundPath', {path, name}))
+          Easystar.calculate()
+        }
+      }
     })
 
-    function findPathCallback(path, name) {
-      io.sockets.to(room).emit('foundPath', {path, name})
-    }
+    // socket.on('moveEnemy', ({name, startingPos, targetPos}) => {
+    //   Easystar.findPath(
+    //     Math.floor(startingPos.x / collisionArray[0].length),
+    //     Math.floor(startingPos.y / collisionArray.length),
+    //     Math.floor(targetPos.x / collisionArray[0].length),
+    //     Math.floor(targetPos.y / collisionArray.length),
+    //     path => io.sockets.to(room).emit('foundPath', {path, name}))
+    //   Easystar.calculate()
+    // })
 
     socket.on('setupState', (player, newRoom) => {
       // remove player from previous map (room)

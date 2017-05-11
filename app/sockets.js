@@ -13,6 +13,7 @@ const socketFunctions = socket => {
   socket.on('removePlayer', removePlayer)
   socket.on('enemyCreated', enemyCreated)
   socket.on('foundPath', foundPath)
+  socket.on('sendEnemies', sendEnemies)
 }
 
 const getPlayers = players => {
@@ -50,6 +51,15 @@ const enemyCreated = (enemy) => {
 
 const foundPath = ({path, name}) => {
   localState.enemies[name].move(path, localState.state)
+}
+
+const sendEnemies = enemies => {
+  Object.keys(enemies).forEach(enemyName => {
+    const enemy = enemies[enemyName]
+    if (!localState.enemies[enemy.name]) {
+      localState.enemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
+    }
+  })
 }
 
 socketFunctions(socket)

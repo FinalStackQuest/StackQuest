@@ -120,6 +120,7 @@ export default class Enemy extends entityPrefab {
     this.fightTween.onLoop.add(function() { this.attackAction() }, this)
     this.fightTween.start()
   }
+
   attackAction() {
     if (Date.now() - this.lastAttack < 900) return
     this.lastAttack = Date.now()
@@ -136,6 +137,7 @@ export default class Enemy extends entityPrefab {
       this.attack()
     }
   }
+
   adjacent(a, b) {
     if (!a || !b) return 0
     var Xdiff = a.position.x - b.position.x

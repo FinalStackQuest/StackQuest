@@ -41,14 +41,6 @@ const fantasyState = {
 
     socket.emit('setupState', player, 'fantasyState')
     socket.emit('getEnemies', {state: 'fantasyState'})
-    socket.on('sendEnemies', (enemies) => {
-      Object.keys(enemies).forEach(enemyName => {
-        const enemy = enemies[enemyName]
-        if (!localState.enemies[enemy.name]) {
-          localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: +enemy.x, y: +enemy.y}, enemy.key)
-        }
-      }, this)
-    })
 
     playerObject = createPlayer(player)
     localState.players.push(playerObject)
@@ -59,7 +51,7 @@ const fantasyState = {
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
-    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
+    this.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
     this.throttleMove = throttle(this.moveAllEnemies, 200)
   },
 
@@ -67,19 +59,8 @@ const fantasyState = {
     graveyard.forEach(enemy => enemy.destroy())
     graveyard = []
 
-    // if (Math.random() * 1000 <= 20) this.spawnEnemy()
-
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
-
-    // socket.on('enemyCreated', (enemy) => {
-    //   console.log(counter++, new Date())
-    //   localState.enemies[enemy.name] = new Enemy(this.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
-    // })
-
-    // socket.on('foundPath', ({path, name}) => {
-    //   localState.enemies[name].move(path, this)
-    // })
 
     this.throttleMove()
 
@@ -103,18 +84,22 @@ const fantasyState = {
       playerObject.position.y = 200
     })
     if (enemy) {
-      const closestPlayer = enemy.findClosestPlayer(localState.players)
-      // socket.emit('moveEnemy', {name: enemy.name, state: 'fantasyState'})
+      // const closestPlayer = enemy.findClosestPlayer(localState.players)
+      // // socket.emit('moveEnemy', {name: enemy.name, state: 'fantasyState'})
+      // socket.emit('moveEnemy', {
+      //   name: enemy.name,
+      //   startingPos: {
+      //     x: enemy.position.x,
+      //     y: enemy.position.y
+      //   },
+      //   targetPos: {
+      //     x: closestPlayer.position.x,
+      //     y: closestPlayer.position.y,
+      //   }
+      // })
       socket.emit('moveEnemy', {
         name: enemy.name,
-        startingPos: {
-          x: enemy.position.x,
-          y: enemy.position.y
-        },
-        targetPos: {
-          x: closestPlayer.position.x,
-          y: closestPlayer.position.y,
-        }
+        state: 'fantasyState'
       })
     }
   },
@@ -145,7 +130,6 @@ const fantasyState = {
   },
 
   spawnEnemy() {
-    // localState.enemies[enemyCounter++] = new Enemy(this.game, 'Soldier', { x: Math.random() * 1920, y: Math.random() * 1920 }, `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`)
     socket.emit('addEnemy', {state: 'fantasyState'})
   },
 
