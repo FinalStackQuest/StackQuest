@@ -1,29 +1,30 @@
 import { GamePlayers, socket } from '../sockets'
-const Easystar = require('easystarjs')
-import Enemy from '../constructor/Enemy'
+import Easystar from 'easystarjs'
 import throttle from 'lodash.throttle'
+import Enemy from '../constructor/Enemy'
+import loadMaps from './utils/loadMaps'
+import buildMaps from './utils/buildMaps'
+import createCursors from './utils/createCursors'
+import createPlayer from './utils/createPlayer'
+import createProjectile from './utils/createProjectile'
+import playerMovement from './utils/playerMovement'
+import playerAttack from './utils/playerAttack'
+import mapTransition from './utils/mapTransition'
 
 let map
   , cursors
-  , OGuy
-  , xCoord = 100
-  , yCoord = 100
-  , monster
+  , playerObject
+  , player
+  , projectile
+  , graveyard = []
+  , enemyCounter = 0
 
 const localState = {
   players: [],
-  enemies: [],
+  enemies: {},
 }
 
-import loadMaps from './utils/loadMaps'
-import buildMaps from './utils/buildMaps'
-import playerMovement from './utils/playerMovement'
-import mapTransition from './utils/mapTransition'
-
-let playerObject
-  , player
-
-export const fantasyState = {
+const fantasyState = {
   init(character) {
     if (character) player = character
   },
@@ -33,44 +34,55 @@ export const fantasyState = {
   },
 
   create() {
-    this.physics.startSystem(Phaser.Physics.P2JS)
+    this.physics.startSystem(Phaser.Physics.ARCADE)
 
+    cursors = createCursors()
     map = buildMaps.fantasy()
-    this.makeCollisionMap()
 
     socket.emit('setupState', player, 'fantasyState')
 
-    playerObject = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+    playerObject = createPlayer(player)
     localState.players.push(playerObject)
+    projectile = createProjectile.bullet(playerObject)
 
+    this.makeCollisionMap()
     this.spawnEnemy()
 
-    this.physics.p2.enable(playerObject)
+    this.physics.setBoundsToWorld(true, true, true, true, false)
 
-    // create monster test
-    // this.easystar.findPath(Math.floor(monster.position.x / 60), Math.floor(monster.position.y / 60), Math.floor(xCoord / 60), Math.floor(yCoord / 60), monster.move)
-    // this.easystar.calculate()
-
-    this.camera.follow(playerObject)
-
-    this.physics.p2.setBoundsToWorld(true, true, true, true, false)
-
-    cursors = this.input.keyboard.createCursorKeys()
+    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
   },
 
   update() {
+    graveyard.forEach(enemy => enemy.destroy())
+    graveyard = []
+
+    if (Math.random() * 1000 <= 20) this.spawnEnemy()
+
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
-    localState.enemies.forEach(this.enemyPathFinding, this)
+
+    for (const enemyKey in localState.enemies) {
+      this.enemyPathFinding(enemyKey)
+    }
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
   },
 
-  enemyPathFinding(enemy) {
+  enemyPathFinding(enemyKey) {
+    const enemy = localState.enemies[enemyKey]
+    StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
+      graveyard.push(enemy)
+      delete localState.enemies[enemyKey]
+    })
+    StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
+      playerObject.position.x = 200
+      playerObject.position.y = 200
+    })
     const closestPlayer = enemy.findClosestPlayer(localState)
-    this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), enemy.move)
+    this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), (path) => enemy.move(path, this))
     this.easystar.calculate()
   },
 
@@ -103,8 +115,7 @@ export const fantasyState = {
   },
 
   spawnEnemy() {
-    localState.enemies.push(new Enemy(this.game, 'testMonster', {x: Math.random(1200), y: Math.random(800)}, 'soldier'))
-    localState.enemies.push(new Enemy(this.game, 'testMonster', {x: Math.random(1200), y: Math.random(800)}, 'soldier'))
+    localState.enemies[enemyCounter++] = new Enemy(this.game, 'Soldier', { x: Math.random() * 1920, y: Math.random() * 1920 }, `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`)
   }
 }
 
