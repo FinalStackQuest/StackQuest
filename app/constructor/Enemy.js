@@ -127,8 +127,8 @@ export default class Enemy extends entityPrefab {
     return false
   }
   attack() {
-    console.log('made it here')
-    console.log('enemy attack damage:', this.stats.attack)
+    if (Date.now() - this.lastAttack < 900) return 0
+    this.lastAttack = Date.now()
     return this.stats.attack
   }
   attackPlayer(player) {

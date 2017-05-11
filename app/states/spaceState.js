@@ -74,12 +74,21 @@ const spaceState = {
   enemyPathFinding(enemyKey) {
     const enemy = localState.enemies[enemyKey]
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
-      graveyard.push(enemy)
-      delete localState.enemies[enemyKey]
+      // console.log('enemy in fantasy state is:', enemy)
+      //make sure projectile stops AS SOON AS it hits target
+      let didDie = enemy.takeDamage(projectile.damage)
+      if (didDie) {
+        graveyard.push(enemy)
+        delete localState.enemies[enemyKey]
+      }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-      playerObject.position.x = 200
-      playerObject.position.y = 200
+      playerObject.internalStats.hp -= enemy.attack()
+      console.log('health', playerObject.internalStats.hp)
+      if (playerObject.internalStats.hp <= 0) {
+        playerObject.position.x = 200
+        playerObject.position.y = 200
+      }
     })
     const closestPlayer = enemy.findClosestPlayer(localState)
     this.easystar.findPath(Math.floor(enemy.position.x / map.width), Math.floor(enemy.position.y / map.height), Math.floor(closestPlayer.position.x / map.width), Math.floor(closestPlayer.position.y / map.height), (path) => enemy.move(path, this))
