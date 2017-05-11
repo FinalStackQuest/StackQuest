@@ -22,7 +22,7 @@ export default class Enemy extends entityPrefab {
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
     this.stats = {
-      hp: 10,
+      hp: 30,
       attack: 10,
       defense: 4,
       speed: 10,
@@ -36,7 +36,12 @@ export default class Enemy extends entityPrefab {
 
     // this.move = throttle(this.move.bind(this), 2000)
     this.move = this.move.bind(this)
-    console.log('confused', position)
+
+    this.findClosestPlayer = this.findClosestPlayer.bind(this)
+    this.takeDamage = this.takeDamage.bind(this)
+    this.attackPlayer = this.attackPlayer.bind(this)
+    this.attackAction = this.attackAction.bind(this)
+    this.attack = this.attack.bind(this)
   }
 
   setup(monsterKey) {
@@ -112,7 +117,24 @@ export default class Enemy extends entityPrefab {
     }
     socket.emit('updatePosition', this.name, this.x, this.y)
   }
-
+  takeDamage(damage) {
+    console.log('damage taken is:', damage, 'armor:', this.stats.defense)
+    this.stats.hp -= (damage - this.stats.defense)
+    console.log('health reduced to:', this.stats.hp)
+    //  check if dead
+    if (this.stats.hp <= 0) {
+      this.die()
+      //  function returns true if the enemy is dead
+      return true
+    }
+    //  returns false because the enemy didn't die
+    return false
+  }
+  attack() {
+    if (Date.now() - this.lastAttack < 900) return 0
+    this.lastAttack = Date.now()
+    return this.stats.attack
+  }
   attackPlayer(player) {
     this.inFight = true
     //  NOTE: where the tweens coming from here? What do they do?
@@ -160,24 +182,24 @@ export default class Enemy extends entityPrefab {
     }
   }
 
-  attack() {
-    if (!this.target) return
-    var direction = this.adjacent(this, this.target)
-    if (direction > 0) this.orientation = direction
-    this.animate('attack_' + this.orientationsDict[this.orientation], false)
-    if (this.target.deathmark) {
-      setTimeout(function(_target) {
-        _target.die(true)
-      }, 500, this.target)
-    }
-    this.idle()
-  }
+  // attack() {
+  //   if (!this.target) return
+  //   var direction = this.adjacent(this, this.target)
+  //   if (direction > 0) this.orientation = direction
+  //   this.animate('attack_' + this.orientationsDict[this.orientation], false)
+  //   if (this.target.deathmark) {
+  //     setTimeout(function(_target) {
+  //       _target.die(true)
+  //     }, 500, this.target)
+  //   }
+  //   this.idle()
+  // }
 
   die() {
-    this.endFight()
+    // this.endFight()
     this.target = null
     this.alive = false
-    this.animate('death', false)
+    // this.animate('death', false)
     this.delayedKill(500)
   }
 

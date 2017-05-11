@@ -68,13 +68,23 @@ const fantasyState = {
     Object.keys(GameEnemies).forEach(enemyKey => {
       const enemy = GameEnemies[enemyKey]
       StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
-        graveyard.push(enemy)
-        delete GameEnemies[enemyKey]
+        let didDie = enemy.takeDamage(projectile.damage)
+  
+        if (didDie) {
+          graveyard.push(enemy)
+          delete GameEnemies[enemyKey]
+        }
       })
       StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-        playerObject.position.x = 200
-        playerObject.position.y = 200
-        socket.emit('updatePlayer', playerObject.position)
+        playerObject.internalStats.hp -= enemy.attack()
+        
+        if (playerObject.internalStats.hp <= 0) {
+          playerObject.position.x = 200
+          playerObject.position.y = 200
+          //  reset internal health: TEMP
+          playerObject.internalStats.hp = 100
+          socket.emit('updatePlayer', playerObject.position)
+        }
       })
     })
   },

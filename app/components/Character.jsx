@@ -45,6 +45,8 @@ class LocalContainer extends React.Component {
 
   selectCharacterClass(event) {
     event.preventDefault()
+    //  this needs to change based off of what
+    //  character user chooses
     if (this.state.characterClass) {
       const newCharacter = {
         hp: 100,
