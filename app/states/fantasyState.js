@@ -47,7 +47,6 @@ const fantasyState = {
     }
 
     this.spawnEnemy()
-    this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
