@@ -2,6 +2,7 @@ import { GamePlayers, socket } from '../sockets'
 import Easystar from 'easystarjs'
 import throttle from 'lodash.throttle'
 import Enemy from '../constructor/Enemy'
+import Loot from '../constructor/Loot'
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
 import createCursors from './utils/createCursors'
@@ -18,10 +19,12 @@ let map
   , projectile
   , graveyard = []
   , enemyCounter = 0
+  , lootCounter = 0
 
 const localState = {
   players: [],
   enemies: {},
+  loot: []
 }
 
 const fantasyState = {
@@ -47,6 +50,7 @@ const fantasyState = {
 
     this.makeCollisionMap()
     this.spawnEnemy()
+    this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -116,6 +120,9 @@ const fantasyState = {
 
   spawnEnemy() {
     localState.enemies[enemyCounter++] = new Enemy(this.game, 'Soldier', { x: Math.random() * 1920, y: Math.random() * 1920 }, `${Math.random() > 0.5 ? 'soldier' : 'soldieralt'}`)
+  },
+  spawnLoot() {
+    localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 400, y: Math.random() * 400 }, 'item')
   }
 }
 
