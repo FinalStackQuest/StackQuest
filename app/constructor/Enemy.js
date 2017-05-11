@@ -37,7 +37,6 @@ export default class Enemy extends entityPrefab {
     // this.move = throttle(this.move.bind(this), 2000)
     this.move = this.move.bind(this)
 
-    this.findClosestPlayer = this.findClosestPlayer.bind(this)
     this.takeDamage = this.takeDamage.bind(this)
     this.attackPlayer = this.attackPlayer.bind(this)
     this.attackAction = this.attackAction.bind(this)
@@ -219,4 +218,3 @@ export default class Enemy extends entityPrefab {
     }
   }
 }
-
