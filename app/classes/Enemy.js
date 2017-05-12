@@ -1,5 +1,6 @@
 import entityPrefab from './entityPrefab'
 import { socket } from '../sockets'
+var HealthBar = require('../states/utils/HealthBar.js')
 
 /* global Phaser */
 
@@ -16,6 +17,8 @@ export default class Enemy extends entityPrefab {
     // this.inputEnabled = true
     //  this.handlBeingAttack
 
+    //  hardcoded for now
+    this.maxLife = 30
     this.orientation = ''
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
@@ -27,6 +30,10 @@ export default class Enemy extends entityPrefab {
       loot: ['test']
     }
 
+    this.enemyHealthBar = new HealthBar(game, {x: position.x, y: position.y})
+    // this.enemyHealthBar.width = 50
+    // this.enemyHealthBar.setFixedToCamera(true)
+
     this.animations.add('walk_up', [0, 1, 2, 3, 4, 5, 6, 7, 8])
     this.animations.add('walk_left', [9, 10, 11, 12, 13, 14, 15, 16, 17])
     this.animations.add('walk_down', [18, 19, 20, 21, 22, 23, 24, 25, 26])
@@ -35,6 +42,7 @@ export default class Enemy extends entityPrefab {
     this.move = this.move.bind(this)
     this.takeDamage = this.takeDamage.bind(this)
     this.attack = this.attack.bind(this)
+    this.computeLifeBar = this.computeLifeBar.bind(this)
   }
 
   move(path) {
@@ -65,6 +73,7 @@ export default class Enemy extends entityPrefab {
         this.animations.play(this.orientation, 30, true)
       }
     }
+    this.enemyHealthBar.setPosition(this.x, this.y)
     socket.emit('updatePosition', this.name, this.x, this.y)
   }
 
@@ -76,6 +85,7 @@ export default class Enemy extends entityPrefab {
 
   takeDamage(damage) {
     this.stats.hp -= (damage - this.stats.defense)
+    this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {
       this.die()
@@ -87,8 +97,15 @@ export default class Enemy extends entityPrefab {
   }
 
   die() {
+    //  makes enemies health bar disappear
+    this.enemyHealthBar.kill()
     this.target = null
     this.alive = false
     this.delayedKill(500)
+  }
+  computeLifeBar() {
+    if (this.stats.hp < 0) this.stats.hp = 0
+    let percent = Math.floor((this.stats.hp/this.maxLife)*100)
+    this.enemyHealthBar.setPercent(percent)
   }
 }

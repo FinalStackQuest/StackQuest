@@ -32,7 +32,6 @@ const spaceState = {
 
     cursors = createCursors()
     map = createMap.space()
-
     socket.emit('setupState', player, 'spaceState')
 
     playerObject = createPlayer(player)
