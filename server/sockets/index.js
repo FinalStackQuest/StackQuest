@@ -99,8 +99,8 @@ const socketFunction = io => {
               if (path && path[1]) {
                 const newX = path[1].x * collisionArrays[room][0].length
                 const newY = path[1].y * collisionArrays[room].length
-                enemy.x = newX
-                enemy.y = newY
+                enemy.x = newX - enemy.x > 0 ? enemy.x + 1 : enemy.x - 1
+                enemy.y = newY - enemy.y > 0 ? enemy.y + 1 : enemy.y - 1
                 const newPos = { x: enemy.x, y: enemy.y }
                 io.sockets.to(room).emit('foundPath', newPos, enemyName)
               }

@@ -63,7 +63,7 @@ export default class Enemy extends entityPrefab {
         if (absDirection > 0) newOrientation = 'walk_right'
       }
 
-      // this.tween.to({ x: newPos.x, y: newPos.y }, 33)
+      this.tween.to({ x: newPos.x, y: newPos.y }, 33)
 
       if (newOrientation !== this.orientation) {
         this.orientation = newOrientation
