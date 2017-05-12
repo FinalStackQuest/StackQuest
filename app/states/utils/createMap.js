@@ -2,31 +2,38 @@
 
 const createMap = {
   fantasy() {
-    const map = StackQuest.game.add.tilemap('stackQuestFantasyMap')
-    map.addTilesetImage('pirate_sheet', 'pirateSheet')
-    map.addTilesetImage('pirate_sheet2', 'pirateSheet2')
-    map.addTilesetImage('rts_medieval_sheet2', 'rtsSheet2')
+    const map = StackQuest.game.add.tilemap('fantasyMap')
 
-    const grassLayer = map.createLayer('grass_layer')
-    const waterLayer = map.createLayer('water_layer')
-    const stuffLayer = map.createLayer('stuff_layer')
+    map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
+    map.addTilesetImage('fishTilesheet@2', 'fishTileSheet2')
+    map.addTilesetImage('RTS_medieval@2', 'rtsTileSheet2')
+    map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
+    map.addTilesetImage('sokoban_tilesheet@2', 'sokobanTileSheet2')
 
-    grassLayer.resizeWorld()
+    const baseLayer = map.createLayer('base')
+    const navigablesLayer = map.createLayer('navigables')
+    const navigables2Layer = map.createLayer('navigables_2')
+    const collisionsLayer = map.createLayer('collisions')
+    const collisions2Layer = map.createLayer('collisions_2')
+
+    baseLayer.resizeWorld()
     return map
   },
 
   space() {
-    const map = StackQuest.game.add.tilemap('stackQuestSpaceMap')
+    const map = StackQuest.game.add.tilemap('marsMap')
 
-    map.addTilesetImage('tilesheet_complete', 'topDownShooterSheet')
-    map.addTilesetImage('scifi_tilesheet', 'scifiSheet')
-    map.addTilesetImage('mapPack_tilesheet', 'mapPackSheet')
+    map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
+    map.addTilesetImage('scifi_tilesheet@2', 'scifiTileSheet')
+    map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
 
-    const groundLayer = map.createLayer('ground_layer')
-    const buildingLayer = map.createLayer('building_layer')
-    const treeLayer = map.createLayer('tree_layer')
+    const baseLayer = map.createLayer('base (red)')
+    const navigablesLayer = map.createLayer('navigables')
+    const navigables2Layer = map.createLayer('navigables_2')
+    const collisionsLayer = map.createLayer('collisions')
+    const collisions2Layer = map.createLayer('collisions_2')
 
-    groundLayer.resizeWorld()
+    baseLayer.resizeWorld()
     return map
   }
 }

@@ -42,8 +42,6 @@ const spaceState = {
       this.makeCollisionMap()
     }
 
-    this.spawnEnemy()
-
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
     StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
@@ -83,10 +81,6 @@ const spaceState = {
       collisionArray.push(rowArray)
     }
     socket.emit('createCollisionArray', {array: collisionArray})
-  },
-
-  spawnEnemy() {
-    socket.emit('addEnemy', {state: 'spaceState'})
   },
 }
 

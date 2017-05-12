@@ -1,5 +1,5 @@
 import socketio from 'socket.io-client'
-import Enemy from './constructor/Enemy'
+import Enemy from './classes/Enemy'
 
 /* global StackQuest */
 

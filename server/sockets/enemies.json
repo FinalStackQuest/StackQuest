@@ -1,12 +1,12 @@
 {
   "fantasyState": [{
     "name": "Soldier 1",
-    "x": 609,
+    "x": 309,
     "y": 430,
     "key": "soldier"
   }, {
     "name": "Soldier 2",
-    "x": 906,
+    "x": 806,
     "y": 257,
     "key": "soldieralt"
   }, {
@@ -17,32 +17,78 @@
   }, {
     "name": "Soldier 4",
     "x": 745,
-    "y": 601,
+    "y": 1601,
     "key": "soldieralt"
   }, {
     "name": "Soldier 5",
-    "x": 843,
-    "y": 605,
+    "x": 343,
+    "y": 1750,
     "key": "soldier"
   }, {
     "name": "Soldier 6",
-    "x": 369,
+    "x": 1369,
     "y": 623,
     "key": "soldieralt"
   }, {
     "name": "Soldier 7",
     "x": 1052,
-    "y": 570,
+    "y": 1570,
     "key": "soldier"
   }, {
     "name": "Soldier 8",
     "x": 1447,
-    "y": 1508,
+    "y": 1308,
     "key": "soldieralt"
   }, {
     "name": "Soldier 9",
-    "x": 1606,
-    "y": 1112,
+    "x": 1806,
+    "y": 1012,
+    "key": "soldier"
+  }],
+  "spaceState": [{
+    "name": "Soldier 1",
+    "x": 309,
+    "y": 430,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 2",
+    "x": 806,
+    "y": 257,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 3",
+    "x": 1075,
+    "y": 801,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 4",
+    "x": 745,
+    "y": 1601,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 5",
+    "x": 343,
+    "y": 1750,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 6",
+    "x": 1369,
+    "y": 623,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 7",
+    "x": 1052,
+    "y": 1570,
+    "key": "soldier"
+  }, {
+    "name": "Soldier 8",
+    "x": 1447,
+    "y": 1308,
+    "key": "soldieralt"
+  }, {
+    "name": "Soldier 9",
+    "x": 1806,
+    "y": 1012,
     "key": "soldier"
   }]
 }

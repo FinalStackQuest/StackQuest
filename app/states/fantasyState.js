@@ -1,5 +1,5 @@
  // fix loot here
-import Loot from '../constructor/Loot'
+import Loot from '../classes/Loot'
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
@@ -10,7 +10,7 @@ import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
-import playerClass from '../constructor/Player'
+import playerClass from '../classes/Player'
 
 /* global StackQuest, Phaser */
 
@@ -52,7 +52,6 @@ const fantasyState = {
       this.makeCollisionMap()
     }
 
-    this.spawnEnemy()
     this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
@@ -69,7 +68,7 @@ const fantasyState = {
     graveyard = []
 
     // spawn loot
-    if (Math.random() * 1000 <= 25) this.spawnLoot()
+    if (Math.random() * 1000 <= 1) this.spawnLoot()
 
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
@@ -115,9 +114,6 @@ const fantasyState = {
     socket.emit('createCollisionArray', {array: collisionArray})
   },
 
-  spawnEnemy() {
-    socket.emit('addEnemy', {state: 'fantasyState'})
-  },
   spawnLoot() {
     localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }
