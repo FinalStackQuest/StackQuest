@@ -29,7 +29,6 @@ const getPlayers = players => {
 }
 
 const addPlayer = (socketId, player) => {
-  console.log('adding player', player)
   GamePlayers[socketId] = new Player(StackQuest.game, player.userName, player)
 }
 
