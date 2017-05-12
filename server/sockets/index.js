@@ -73,25 +73,25 @@ const socketFunction = io => {
       io.sockets.to(room).emit('madeCollisionArray')
     })
 
-    function enemyMovement() {
-      Object.keys(GameEnemies[room]).forEach(enemyName => {
-        const enemy = GameEnemies[room][enemyName]
-        const closestPlayer = findClosestPlayer(GamePlayers[room], enemy)
+    function enemyMovement(state) {
+      Object.keys(GameEnemies[state]).forEach(enemyName => {
+        const enemy = GameEnemies[state][enemyName]
+        const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
         if (closestPlayer) {
           Easystar.findPath(
-            Math.floor(enemy.x / collisionArrays[room][0].length),
-            Math.floor(enemy.y / collisionArrays[room].length),
-            Math.floor(closestPlayer.x / collisionArrays[room][0].length),
-            Math.floor(closestPlayer.y / collisionArrays[room].length),
+            Math.floor(enemy.x / collisionArrays[state][0].length),
+            Math.floor(enemy.y / collisionArrays[state].length),
+            Math.floor(closestPlayer.x / collisionArrays[state][0].length),
+            Math.floor(closestPlayer.y / collisionArrays[state].length),
             path => {
               if (path && path[1]) {
-                const newX = path[1].x * collisionArrays[room][0].length
-                const newY = path[1].y * collisionArrays[room].length
+                const newX = path[1].x * collisionArrays[state][0].length
+                const newY = path[1].y * collisionArrays[state].length
                 const distance = 1
                 enemy.x += newX - enemy.x > 0 ? distance : -distance
                 enemy.y += newY - enemy.y > 0 ? distance : -distance
                 const newPos = { x: enemy.x, y: enemy.y }
-                io.sockets.to(room).emit('foundPath', newPos, enemyName)
+                io.sockets.to(state).emit('foundPath', newPos, enemyName)
               }
             })
           Easystar.calculate()
@@ -99,18 +99,18 @@ const socketFunction = io => {
       })
     }
 
-    function spawnEnemy() {
-      enemies[room].forEach((enemy) => {
-        if (!GameEnemies[room][enemy.name]) {
-          GameEnemies[room][enemy.name] = Object.assign({}, enemy)
-          io.sockets.to(room).emit('enemyCreated', enemy)
+    function spawnEnemy(state) {
+      enemies[state].forEach((enemy) => {
+        if (!GameEnemies[state][enemy.name]) {
+          GameEnemies[state][enemy.name] = Object.assign({}, enemy)
+          io.sockets.to(state).emit('enemyCreated', enemy)
         }
       })
     }
 
     function runIntervals() {
-      setInterval(enemyMovement, 33)
-      setInterval(spawnEnemy, 10000)
+      setInterval(() => enemyMovement(room), 33)
+      setInterval(() => spawnEnemy(room), 10000)
     }
 
     socket.on('setupState', (player, newRoom) => {
