@@ -21,6 +21,7 @@ const itemCollision = (playerObject, projectile, items) => {
         setTimeout(() => { armorNotice.destroy() }, 3000)
       }
       item.destroy()
+      socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: playerObject.lootCount})
     })
   }
 }
