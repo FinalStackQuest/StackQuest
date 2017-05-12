@@ -24,7 +24,7 @@ const enemyCollision = (playerObject, projectile, graveyard) => {
         playerObject.position.y = 200
         //  reset internal health: TEMP
         playerObject.stats.hp = 100
-        socket.emit('updatePlayer', playerObject.position)
+        socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: 0})
       }
     })
   })

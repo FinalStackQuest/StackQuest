@@ -16,6 +16,8 @@ export default class Player extends Prefab {
     this.stats.hp = property.hp
     this.setAnimationFrames(this)
 
+    this.lootCount = 0
+
     this.loadControls()
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)

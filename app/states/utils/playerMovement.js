@@ -10,17 +10,17 @@ const playerMovement = (playerObject, cursors) => {
 
   if (cursors.up.isDown || cursors.w.isDown) {
     playerObject.body.velocity.y = -200
-    socket.emit('updatePlayer', playerObject.position)
+    socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: playerObject.lootCount})
   } else if (cursors.down.isDown || cursors.s.isDown) {
     playerObject.body.velocity.y = 200
-    socket.emit('updatePlayer', playerObject.position)
+    socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: playerObject.lootCount})
   }
   if (cursors.left.isDown || cursors.a.isDown) {
     playerObject.body.velocity.x = -200
-    socket.emit('updatePlayer', playerObject.position)
+    socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: playerObject.lootCount})
   } else if (cursors.right.isDown || cursors.d.isDown) {
     playerObject.body.velocity.x = 200
-    socket.emit('updatePlayer', playerObject.position)
+    socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: playerObject.lootCount})
   }
 }
 
