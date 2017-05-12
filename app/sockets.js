@@ -1,5 +1,6 @@
 import socketio from 'socket.io-client'
 import Enemy from './constructor/Enemy'
+import Player from './constructor/Player-temp'
 
 export const socket = socketio.connect()
 export const GamePlayers = {}
@@ -21,16 +22,12 @@ const socketFunctions = socket => {
 const getPlayers = players => {
   for (const player in GamePlayers) delete GamePlayers[player]
   Object.keys(players).forEach(playerSocketId => {
-    const xPos = players[playerSocketId].x
-    const yPos = players[playerSocketId].y
-    const playerClass = players[playerSocketId].class
-    GamePlayers[playerSocketId] = StackQuest.game.add.text(xPos, yPos, playerClass, { font: '32px Arial', fill: '#ffffff' })
-    GamePlayers[playerSocketId].anchor.setTo(0.5, 0.5)
+    GamePlayers[playerSocketId] = new Player(StackQuest.game, 'otherPlayer', players[playerSocketId])
   })
 }
 
 const addPlayer = (socketId, player) => {
-  GamePlayers[socketId] = StackQuest.game.add.text(player.x, player.y, player.class, { font: '32px Arial', fill: '#ffffff' })
+  GamePlayers[socketId] = new Player(StackQuest.game, 'otherPlayer', player)
 }
 
 const updatePlayer = (socketId, playerPos) => {

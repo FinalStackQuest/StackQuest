@@ -3,8 +3,8 @@ import playerProperties from '../properties/playerProperties'
 import {socket} from '../sockets'
 // client side class for Playable Characters
 export default class Player extends Prefab {
-  constructor(game, name, property, spriteKey) {
-    super(game, name, {x: property.x, y: property.y}, spriteKey)
+  constructor(game, name, property) {
+    super(game, name, {x: property.x, y: property.y}, property.class)
 
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
@@ -12,7 +12,7 @@ export default class Player extends Prefab {
     this.maxLife = this.game.playerLife
     this.inFight = false
 
-    this.absorbProperties(playerProperties[spriteKey])
+    this.absorbProperties(playerProperties[property.class])
     this.stats.hp = property.hp
     this.setAnimationFrames(this)
 
@@ -73,9 +73,5 @@ export default class Player extends Prefab {
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
       this.animations.play(`walk_${this.orientationsDict[this.orientation]}`) 
     }
-  }
-
-  update() {
-    this.movePlayer()
   }
 }
