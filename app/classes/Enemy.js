@@ -1,5 +1,6 @@
 import entityPrefab from './entityPrefab'
 import { socket } from '../sockets'
+import HealthBar from '../states/utils/HealthBar.js'
 import enemyProperties from '../properties/enemyProperties'
 
 /* global Phaser */
@@ -17,6 +18,8 @@ export default class Enemy extends entityPrefab {
     // this.inputEnabled = true
     //  this.handlBeingAttack
 
+    //  hardcoded for now
+    this.maxLife = 30
     this.orientation = ''
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
@@ -28,12 +31,13 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
-    console.log(this.frames)
+
     this.setAnimationFrames(this)
 
     this.move = this.move.bind(this)
     this.takeDamage = this.takeDamage.bind(this)
     this.attack = this.attack.bind(this)
+    this.enemyHealthBar = new HealthBar(game, {x: position.x, y: position.y})
   }
 
   move(path) {
@@ -64,6 +68,7 @@ export default class Enemy extends entityPrefab {
         this.animations.play(this.orientation, 30, true)
       }
     }
+    this.enemyHealthBar.setPosition(this.x, this.y)
     socket.emit('updatePosition', this.name, this.x, this.y)
   }
 
@@ -75,6 +80,7 @@ export default class Enemy extends entityPrefab {
 
   takeDamage(damage) {
     this.stats.hp -= (damage - this.stats.defense)
+    this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {
       this.die()
@@ -86,8 +92,15 @@ export default class Enemy extends entityPrefab {
   }
 
   die() {
+    //  makes enemies health bar disappear
+    this.enemyHealthBar.kill()
     this.target = null
     this.alive = false
     this.delayedKill(500)
+  }
+  computeLifeBar() {
+    if (this.stats.hp < 0) this.stats.hp = 0
+    let percent = Math.floor((this.stats.hp/this.maxLife)*100)
+    this.enemyHealthBar.setPercent(percent)
   }
 }
