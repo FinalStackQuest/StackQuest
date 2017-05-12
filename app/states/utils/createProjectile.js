@@ -1,3 +1,5 @@
+/* global StackQuest, Phaser */
+
 const createProjectile = {
   bullet(playerObject) {
     //  Creates 3 bullets, using the 'bullet' graphic

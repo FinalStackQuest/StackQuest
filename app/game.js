@@ -7,6 +7,8 @@ import loadingScreen from './states/loadingScreen'
 import fantasyState from './states/fantasyState'
 import spaceState from './states/spaceState'
 
+/* global StackQuest, Phaser */
+
 class StackQuest extends Phaser.Game {
   // Initialize game
   constructor() {
