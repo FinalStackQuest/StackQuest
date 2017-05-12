@@ -1,4 +1,7 @@
 import fantasyState from './fantasyState.js'
+
+/* global StackQuest, Phaser */
+
 let loadingText
   , player
   , nextMap

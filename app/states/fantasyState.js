@@ -1,15 +1,18 @@
  // fix loot here
-import Loot from '../constructor/Loot'
+import Loot from '../classes/Loot'
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
-import buildMaps from './utils/buildMaps'
+import createMap from './utils/createMap'
 import createCursors from './utils/createCursors'
 import createPlayer from './utils/createPlayer'
 import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
-import playerClass from '../constructor/Player'
+import enemyCollision from './utils/enemyCollision'
+import playerClass from '../classes/Player'
+
+/* global StackQuest, Phaser */
 
 let map
   , cursors
@@ -22,8 +25,6 @@ let map
 
 // TODO get rid of this (put in sockets) ?
 const localState = {
-  players: [],
-  enemies: {},
   loot: []
 }
 
@@ -40,7 +41,7 @@ const fantasyState = {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
     cursors = createCursors()
-    map = buildMaps.fantasy()
+    map = createMap.fantasy()
 
     socket.emit('setupState', player, 'fantasyState')
 
@@ -51,12 +52,11 @@ const fantasyState = {
       this.makeCollisionMap()
     }
 
-    this.spawnEnemy()
     this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
-    this.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
+    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
   },
 
   update() {
@@ -68,23 +68,24 @@ const fantasyState = {
     graveyard = []
 
     // spawn loot
-    if (Math.random() * 1000 <= 25) this.spawnLoot()
+    if (Math.random() * 1000 <= 1) this.spawnLoot()
 
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
     }
 
+    // TODO: export fn to utils file
+    this.itemCollision()
+    enemyCollision(playerObject, projectile, graveyard)
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
-
-    this.enemyCollision()
-    this.itemCollision()
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
   },
 
+  // TODO export to utils file
   itemCollision() {
     for (const itemKey in localState.loot) {
       let self = this
@@ -114,31 +115,6 @@ const fantasyState = {
     }
   },
 
-  enemyCollision() {
-    Object.keys(GameEnemies).forEach(enemyKey => {
-      const enemy = GameEnemies[enemyKey]
-      StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
-        let didDie = enemy.takeDamage(projectile.damage)
-
-        if (didDie) {
-          graveyard.push(enemy)
-          delete GameEnemies[enemyKey]
-        }
-      })
-      StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-        playerObject.internalStats.hp -= enemy.attack()
-
-        if (playerObject.internalStats.hp <= 0) {
-          playerObject.position.x = 200
-          playerObject.position.y = 200
-          //  reset internal health: TEMP
-          playerObject.internalStats.hp = 100
-          socket.emit('updatePlayer', playerObject.position)
-        }
-      })
-    })
-  },
-
   makeCollisionMap() {
     const collisionArray = []
     for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
@@ -158,9 +134,6 @@ const fantasyState = {
     socket.emit('createCollisionArray', {array: collisionArray})
   },
 
-  spawnEnemy() {
-    socket.emit('addEnemy', {state: 'fantasyState'})
-  },
   spawnLoot() {
     localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }

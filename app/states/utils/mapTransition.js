@@ -1,5 +1,7 @@
 import { socket } from 'APP/app/sockets'
 
+/* global StackQuest */
+
 const mapTransition = (player, playerObject, nextMap) => {
   if (playerObject.position.y <= StackQuest.game.world.bounds.top + playerObject.height) {
     player.x = playerObject.position.x
