@@ -20,8 +20,8 @@ const enemyCollision = (playerObject, projectile, graveyard) => {
       playerObject.internalStats.hp -= enemy.attack()
 
       if (playerObject.internalStats.hp <= 0) {
-        playerObject.position.x = 200
-        playerObject.position.y = 200
+        playerObject.position.x = 500
+        playerObject.position.y = 500
         //  reset internal health: TEMP
         playerObject.internalStats.hp = 100
         socket.emit('updatePlayer', playerObject.position)
