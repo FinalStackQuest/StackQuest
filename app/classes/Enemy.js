@@ -1,7 +1,7 @@
 import entityPrefab from './entityPrefab'
 import { socket } from '../sockets'
 
-/* global Phaser */
+/* global StackQuest, Phaser */
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -20,6 +20,7 @@ export default class Enemy extends entityPrefab {
     // this.orientation = game.rnd.between(1, 4)
     this.orientation = ''
     // this.initialPosition = new Phaser.Point(position.x, position.y)
+    this.lastAttack = Date.now()
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
     this.stats = {
@@ -75,9 +76,14 @@ export default class Enemy extends entityPrefab {
   }
 
   attack() {
-    if (Date.now() - this.lastAttack < 900) return 0
-    this.lastAttack = Date.now()
-    return this.stats.attack
+    if (Date.now() - this.lastAttack > 1000) {
+      this.lastAttack = Date.now()
+      const damage = StackQuest.game.add.text(this.x, this.y + 20, '-' + this.stats.attack, { font: '22px Times New Roman', fill: '#ff0000' })
+      setTimeout(() => { damage.destroy() }, 3000)
+      return this.stats.attack
+    } else {
+      return 0
+    }
   }
 
   takeDamage(damage) {
