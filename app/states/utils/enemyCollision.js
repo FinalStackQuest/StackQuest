@@ -24,6 +24,8 @@ const enemyCollision = (playerObject, projectile, graveyard) => {
         playerObject.position.y = 500
         //  reset internal health: TEMP
         playerObject.internalStats.hp = 100
+        const damage = StackQuest.game.add.text(playerObject.x, playerObject.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ffa500' })
+        setTimeout(() => damage.destroy(), 1000)
         socket.emit('updatePlayer', playerObject.position)
       }
     })
