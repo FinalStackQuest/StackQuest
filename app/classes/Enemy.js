@@ -75,7 +75,6 @@ export default class Enemy extends entityPrefab {
     }
 
     this.enemyHealthBar.setPosition(this.x, this.y)
-    socket.emit('updatePosition', this.name, this.x, this.y)
   }
 
   attack() {
