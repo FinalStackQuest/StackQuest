@@ -4,6 +4,8 @@ import { logout } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
 import { socket } from 'APP/app/sockets'
 
+/* global StackQuest */
+
 const WhoAmI = ({ user, gameExist, logoutHandler }) => (
   <form className="nav navbar-form navbar-right whoami">
     <label className="col-sm-2 col-form-label col-form-label-sm whoami-user-name">{user && user.name}</label>

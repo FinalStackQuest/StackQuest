@@ -1,12 +1,15 @@
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
-import buildMaps from './utils/buildMaps'
+import createMap from './utils/createMap'
 import createCursors from './utils/createCursors'
 import createPlayer from './utils/createPlayer'
 import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
+import enemyCollision from './utils/enemyCollision'
+
+/* global StackQuest, Phaser */
 
 let map
   , cursors
@@ -28,7 +31,7 @@ const spaceState = {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
     cursors = createCursors()
-    map = buildMaps.space()
+    map = createMap.space()
 
     socket.emit('setupState', player, 'spaceState')
 
@@ -38,8 +41,6 @@ const spaceState = {
     if (!collisionArrayStatus) {
       this.makeCollisionMap()
     }
-
-    this.spawnEnemy()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -55,38 +56,13 @@ const spaceState = {
     graveyard = []
 
     playerObject.movePlayer()
-    mapTransition(player, playerObject, 'fantasyState')
+    enemyCollision(playerObject, projectile, graveyard)
 
-    this.enemyCollision()
+    mapTransition(player, playerObject, 'fantasyState')
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
-  },
-
-  enemyCollision() {
-    Object.keys(GameEnemies).forEach(enemyKey => {
-      const enemy = GameEnemies[enemyKey]
-      StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, () => {
-        let didDie = enemy.takeDamage(projectile.damage)
-  
-        if (didDie) {
-          graveyard.push(enemy)
-          delete GameEnemies[enemyKey]
-        }
-      })
-      StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-        playerObject.stats.hp -= enemy.attack()
-        
-        if (playerObject.stats.hp <= 0) {
-          playerObject.position.x = 200
-          playerObject.position.y = 200
-          //  reset internal health: TEMP
-          playerObject.stats.hp = 100
-          socket.emit('updatePlayer', playerObject.position)
-        }
-      })
-    })
   },
 
   makeCollisionMap() {
@@ -106,10 +82,6 @@ const spaceState = {
       collisionArray.push(rowArray)
     }
     socket.emit('createCollisionArray', {array: collisionArray})
-  },
-
-  spawnEnemy() {
-    socket.emit('addEnemy', {state: 'spaceState'})
   },
 }
 

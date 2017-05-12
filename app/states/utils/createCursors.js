@@ -1,3 +1,5 @@
+/* global StackQuest, Phaser */
+
 const createCursors = () => {
   const cursors = StackQuest.game.input.keyboard.createCursorKeys()
   cursors.w = StackQuest.game.input.keyboard.addKey(Phaser.Keyboard.W)

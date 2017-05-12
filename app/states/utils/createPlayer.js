@@ -1,4 +1,5 @@
-import Player from '../../constructor/Player-temp'
+import Player from '../../classes/Player-temp'
+/* global StackQuest */
 
 const createPlayer = (player) => {
   const playerObject = new Player(StackQuest.game, 'player1', player)
