@@ -29,7 +29,7 @@ const localState = {
 
 const fantasyState = {
   init(character) {
-      if (character) player = character
+    if (character) player = character
   },
 
   preload() {
