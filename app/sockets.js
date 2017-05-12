@@ -34,15 +34,11 @@ const addPlayer = (socketId, player) => {
 
 const updatePlayer = (socketId, playerPos) => {
   GamePlayers[socketId].moveOther(playerPos.x, playerPos.y)
-  // GamePlayers[socketId].position.y = playerPos.y
 }
 
 const removePlayer = socketId => {
-  const player = GamePlayers[socketId]
-  if (player) {
-    player.destroy()
-    delete GamePlayers[socketId]
-  }
+  if (GamePlayers[socketId]) GamePlayers[socketId].destroy()
+  delete GamePlayers[socketId]
 }
 
 const enemyCreated = enemy => {
@@ -61,9 +57,12 @@ const getEnemies = enemies => {
   })
 }
 
-const removeEnemy = name => {
-  GameEnemies[name].destroy()
-  delete GameEnemies[name]
+const removeEnemy = enemyName => {
+  if (GameEnemies[enemyName]) {
+    GameEnemies[enemyName].enemyHealthBar.kill()
+    GameEnemies[enemyName].destroy()
+  }
+  delete GameEnemies[enemyName]
 }
 
 const createdCollisionArray = (state) => {
