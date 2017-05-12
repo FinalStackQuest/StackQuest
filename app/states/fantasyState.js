@@ -1,5 +1,3 @@
- // fix loot here
-import Loot from '../classes/Loot'
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
@@ -10,8 +8,10 @@ import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
+import makeCollisionMap from './utils/makeCollisionMap'
 import itemCollision from './utils/itemCollision'
 import playerClass from '../classes/Player'
+import Loot from '../classes/Loot'
 
 /* global StackQuest, Phaser */
 
@@ -49,7 +49,7 @@ const fantasyState = {
     projectile = createProjectile.bullet(playerObject)
 
     if (!collisionArrayStatus) {
-      this.makeCollisionMap()
+      makeCollisionMap(map)
     }
 
     this.spawnLoot()
@@ -60,6 +60,9 @@ const fantasyState = {
   },
 
   update() {
+    StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions)
+    StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions_2)
+
     graveyard.forEach(enemy => {
       enemy.destroy()
       delete GameEnemies[enemy.name]
@@ -68,6 +71,7 @@ const fantasyState = {
     graveyard = []
 
     playerObject.movePlayer()
+
     // spawn loot
     if (Math.random() * 1000 <= 1) this.spawnLoot()
 
@@ -75,7 +79,6 @@ const fantasyState = {
       this.enemyPathFinding(enemyKey)
     }
 
-    // this.itemCollision()
     itemCollision(playerObject, projectile, localState.loot)
     enemyCollision(playerObject, projectile, graveyard)
     mapTransition(player, playerObject, 'spaceState')
@@ -83,25 +86,6 @@ const fantasyState = {
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
-  },
-
-  makeCollisionMap() {
-    const collisionArray = []
-    for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
-      const rowArray = []
-      for (let colIdx = 0; colIdx < map.width; colIdx++) {
-        let collision = false
-        for (const layer of map.layers) {
-          if (layer.data[rowIdx][colIdx].collides) {
-            collision = true
-            break
-          }
-        }
-        rowArray.push(Number(collision))
-      }
-      collisionArray.push(rowArray)
-    }
-    socket.emit('createCollisionArray', {array: collisionArray})
   },
 
   spawnLoot() {

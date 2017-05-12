@@ -7,8 +7,5 @@ export default class Loot extends entityPrefab {
     // set loot type to be random
     super(game, name, position, spriteKey)
     this.type = lootTypes[Math.floor(Math.random() * lootTypes.length)]
-
-    // remove the nameholder for item
-    // this.removeChildren(0, this.children.length)
   }
 }

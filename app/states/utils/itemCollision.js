@@ -1,5 +1,7 @@
 import { socket } from 'APP/app/sockets'
 
+/* global StackQuest */
+
 const itemCollision = (playerObject, projectile, items) => {
   for (const itemKey in items) {
     // const self = this
@@ -21,7 +23,7 @@ const itemCollision = (playerObject, projectile, items) => {
         setTimeout(() => { armorNotice.destroy() }, 3000)
       }
       item.destroy()
-      socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: playerObject.lootCount})
+      socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount })
     })
   }
 }

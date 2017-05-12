@@ -1,10 +1,13 @@
 import Prefab from './entityPrefab'
 import playerProperties from '../properties/playerProperties'
-import {socket} from '../sockets'
+import { socket } from '../sockets'
+
+/* global Phaser */
+
 // client side class for Playable Characters
 export default class Player extends Prefab {
   constructor(game, name, property) {
-    super(game, name, {x: property.x, y: property.y}, property.class)
+    super(game, name, { x: property.x, y: property.y }, property.class)
 
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
@@ -65,7 +68,7 @@ export default class Player extends Prefab {
     }
 
     this.animations.play(`walk_${this.orientationsDict[this.orientation]}`, null, true)
-    this.moveTween = this.game.add.tween(this.position).to({x: targetX, y: targetY})
+    this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
     this.moveTween.onComplete.add(this.completeMovement, this)
     this.moveTween.start()
   }
@@ -81,26 +84,26 @@ export default class Player extends Prefab {
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200
       this.orientation = 2
-      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     }
     if (this.cursors.down.isDown) {
       this.body.velocity.y = 200
       this.orientation = 4
-      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     }
     if (this.cursors.left.isDown) {
       this.body.velocity.x = -200
       this.orientation = 1
-      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     }
     if (this.cursors.right.isDown) {
       this.body.velocity.x = 200
       this.orientation = 3
-      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     }
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
-      this.animations.play(`walk_${this.orientationsDict[this.orientation]}`) 
+      this.animations.play(`walk_${this.orientationsDict[this.orientation]}`)
     }
   }
 }
