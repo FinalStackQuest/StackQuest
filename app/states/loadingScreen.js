@@ -21,9 +21,7 @@ export default {
       align: 'center'
     })
     loadingText.anchor.setTo(0.5, 1)
-    this.load.tilemap('testmap', 'assets/maps/testmap.json', null, Phaser.Tilemap.TILED_JSON)
-    this.load.image('terrainTiles', 'assets/tilesets/LPC_Terrain/terrain.png')
-    this.load.image('baseOutAtlasTiles', 'assets/tilesets/Atlas/base_out_atlas.png')
+    this.load.spritesheet('player', 'assets/tilesets/LPC_Terrain/terrain.png')
   },
   loadUpdate() {
     loadingText.setText(`${this.load.progress}% / 100%`)
