@@ -23,7 +23,7 @@ const createPlayer = (player) => {
   playerObject.anchor.setTo(0.5, 0.5)
   playerObject.body.allowRotation = false
   playerObject.internalStats = player
-
+  playerObject.lootCount = 0
   StackQuest.game.camera.follow(playerObject)
 
   return playerObject
