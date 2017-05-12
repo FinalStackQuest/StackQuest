@@ -67,6 +67,7 @@ const fantasyState = {
     })
     graveyard = []
 
+    playerObject.movePlayer()
     // spawn loot
     if (Math.random() * 1000 <= 1) this.spawnLoot()
 
@@ -77,7 +78,6 @@ const fantasyState = {
     // this.itemCollision()
     itemCollision(playerObject, projectile, localState.loot)
     enemyCollision(playerObject, projectile, graveyard)
-    playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
   },
 
