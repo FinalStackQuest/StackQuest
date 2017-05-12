@@ -8,23 +8,25 @@ const enemyCollision = (playerObject, projectile, graveyard) => {
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       const didDie = enemy.takeDamage(projectile.damage)
       bullet.kill()
+      const damage = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, projectile.damage, { font: '32px Times New Roman', fill: '#ffa500' })
+      setTimeout(() => damage.destroy(), 500)
 
       if (didDie) {
         graveyard.push(enemy)
-        // enemy.kill()
         delete GameEnemies[enemyKey]
-        // socket.emit('killEnemy', enemy.name)
       }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
       playerObject.stats.hp -= enemy.attack()
 
       if (playerObject.stats.hp <= 0) {
-        playerObject.position.x = 200
-        playerObject.position.y = 200
+        playerObject.position.x = 500
+        playerObject.position.y = 500
         //  reset internal health: TEMP
         playerObject.stats.hp = 100
-        socket.emit('updatePlayer', {playerPos: playerObject.position, lootCount: 0})
+        const damage = StackQuest.game.add.text(playerObject.position.x, playerObject.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
+        setTimeout(() => damage.destroy(), 1000)
+        socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: 0 })
       }
     })
   })

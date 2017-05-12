@@ -12,7 +12,7 @@ import spaceState from './states/spaceState'
 class StackQuest extends Phaser.Game {
   // Initialize game
   constructor() {
-    super(1280, 720, Phaser.AUTO, 'game-container')// Add all the states
+    super(1280, 720, Phaser.AUTO, 'game-container') // Add all the states
     this.state.add('loadingScreen', loadingScreen)
     this.state.add('fantasyState', fantasyState)
     this.state.add('spaceState', spaceState)

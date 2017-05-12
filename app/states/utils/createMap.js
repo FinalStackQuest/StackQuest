@@ -10,13 +10,8 @@ const createMap = {
     map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
     map.addTilesetImage('sokoban_tilesheet@2', 'sokobanTileSheet2')
 
-    const baseLayer = map.createLayer('base')
-    const navigablesLayer = map.createLayer('navigables')
-    const navigables2Layer = map.createLayer('navigables_2')
-    const collisionsLayer = map.createLayer('collisions')
-    const collisions2Layer = map.createLayer('collisions_2')
+    setCollision(map)
 
-    baseLayer.resizeWorld()
     return map
   },
 
@@ -27,15 +22,31 @@ const createMap = {
     map.addTilesetImage('scifi_tilesheet@2', 'scifiTileSheet')
     map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
 
-    const baseLayer = map.createLayer('base (red)')
-    const navigablesLayer = map.createLayer('navigables')
-    const navigables2Layer = map.createLayer('navigables_2')
-    const collisionsLayer = map.createLayer('collisions')
-    const collisions2Layer = map.createLayer('collisions_2')
+    setCollision(map)
 
-    baseLayer.resizeWorld()
     return map
   }
+}
+
+const setCollision = map => {
+  StackQuest.game.layers = {}
+
+  map.layers.forEach(layer => {
+    StackQuest.game.layers[layer.name] = map.createLayer(layer.name)
+    if (layer.properties.collision) {
+      const collisionTiles = []
+      layer.data.forEach(dataRow => {
+        dataRow.forEach(tile => {
+          if (tile.index > 0 && collisionTiles.indexOf(tile.index) === -1) {
+            collisionTiles.push(tile.index)
+          }
+        })
+      })
+      map.setCollision(collisionTiles, true, layer.name)
+    }
+  })
+
+  StackQuest.game.layers[map.layer.name].resizeWorld()
 }
 
 export default createMap
