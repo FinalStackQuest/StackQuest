@@ -81,22 +81,22 @@ export default class Player extends Prefab {
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200
       this.orientation = 2
-      socket.emit('updatePlayer', this.position)
+      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
     }
     if (this.cursors.down.isDown) {
       this.body.velocity.y = 200
       this.orientation = 4
-      socket.emit('updatePlayer', this.position)
+      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
     }
     if (this.cursors.left.isDown) {
       this.body.velocity.x = -200
       this.orientation = 1
-      socket.emit('updatePlayer', this.position)
+      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
     }
     if (this.cursors.right.isDown) {
       this.body.velocity.x = 200
       this.orientation = 3
-      socket.emit('updatePlayer', this.position)
+      socket.emit('updatePlayer', {playerPos: this.position, lootCount: this.lootCount})
     }
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {

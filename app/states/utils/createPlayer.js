@@ -1,4 +1,4 @@
-import Player from '../../classes/Player-temp'
+import Player from '../../classes/Player'
 /* global StackQuest */
 
 const createPlayer = (player) => {

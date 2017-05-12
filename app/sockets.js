@@ -1,6 +1,6 @@
 import socketio from 'socket.io-client'
 import Enemy from './classes/Enemy'
-import Player from './classes/Player-temp'
+import Player from './classes/Player'
 
 export const socket = socketio.connect()
 export const GamePlayers = {}

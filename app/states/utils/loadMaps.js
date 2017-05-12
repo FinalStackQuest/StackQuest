@@ -12,7 +12,7 @@ const loadMaps = {
     StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
     StackQuest.game.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 64, 64)
     StackQuest.game.load.spritesheet('soldieralt', 'assets/tilesets/LPC Base Assets/sprites/people/soldier_altcolor.png', 64, 64)
-    StackQuest.game.load.spritesheet('bat', 'assets/tilesets/LPC Base Assets/sprites/people/bat.png', 32, 32)
+    StackQuest.game.load.spritesheet('bat', 'assets/tilesets/LPC Base Assets/sprites/monsters/bat.png', 32, 32)
     StackQuest.game.load.spritesheet('wizard', 'assets/tilesets/LPC Base Assets/sprites/people/male_walkcycle.png', 64, 64)
     StackQuest.game.load.spritesheet('cyborg', 'assets/tilesets/LPC Base Assets/sprites/people/princess.png', 64, 64)
     StackQuest.game.load.spritesheet('item', 'assets/tilesets/LPC Base Assets/sprites/monsters/eyeball.png', 32, 32)
