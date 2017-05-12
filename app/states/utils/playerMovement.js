@@ -1,6 +1,7 @@
 import { socket } from 'APP/app/sockets'
 
 const playerMovement = (playerObject, cursors) => {
+  console.log(playerObject)
   playerObject.body.velocity.x = 0
   playerObject.body.velocity.y = 0
   playerObject.rotation = StackQuest.game.physics.arcade.angleToPointer(playerObject)

@@ -54,7 +54,7 @@ const fantasyState = {
     })
     graveyard = []
 
-    playerMovement(playerObject, cursors)
+    // playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
 
     this.enemyCollision()
@@ -76,13 +76,13 @@ const fantasyState = {
         }
       })
       StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-        playerObject.internalStats.hp -= enemy.attack()
+        playerObject.stats.hp -= enemy.attack()
         
-        if (playerObject.internalStats.hp <= 0) {
+        if (playerObject.stats.hp <= 0) {
           playerObject.position.x = 200
           playerObject.position.y = 200
           //  reset internal health: TEMP
-          playerObject.internalStats.hp = 100
+          playerObject.stats.hp = 100
           socket.emit('updatePlayer', playerObject.position)
         }
       })

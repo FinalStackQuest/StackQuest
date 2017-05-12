@@ -11,7 +11,7 @@ export default class entityPrefab extends Phaser.Sprite {
     this.name = name
     this.attackTarget = null
     this.game = game
-    this.addChild(this.nameHolder = game.add.text(0, 50, `${name}`, {
+    this.addChild(this.nameHolder = game.add.text(-25, 50, `${name}`, {
       font: '14px pixel',
       fill: '#ffffff',
       stroke: '#000000',
@@ -36,11 +36,11 @@ export default class entityPrefab extends Phaser.Sprite {
     // commented for now
     const rates = {
       'idle': 2,
-      'move': 16,
+      'walk': 16,
       'attack': 14
     }
     // defines frame rate of each animation type
-    const animationPrefixes = ['idle', 'move', 'attack']
+    const animationPrefixes = ['idle', 'walk', 'attack']
     const directions = ['up', 'down', 'left', 'right']
 
     for (const animationPrefix of animationPrefixes) {
@@ -48,7 +48,7 @@ export default class entityPrefab extends Phaser.Sprite {
         const animationType = `${animationPrefix}_${direction}`
 
         if (frames.hasOwnProperty(animationType)) {
-          this.animations.add(animationType, frames[animationType], rates[animationPrefix], false)
+          targetObject.animations.add(animationType, frames[animationType], rates[animationPrefix], false)
         }
       }
     }

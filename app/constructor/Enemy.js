@@ -1,4 +1,5 @@
 import entityPrefab from './entityPrefab'
+import enemyProperties from '../game/enemyProperties'
 import throttle from 'lodash.throttle'
 import { socket } from '../sockets'
 
@@ -21,6 +22,7 @@ export default class Enemy extends entityPrefab {
     this.initialPosition = new Phaser.Point(position.x, position.y)
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
+    this.absorbProperties(enemyProperties[spriteKey])
     this.stats = {
       hp: 30,
       attack: 10,
@@ -28,11 +30,7 @@ export default class Enemy extends entityPrefab {
       speed: 10,
       loot: ['test']
     }
-
-    this.animations.add('walk_up', [0, 1, 2, 3, 4, 5, 6, 7, 8])
-    this.animations.add('walk_left', [9, 10, 11, 12, 13, 14, 15, 16, 17])
-    this.animations.add('walk_down', [18, 19, 20, 21, 22, 23, 24, 25, 26])
-    this.animations.add('walk_right', [27, 28, 29, 30, 31, 32, 33, 34, 35])
+    this.setAnimationFrames(this)
 
     // this.move = throttle(this.move.bind(this), 2000)
     this.move = this.move.bind(this)
