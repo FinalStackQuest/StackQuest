@@ -32,8 +32,8 @@ const addPlayer = (socketId, player) => {
   GamePlayers[socketId] = new Player(StackQuest.game, 'otherPlayer', player)
 }
 
-const updatePlayer = (socketId, playerPos) => {
-  GamePlayers[socketId].moveOther(playerPos.x, playerPos.y)
+const updatePlayer = (socketId, player) => {
+  GamePlayers[socketId].moveOther(player.playerPos.x, player.playerPos.y)
 }
 
 const removePlayer = socketId => {
