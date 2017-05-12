@@ -8,6 +8,8 @@ const enemyCollision = (playerObject, projectile, graveyard) => {
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       const didDie = enemy.takeDamage(projectile.damage)
       bullet.kill()
+      const damage = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, projectile.damage, { font: '32px Times New Roman', fill: '#ffa500' })
+      setTimeout(() => damage.destroy(), 500)
 
       if (didDie) {
         graveyard.push(enemy)
