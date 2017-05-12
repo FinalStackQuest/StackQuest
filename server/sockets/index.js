@@ -45,9 +45,9 @@ const socketFunction = io => {
       socket.broadcast.to(room).emit('addPlayer', socket.id, player)
     })
 
-    socket.on('updatePlayer', playerPos => {
+    socket.on('updatePlayer', ({playerPos, lootCount}) => {
       if (GamePlayers[room]) {
-        GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: playerPos.x, y: playerPos.y })
+        GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: playerPos.x, y: playerPos.y, lootCount: lootCount })
         socket.broadcast.to(room).emit('updatePlayer', socket.id, playerPos)
       }
     })
