@@ -1,5 +1,7 @@
 import { socket } from 'APP/app/sockets'
 
+/* global StackQuest */
+
 const playerMovement = (playerObject, cursors) => {
   playerObject.body.velocity.x = 0
   playerObject.body.velocity.y = 0
