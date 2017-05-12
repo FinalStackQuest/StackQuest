@@ -1,4 +1,4 @@
- // fix loot here
+// fix loot here
 import Loot from '../classes/Loot'
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
@@ -10,6 +10,7 @@ import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
+import makeCollisionMap from './utils/makeCollisionMap'
 import playerClass from '../classes/Player'
 
 /* global StackQuest, Phaser */
@@ -49,7 +50,7 @@ const fantasyState = {
     projectile = createProjectile.bullet(playerObject)
 
     if (!collisionArrayStatus) {
-      this.makeCollisionMap()
+      makeCollisionMap(map)
     }
 
     this.spawnLoot()
@@ -78,7 +79,7 @@ const fantasyState = {
     for (const itemKey in localState.loot) {
       const self = this
       const item = localState.loot[itemKey]
-      this.physics.arcade.collide(playerObject, item, function(player, loot) {
+      this.physics.arcade.collide(playerObject, item, function (player, loot) {
         lootTouched++
         const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
         setTimeout(() => { lootCount.destroy() }, 3000)
@@ -93,25 +94,6 @@ const fantasyState = {
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
-  },
-
-  makeCollisionMap() {
-    const collisionArray = []
-    for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
-      const rowArray = []
-      for (let colIdx = 0; colIdx < map.width; colIdx++) {
-        let collision = false
-        for (const layer of map.layers) {
-          if (layer.data[rowIdx][colIdx].collides) {
-            collision = true
-            break
-          }
-        }
-        rowArray.push(Number(collision))
-      }
-      collisionArray.push(rowArray)
-    }
-    socket.emit('createCollisionArray', {array: collisionArray})
   },
 
   spawnLoot() {

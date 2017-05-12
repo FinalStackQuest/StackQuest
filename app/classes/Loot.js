@@ -6,6 +6,6 @@ export default class Loot extends entityPrefab {
 
     // remove the nameholder for item
     // this.removeChildren(0, this.children.length)
-    console.log('Our Loot', this)
+    // console.log('Our Loot', this)
   }
 }

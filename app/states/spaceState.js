@@ -8,6 +8,7 @@ import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
+import makeCollisionMap from './utils/makeCollisionMap'
 
 /* global StackQuest, Phaser */
 
@@ -39,7 +40,7 @@ const spaceState = {
     projectile = createProjectile.bullet(playerObject)
 
     if (!collisionArrayStatus) {
-      this.makeCollisionMap()
+      makeCollisionMap(map)
     }
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
@@ -48,6 +49,9 @@ const spaceState = {
   },
 
   update() {
+    StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions)
+    StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions_2)
+
     graveyard.forEach(enemy => {
       enemy.destroy()
       delete GameEnemies[enemy.name]
@@ -62,26 +66,7 @@ const spaceState = {
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
-  },
-
-  makeCollisionMap() {
-    const collisionArray = []
-    for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
-      const rowArray = []
-      for (let colIdx = 0; colIdx < map.width; colIdx++) {
-        let collision = false
-        for (const layer of map.layers) {
-          if (layer.data[rowIdx][colIdx].collides) {
-            collision = true
-            break
-          }
-        }
-        rowArray.push(Number(collision))
-      }
-      collisionArray.push(rowArray)
-    }
-    socket.emit('createCollisionArray', {array: collisionArray})
-  },
+  }
 }
 
 export default spaceState

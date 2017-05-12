@@ -46,32 +46,59 @@ export default class Enemy extends entityPrefab {
   move(path) {
     if (this.body && path) {
       const speed = 100
-      const xDirection = this.x - path.x * 60
-      const yDirection = this.y - path.y * 60
+      const xDirection = this.x - path.x
+      const yDirection = this.y - path.y
       const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+      this.tween = this.game.tweens.create(this)
       let newOrientation
 
       if (yDirection >= 0) {
-        this.body.velocity.y = -speed
         if (absDirection < 0) newOrientation = 'walk_up'
       } else if (yDirection < 0) {
-        this.body.velocity.y = speed
         if (absDirection < 0) newOrientation = 'walk_down'
       }
       if (xDirection >= 0) {
-        this.body.velocity.x = -speed
         if (absDirection > 0) newOrientation = 'walk_left'
       } else if (xDirection < 0) {
-        this.body.velocity.x = speed
         if (absDirection > 0) newOrientation = 'walk_right'
       }
+
+      // this.tween.to({ x: path.x, y: path.y }, 33)
 
       if (newOrientation !== this.orientation) {
         this.orientation = newOrientation
         this.animations.play(this.orientation, 30, true)
       }
+      this.tween.start()
     }
-    socket.emit('updatePosition', this.name, this.x, this.y)
+    // if (this.body && path) {
+    //   const speed = 100
+    //   const xDirection = this.x - path.x * 60
+    //   const yDirection = this.y - path.y * 60
+    //   const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+    //   let newOrientation
+
+    //   if (yDirection >= 0) {
+    //     this.body.velocity.y = -speed
+    //     if (absDirection < 0) newOrientation = 'walk_up'
+    //   } else if (yDirection < 0) {
+    //     this.body.velocity.y = speed
+    //     if (absDirection < 0) newOrientation = 'walk_down'
+    //   }
+    //   if (xDirection >= 0) {
+    //     this.body.velocity.x = -speed
+    //     if (absDirection > 0) newOrientation = 'walk_left'
+    //   } else if (xDirection < 0) {
+    //     this.body.velocity.x = speed
+    //     if (absDirection > 0) newOrientation = 'walk_right'
+    //   }
+
+    //   if (newOrientation !== this.orientation) {
+    //     this.orientation = newOrientation
+    //     this.animations.play(this.orientation, 30, true)
+    //   }
+    // }
+    // socket.emit('updatePosition', this.name, this.x, this.y)
   }
 
   attack() {
