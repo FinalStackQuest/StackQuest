@@ -1,3 +1,5 @@
+/* global StackQuest */
+
 import { GameEnemies, socket } from 'APP/app/sockets'
 
 const enemyCollision = (playerObject, projectile, graveyard) => {

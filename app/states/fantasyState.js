@@ -1,3 +1,5 @@
+ // fix loot here
+import Loot from '../constructor/Loot'
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
@@ -8,6 +10,9 @@ import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
+import playerClass from '../constructor/Player'
+
+/* global StackQuest, Phaser */
 
 let map
   , cursors
@@ -15,6 +20,13 @@ let map
   , player
   , projectile
   , graveyard = []
+  , lootCounter = 0
+  , lootTouched = 0
+
+// TODO get rid of this (put in sockets) ?
+const localState = {
+  loot: []
+}
 
 const fantasyState = {
   init(character) {
@@ -41,6 +53,7 @@ const fantasyState = {
     }
 
     this.spawnEnemy()
+    this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -54,6 +67,25 @@ const fantasyState = {
       socket.emit('killEnemy', enemy.name)
     })
     graveyard = []
+
+    // spawn loot
+    if (Math.random() * 1000 <= 25) this.spawnLoot()
+
+    for (const enemyKey in localState.enemies) {
+      this.enemyPathFinding(enemyKey)
+    }
+
+    // should abstract into different fn
+    for (const itemKey in localState.loot) {
+      const self = this
+      const item = localState.loot[itemKey]
+      this.physics.arcade.collide(playerObject, item, function(player, loot) {
+        lootTouched++
+        const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
+        setTimeout(() => { lootCount.destroy() }, 3000)
+        loot.destroy()
+      })
+    }
 
     enemyCollision(playerObject, projectile, graveyard)
     playerMovement(playerObject, cursors)
@@ -86,6 +118,9 @@ const fantasyState = {
   spawnEnemy() {
     socket.emit('addEnemy', {state: 'fantasyState'})
   },
+  spawnLoot() {
+    localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
+  }
 }
 
 export default fantasyState

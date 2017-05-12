@@ -1,3 +1,5 @@
+/* global StackQuest */
+
 const createMap = {
   fantasy() {
     const map = StackQuest.game.add.tilemap('stackQuestFantasyMap')

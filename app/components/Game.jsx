@@ -9,6 +9,8 @@ import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
 import { createCharacter } from 'APP/app/reducers/user'
 
+/* global StackQuest */
+
 const Game = ({ loggedIn, gameExist, startGame }) =>
   <div id="game-container">
     {loggedIn && !gameExist &&

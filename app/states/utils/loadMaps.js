@@ -1,3 +1,5 @@
+/* global StackQuest, Phaser */
+
 const loadMaps = {
   fantasy() {
     StackQuest.game.load.tilemap('stackQuestFantasyMap', 'assets/maps/StackQuestFantasyTilemap.json', null, Phaser.Tilemap.TILED_JSON)
@@ -8,6 +10,7 @@ const loadMaps = {
     StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
     StackQuest.game.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 64, 64)
     StackQuest.game.load.spritesheet('soldieralt', 'assets/tilesets/LPC Base Assets/sprites/people/soldier_altcolor.png', 64, 64)
+    StackQuest.game.load.spritesheet('item', 'assets/tilesets/LPC Base Assets/sprites/monsters/eyeball.png', 32, 32)
   },
 
   space() {

@@ -1,6 +1,8 @@
 import socketio from 'socket.io-client'
 import Enemy from './constructor/Enemy'
 
+/* global StackQuest */
+
 export const socket = socketio.connect()
 export const GamePlayers = {}
 export const GameEnemies = {}

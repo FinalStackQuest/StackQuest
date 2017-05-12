@@ -1,6 +1,8 @@
 import entityPrefab from './entityPrefab'
 import { socket } from '../sockets'
 
+/* global Phaser */
+
 // To Do:
 //  1. add correct animations using spritesheet
 //  2. resolve 'note' questions

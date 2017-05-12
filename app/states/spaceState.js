@@ -9,6 +9,8 @@ import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
 
+/* global StackQuest, Phaser */
+
 let map
   , cursors
   , playerObject

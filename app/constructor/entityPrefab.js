@@ -5,6 +5,8 @@ require('pixi')
 require('p2')
 require('phaser')
 
+/* global Phaser */
+
 export default class entityPrefab extends Phaser.Sprite {
   constructor(game, name, position, spriteKey) {
     super(game, position.x, position.y, spriteKey)

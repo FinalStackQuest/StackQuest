@@ -1,3 +1,5 @@
+/* global StackQuest */
+
 const createPlayer = (player) => {
   let playerObject
   //  load correct sprite

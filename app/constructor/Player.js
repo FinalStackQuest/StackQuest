@@ -1,26 +1,19 @@
-import Prefab from './entityPrefab'
+import entityPrefab from './entityPrefab'
 
-// client side class for Playable Characters
-export default class Player extends Prefab {
-  constructor(game, name, position, spriteKey) {
-    // call it's superclass constructor
+export default class Player extends entityPrefab {
+  constructor(game, name, position, spriteKey, properties) {
     super(game, name, position, spriteKey)
-    // Send context as first argument!!
     this.anchor.set(0.25, 0.35)
     this.orientation = 4 // down
-    this.speed = this.game.playerSpeed
-    // TODO create dialogue logic.. maybe
-    // this.dialoguesMemory = {}
     this.maxLife = this.game.playerLife
 
     this.stats = {
-      attack: 7,
-      // totalAttack: properties.stats.attack + properties.stats.weapon.damage,
-      // Hp: properties.stats.hp,
-      // totalDefense: properties.stats.defense + properties.stats.armor.block,
-      // speed: properties.stats.speed,
-      // weapon: properties.stats.weapon,
-      // armor: properties.stats.armor
+      attack: 0,
+      defense: 0,
+      speed: 0,
+      weapon: '',
+      armor: '',
+      hp: 0,
     }
 
     this.life = this.maxLife
@@ -47,23 +40,45 @@ export default class Player extends Prefab {
     this.events.onKilled.add(function(player) {
       this.game.displayedPlayers.delete(player.id)
     }, this)
-    this.loadControls()
     this.getStats = this.getStats.bind(this)
+
+    this.setStats(spriteKey)
   }
   // changes color of name text if Player is the main Player
   setIsPlayer(flag) {
     this.isPlayer = flag
     if (this.isPlayer) this.nameHolder.addColor('#f4d442', 0)
   }
+  setStats(classType) {
+    if (classType === 'wizard') {
+      this.stats = {
+        attack: 7,
+        defense: 5,
+        speed: 5,
+
+
+        weapon: 5,
+        armor: 5
+        // totalAttack: properties.stats.attack + properties.stats.weapon.damage,
+        // Hp: properties.stats.hp,
+        // totalDefense: properties.stats.defense + properties.stats.armor.block,
+
+      }
+    } else if (classType === 'cyborg') {
+
+    }
+  }
   getStats() {
-    return this.stats;
+
   }
   // sets the player's name
   setName(name) {
     this.nameHolder.text = name
     this.nameHolder.x = Math.floor(16 - (this.nameHolder.width/2))
   }
-
+  attack() {
+    return this.stats.attack + this.stats.armor
+  }
   equipWeapon(key) {
     this.weapon.name = key
     this.weapon.frameName = key + '_0' // sets initial weapon animation frame
@@ -77,26 +92,14 @@ export default class Player extends Prefab {
     }
     return true
   }
-
   adjustWeapon() {
-    this.weapon.position.set(this.weapon.offsets.x, this.weapon.offsets.y)
+    // this.weapon.position.set(this.weapon.offsets.x, this.weapon.offsets.y)
   }
-
   equipArmor(key) {
     const armorInfo = Game.itemsInfo[key]
     this.def = armorInfo.def
     this.armorName = key
     return true
-  }
-
-  loadControls() {
-    this.cursors = {}
-    this.cursors.up = this.game.input.keyboard.addKey(Phaser.Keyboard.W)
-    this.cursors.down = this.game.input.keyboard.addKey(Phaser.Keyboard.S)
-    this.cursors.right = this.game.input.keyboard.addKey(Phaser.Keyboard.D)
-    this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
-    this.cursors.attack = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-    this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
   }
   // TODO reimplement this fn when we manage life
   updateLife() {
@@ -143,37 +146,5 @@ export default class Player extends Prefab {
       this.updateLife()
     }
     this.idle(true)
-  }
-  update() {
-    // so it doesn't float off into space...
-    this.body.setZeroVelocity()
-    if (this.cursors.up.isDown) {
-      this.animations.play('up')
-      this.body.moveUp(200)
-    }
-    if (this.cursors.down.isDown) {
-      this.animations.play('down')
-      this.body.moveDown(200)
-    }
-    if (this.cursors.left.isDown) {
-      this.animations.play('left')
-      this.body.moveLeft(200)
-    }
-    if (this.cursors.up.isDown) {
-      this.animations.play('right')
-      this.body.moveRight(200)
-    }
-    if (this.cursors.attack.isDown && this.orientation === 1) {
-      this.animations.play('attack_up')
-    }
-    if (this.cursors.attack.isDown && this.orientation === 2) {
-      this.animations.play('attack_left')
-    }
-    if (this.cursors.attack.isDown && this.orientation === 3) {
-      this.animations.play('attack_right')
-    }
-    if (this.cursors.attack.isDown && this.orientation === 4) {
-      this.animations.play('attack_down')
-    }
   }
 }
