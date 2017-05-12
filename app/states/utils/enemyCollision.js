@@ -11,9 +11,7 @@ const enemyCollision = (playerObject, projectile, graveyard) => {
 
       if (didDie) {
         graveyard.push(enemy)
-        // enemy.kill()
         delete GameEnemies[enemyKey]
-        // socket.emit('killEnemy', enemy.name)
       }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {

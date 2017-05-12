@@ -16,7 +16,7 @@ const makeCollisionMap = map => {
     }
     collisionArray.push(rowArray)
   }
-  socket.emit('createCollisionArray', { array: collisionArray })
+  socket.emit('createCollisionArray', collisionArray)
 }
 
 export default makeCollisionMap

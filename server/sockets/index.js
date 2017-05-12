@@ -66,10 +66,10 @@ const socketFunction = io => {
       }
     })
 
-    socket.on('createCollisionArray', ({ array }) => {
+    socket.on('createCollisionArray', arr => {
       if (!collisionArrays[room]) {
-        collisionArrays[room] = array
-        Easystar.setGrid(array)
+        collisionArrays[room] = arr
+        Easystar.setGrid(arr)
         Easystar.setAcceptableTiles([0])
         Easystar.enableDiagonals()
       }
@@ -85,7 +85,6 @@ const socketFunction = io => {
     })
 
     function enemyMovement() {
-      // isUpdating = true
       Object.keys(GameEnemies[room]).forEach(enemyName => {
         const enemy = GameEnemies[room][enemyName]
         const closestPlayer = findClosestPlayer(GamePlayers[room], enemy)
@@ -99,8 +98,9 @@ const socketFunction = io => {
               if (path && path[1]) {
                 const newX = path[1].x * collisionArrays[room][0].length
                 const newY = path[1].y * collisionArrays[room].length
-                enemy.x = newX - enemy.x > 0 ? enemy.x + 1 : enemy.x - 1
-                enemy.y = newY - enemy.y > 0 ? enemy.y + 1 : enemy.y - 1
+                const distance = 1
+                enemy.x += newX - enemy.x > 0 ? distance : -distance
+                enemy.y += newY - enemy.y > 0 ? distance : -distance
                 const newPos = { x: enemy.x, y: enemy.y }
                 io.sockets.to(room).emit('foundPath', newPos, enemyName)
               }
