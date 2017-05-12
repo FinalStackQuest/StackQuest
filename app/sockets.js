@@ -14,6 +14,7 @@ const socketFunctions = socket => {
   socket.on('addPlayer', addPlayer)
   socket.on('updatePlayer', updatePlayer)
   socket.on('removePlayer', removePlayer)
+  socket.on('fireProjectile', fireProjectile)
   socket.on('enemyCreated', enemyCreated)
   socket.on('foundPath', foundPath)
   socket.on('getEnemies', getEnemies)
@@ -39,6 +40,10 @@ const updatePlayer = (socketId, player) => {
 const removePlayer = socketId => {
   if (GamePlayers[socketId]) GamePlayers[socketId].destroy()
   delete GamePlayers[socketId]
+}
+
+const fireProjectile = (socketId, projectile, xCoord, yCoord) => {
+  projectile.fire(null, xCoord, yCoord)
 }
 
 const enemyCreated = enemy => {

@@ -4,7 +4,7 @@ import createMap from './utils/createMap'
 import createCursors from './utils/createCursors'
 import createPlayer from './utils/createPlayer'
 import createProjectile from './utils/createProjectile'
-import playerMovement from './utils/playerMovement'
+// import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
@@ -16,7 +16,7 @@ import Loot from '../classes/Loot'
 /* global StackQuest, Phaser */
 
 let map
-  , cursors
+  // , cursors
   , playerObject
   , player
   , projectile
@@ -40,7 +40,7 @@ const fantasyState = {
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
-    cursors = createCursors()
+    // cursors = createCursors()
     map = createMap.fantasy()
 
     socket.emit('setupState', player, 'fantasyState')
