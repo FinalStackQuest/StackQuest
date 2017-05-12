@@ -52,7 +52,7 @@ const fantasyState = {
       makeCollisionMap(map)
     }
 
-    this.spawnLoot()
+    // this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -72,15 +72,12 @@ const fantasyState = {
 
     playerObject.movePlayer()
 
-    // spawn loot
-    if (Math.random() * 1000 <= 1) this.spawnLoot()
-
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
     }
 
     itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard)
+    enemyCollision(playerObject, projectile, graveyard, localState.loot)
     mapTransition(player, playerObject, 'spaceState')
   },
 

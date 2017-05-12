@@ -73,14 +73,14 @@ const spaceState = {
     playerObject.movePlayer()
 
     // spawn loot
-    if (Math.random() * 1000 <= 1) this.spawnLoot()
+    // if (Math.random() * 1000 <= 1) this.spawnLoot()
 
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
     }
 
     itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard)
+    enemyCollision(playerObject, projectile, graveyard, localState.loot)
     mapTransition(player, playerObject, 'fantasyState')
   },
 
