@@ -1,6 +1,6 @@
 import entityPrefab from './entityPrefab'
 import { socket } from '../sockets'
-var HealthBar = require('../states/utils/HealthBar.js')
+import HealthBar from '../states/utils/HealthBar.js'
 
 /* global Phaser */
 
@@ -31,8 +31,6 @@ export default class Enemy extends entityPrefab {
     }
 
     this.enemyHealthBar = new HealthBar(game, {x: position.x, y: position.y})
-    // this.enemyHealthBar.width = 50
-    // this.enemyHealthBar.setFixedToCamera(true)
 
     this.animations.add('walk_up', [0, 1, 2, 3, 4, 5, 6, 7, 8])
     this.animations.add('walk_left', [9, 10, 11, 12, 13, 14, 15, 16, 17])
@@ -42,7 +40,6 @@ export default class Enemy extends entityPrefab {
     this.move = this.move.bind(this)
     this.takeDamage = this.takeDamage.bind(this)
     this.attack = this.attack.bind(this)
-    this.computeLifeBar = this.computeLifeBar.bind(this)
   }
 
   move(path) {
