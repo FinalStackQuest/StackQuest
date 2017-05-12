@@ -1,5 +1,5 @@
 const playerAttack = (pointer, mouseEvent, playerObject, projectile) => {
-  projectile.fire()
+  projectile.fire(null, StackQuest.game.input.worldX, StackQuest.game.input.worldY)
 }
 
 export default playerAttack

@@ -17,11 +17,11 @@ const createProjectile = {
     //  Tell the Weapon to track the 'player' Sprite
     //  With no offsets from the position
     //  But the 'true' argument tells the weapon to track sprite rotation
-    projectile.trackSprite(playerObject, 0, 0, true)
+    projectile.trackSprite(playerObject, 0, 0, false)
 
     // console.log('playerObj in projectile:', playerObject)
     // //  adds damage associated with that player
-    projectile.damage = playerObject.internalStats.stats.attack
+    projectile.damage = playerObject.stats.attack
 
     return projectile
   }
