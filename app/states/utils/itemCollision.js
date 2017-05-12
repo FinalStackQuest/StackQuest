@@ -17,7 +17,7 @@ const itemCollision = (playerObject, projectile, items) => {
       } else {
         const armorNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Armor acquired, 2X Health! ', { font: '22px Times New Roman', fill: '#ffffff' })
         // for now, double's the player's internal HP stat
-        playerObject.internalStats.hp *= 2
+        playerObject.stats.hp *= 2
         setTimeout(() => { armorNotice.destroy() }, 3000)
       }
       item.destroy()
