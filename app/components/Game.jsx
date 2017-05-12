@@ -42,7 +42,9 @@ class LocalContainer extends React.Component {
     // checks to make sure user and character information is updated in the store
     this.props.whoami()
     this.props.showGameDisplay(true)
-    const character = this.props.user.character
+    console.log(this.props)
+    let character = this.props.user.character
+    character.userName = this.props.user.userName
 
     StackQuest.game = new StackQuestGame()
     StackQuest.game.startGame(character)

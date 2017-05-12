@@ -19,6 +19,7 @@ class StackQuest extends Phaser.Game {
   }
 
   startGame(character) {
+    console.log('character is:', character)
     // Start StackQuest Game
     this.state.start(character.currentMap, true, false, character)
   }
