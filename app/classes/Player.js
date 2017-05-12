@@ -67,9 +67,11 @@ export default class Player extends Prefab {
     }
 
     this.animations.play(`walk_${this.orientationsDict[this.orientation]}`, null, true)
-    this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
-    this.moveTween.onComplete.add(this.completeMovement, this)
-    this.moveTween.start()
+    if (this.game) {
+      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
+      this.moveTween.onComplete.add(this.completeMovement, this)
+      this.moveTween.start()
+    }
   }
 
   completeMovement() {
