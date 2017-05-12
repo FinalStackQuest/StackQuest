@@ -18,6 +18,7 @@ export default class Player extends Prefab {
 
     this.loadControls()
     this.movePlayer = this.movePlayer.bind(this)
+    this.moveOther = this.moveOther.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -43,6 +44,32 @@ export default class Player extends Prefab {
     this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
     this.cursors.click = this.game.input.activePointer
+  }
+
+  moveOther(targetX, targetY) {
+    const xDirection = this.position.x - targetX
+    const yDirection = this.position.y - targetY
+    const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+
+    if (yDirection > 0) {
+      this.orientation = 2
+    } else if (yDirection < 0) {
+      this.orientation = 4
+    }
+    if (xDirection > 0) {
+      this.orientation = 1
+    } else if (xDirection < 0) {
+      this.orientation = 3
+    }
+
+    this.animations.play(`walk_${this.orientationsDict[this.orientation]}`, null, true)
+    this.moveTween = this.game.add.tween(this.position).to({x: targetX, y: targetY})
+    this.moveTween.onComplete.add(this.completeMovement, this)
+    this.moveTween.start()
+  }
+
+  completeMovement() {
+    this.animations.stop()
   }
 
   movePlayer() {

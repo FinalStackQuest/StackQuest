@@ -54,7 +54,7 @@ const spaceState = {
     })
     graveyard = []
 
-    // playerMovement(playerObject, cursors)
+    playerObject.movePlayer()
     mapTransition(player, playerObject, 'fantasyState')
 
     this.enemyCollision()

@@ -31,8 +31,8 @@ const addPlayer = (socketId, player) => {
 }
 
 const updatePlayer = (socketId, playerPos) => {
-  GamePlayers[socketId].position.x = playerPos.x
-  GamePlayers[socketId].position.y = playerPos.y
+  GamePlayers[socketId].moveOther(playerPos.x, playerPos.y)
+  // GamePlayers[socketId].position.y = playerPos.y
 }
 
 const removePlayer = socketId => {
