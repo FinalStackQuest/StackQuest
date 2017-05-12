@@ -60,8 +60,10 @@ const socketFunction = io => {
     })
 
     socket.on('killEnemy', name => {
-      delete GameEnemies[room][name]
-      socket.broadcast.to(room).emit('removeEnemy', name)
+      if (GameEnemies[room]) {
+        delete GameEnemies[room][name]
+        socket.broadcast.to(room).emit('removeEnemy', name)
+      }
     })
 
     socket.on('updatePosition', (name, x, y) => {
@@ -93,7 +95,7 @@ const socketFunction = io => {
             Math.floor(enemy.y / collisionArrays[room].length),
             Math.floor(closestPlayer.x / collisionArrays[room][0].length),
             Math.floor(closestPlayer.y / collisionArrays[room].length),
-            path => socket.emit('foundPath', path, name))
+            path => io.sockets.to(room).emit('foundPath', path, name))
           Easystar.calculate()
         }
       })
