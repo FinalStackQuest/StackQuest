@@ -8,7 +8,6 @@ import { socket } from '../sockets'
 export default class Player extends Prefab {
   constructor(game, name, property) {
     super(game, name, { x: property.x, y: property.y }, property.class)
-
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
 
