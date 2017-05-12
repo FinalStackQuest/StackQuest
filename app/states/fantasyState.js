@@ -1,3 +1,5 @@
+ // fix loot here
+import Loot from '../constructor/Loot'
 import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import buildMaps from './utils/buildMaps'
@@ -7,6 +9,7 @@ import createProjectile from './utils/createProjectile'
 import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
+import playerClass from '../constructor/Player'
 
 let map
   , cursors
@@ -15,7 +18,9 @@ let map
   , projectile
   , graveyard = []
   , lootCounter = 0
+  , lootTouched = 0
 
+// TODO get rid of this (put in sockets) ?
 const localState = {
   players: [],
   enemies: {},
@@ -24,7 +29,7 @@ const localState = {
 
 const fantasyState = {
   init(character) {
-    if (character) player = character
+      if (character) player = character
   },
 
   preload() {
@@ -60,6 +65,25 @@ const fantasyState = {
       socket.emit('killEnemy', enemy.name)
     })
     graveyard = []
+
+    // spawn loot
+    if (Math.random() * 1000 <= 25) this.spawnLoot()
+
+    for (const enemyKey in localState.enemies) {
+      this.enemyPathFinding(enemyKey)
+    }
+
+    // should abstract into different fn
+    for (const itemKey in localState.loot) {
+      let self = this
+      const item = localState.loot[itemKey]
+      this.physics.arcade.collide(playerObject, item, function(player, loot) {
+        lootTouched++
+        const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
+        setTimeout(() => { lootCount.destroy() }, 3000)
+        loot.destroy()
+      })
+    }
 
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
@@ -118,6 +142,9 @@ const fantasyState = {
   spawnEnemy() {
     socket.emit('addEnemy', {state: 'fantasyState'})
   },
+  spawnLoot() {
+    localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
+  }
 }
 
 export default fantasyState

@@ -2,6 +2,7 @@ const createPlayer = (player) => {
   console.log('checking stats', player)
   let playerObject
   //  load correct sprite
+  console.log('player:', player)
   if (player.class === 'wizard') {
     player.stats = {
       attack: 8,

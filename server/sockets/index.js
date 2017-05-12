@@ -43,8 +43,10 @@ const socketFunction = io => {
     })
 
     socket.on('updatePlayer', playerPos => {
-      GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: playerPos.x, y: playerPos.y })
-      socket.broadcast.to(room).emit('updatePlayer', socket.id, playerPos)
+      if (GamePlayers[room]) {
+        GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: playerPos.x, y: playerPos.y })
+        socket.broadcast.to(room).emit('updatePlayer', socket.id, playerPos)
+      }
     })
 
     socket.on('removePlayer', () => {
@@ -56,9 +58,9 @@ const socketFunction = io => {
 
     socket.on('addEnemy', () => {
       const enemy = {
-        name: `testMonster ${Object.keys(Enemies[room]).length+1}`,
-        x: Math.random()*600,
-        y: Math.random()*600,
+        name: `testMonster ${Object.keys(Enemies[room]).length + 1}`,
+        x: Math.random() * 600,
+        y: Math.random() * 600,
         key: 'soldier'
       }
       Enemies[room][enemy.name] = enemy
@@ -102,14 +104,14 @@ const socketFunction = io => {
     }
 
     socket.on('updatePosition', (name, x, y) => {
-      if(Enemies[room][name] && isUpdating) {
-      Enemies[room][name].x = x
-      Enemies[room][name].y = y
-      isUpdating = false
+      if (Enemies[room][name] && isUpdating) {
+        Enemies[room][name].x = x
+        Enemies[room][name].y = y
+        isUpdating = false
       }
     })
 
-    socket.on('createCollisionArray', ({array}) => {
+    socket.on('createCollisionArray', ({ array }) => {
       if (!collisionArrays[room]) {
         collisionArrays[room] = array
         Easystar.setGrid(array)
