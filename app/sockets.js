@@ -24,12 +24,12 @@ const socketFunctions = socket => {
 const getPlayers = players => {
   for (const player in GamePlayers) delete GamePlayers[player]
   Object.keys(players).forEach(playerSocketId => {
-    GamePlayers[playerSocketId] = new Player(StackQuest.game, 'otherPlayer', players[playerSocketId])
+    GamePlayers[playerSocketId] = new Player(StackQuest.game, players[playerSocketId].userName, players[playerSocketId])
   })
 }
 
 const addPlayer = (socketId, player) => {
-  GamePlayers[socketId] = new Player(StackQuest.game, 'otherPlayer', player)
+  GamePlayers[socketId] = new Player(StackQuest.game, player.userName, player)
 }
 
 const updatePlayer = (socketId, player) => {
