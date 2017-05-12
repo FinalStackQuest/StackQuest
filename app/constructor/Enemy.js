@@ -1,5 +1,5 @@
 import entityPrefab from './entityPrefab'
-import enemyProperties from '../game/enemyProperties'
+import enemyProperties from '../properties/enemyProperties'
 import throttle from 'lodash.throttle'
 import { socket } from '../sockets'
 

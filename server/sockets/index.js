@@ -44,7 +44,6 @@ const socketFunction = io => {
 
     socket.on('updatePlayer', playerPos => {
       if (GamePlayers[room]) {
-        console.log(playerPos)
         GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: playerPos.x, y: playerPos.y })
         socket.broadcast.to(room).emit('updatePlayer', socket.id, playerPos)
       }
@@ -72,20 +71,6 @@ const socketFunction = io => {
       delete Enemies[room][name]
       socket.broadcast.to(room).emit('removeEnemy', name)
     })
-
-    // socket.on('moveEnemy', ({name}) => {
-    //   const enemy = Enemies[room][name]
-    //   const closestPlayer = findClosestPlayer(GamePlayers[room], enemy)
-    //   if (closestPlayer) {
-    //     Easystar.findPath(
-    //       Math.floor(enemy.x / collisionArrays[room][0].length),
-    //       Math.floor(enemy.y / collisionArrays[room].length),
-    //       Math.floor(closestPlayer.x / collisionArrays[room][0].length),
-    //       Math.floor(closestPlayer.y / collisionArrays[room].length),
-    //       path => io.sockets.to(room).emit('foundPath', {path, name}))
-    //     Easystar.calculate()
-    //   }
-    // })
 
     function enemyMovement() {
       isUpdating = true

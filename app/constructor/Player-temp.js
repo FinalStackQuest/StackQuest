@@ -1,5 +1,5 @@
 import Prefab from './entityPrefab'
-import playerProperties from '../game/playerProperties'
+import playerProperties from '../properties/playerProperties'
 import {socket} from '../sockets'
 // client side class for Playable Characters
 export default class Player extends Prefab {
