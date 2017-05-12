@@ -32,11 +32,6 @@ export default class Enemy extends entityPrefab {
       loot: ['test']
     }
 
-    this.animations.add('walk_up', [0, 1, 2, 3, 4, 5, 6, 7, 8])
-    this.animations.add('walk_left', [9, 10, 11, 12, 13, 14, 15, 16, 17])
-    this.animations.add('walk_down', [18, 19, 20, 21, 22, 23, 24, 25, 26])
-    this.animations.add('walk_right', [27, 28, 29, 30, 31, 32, 33, 34, 35])
-    console.log(this.frames)
     this.setAnimationFrames(this)
 
     this.move = this.move.bind(this)
