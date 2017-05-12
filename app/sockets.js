@@ -2,6 +2,8 @@ import socketio from 'socket.io-client'
 import Enemy from './classes/Enemy'
 import Player from './classes/Player'
 
+/* global StackQuest */
+
 export const socket = socketio.connect()
 export const GamePlayers = {}
 export const GameEnemies = {}
@@ -44,18 +46,18 @@ const removePlayer = socketId => {
 }
 
 const enemyCreated = enemy => {
-  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, {x: enemy.x, y: enemy.y}, enemy.key)
+  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.key)
 }
 
-const foundPath = (path, name) => {
-  if (GameEnemies[name]) GameEnemies[name].move(path)
+const foundPath = (newPos, name) => {
+  if (GameEnemies[name]) GameEnemies[name].move(newPos)
 }
 
 const getEnemies = enemies => {
   for (const enemy in GameEnemies) delete GameEnemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
     const enemy = enemies[enemyName]
-    GameEnemies[enemyName] = new Enemy(StackQuest.game, enemyName, {x: enemy.x, y: enemy.y}, enemy.key)
+    GameEnemies[enemyName] = new Enemy(StackQuest.game, enemyName, { x: enemy.x, y: enemy.y }, enemy.key)
   })
 }
 

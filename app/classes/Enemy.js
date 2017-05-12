@@ -3,7 +3,7 @@ import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
 import enemyProperties from '../properties/enemyProperties'
 
-/* global Phaser */
+/* global StackQuest, Phaser */
 
 // To Do:
 //  1. add correct animations using spritesheet
@@ -21,6 +21,8 @@ export default class Enemy extends entityPrefab {
     //  hardcoded for now
     this.maxLife = 30
     this.orientation = ''
+    // this.initialPosition = new Phaser.Point(position.x, position.y)
+    this.lastAttack = Date.now()
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db
     this.absorbProperties(enemyProperties[spriteKey])
@@ -35,47 +37,56 @@ export default class Enemy extends entityPrefab {
     this.setAnimationFrames(this)
 
     this.move = this.move.bind(this)
-    this.takeDamage = this.takeDamage.bind(this)
     this.attack = this.attack.bind(this)
-    this.enemyHealthBar = new HealthBar(game, {x: position.x, y: position.y})
+    this.takeDamage = this.takeDamage.bind(this)
+    this.die = this.die.bind(this)
+    this.attack = this.attack.bind(this)
+    this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y })
   }
 
-  move(path) {
-    if (this.body && path[1]) {
+  move(newPos) {
+    if (this.body && newPos) {
       const speed = 100
-      const xDirection = this.x - path[1].x * 60
-      const yDirection = this.y - path[1].y * 60
+      const xDirection = this.x - newPos.x
+      const yDirection = this.y - newPos.y
       const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+      this.tween = this.game.tweens.create(this)
       let newOrientation
 
       if (yDirection >= 0) {
-        this.body.velocity.y = -speed
         if (absDirection < 0) newOrientation = 'walk_up'
       } else if (yDirection < 0) {
-        this.body.velocity.y = speed
         if (absDirection < 0) newOrientation = 'walk_down'
       }
       if (xDirection >= 0) {
-        this.body.velocity.x = -speed
         if (absDirection > 0) newOrientation = 'walk_left'
       } else if (xDirection < 0) {
-        this.body.velocity.x = speed
         if (absDirection > 0) newOrientation = 'walk_right'
       }
 
+      this.tween.to({ x: newPos.x, y: newPos.y }, 33)
+
       if (newOrientation !== this.orientation) {
         this.orientation = newOrientation
-        this.animations.play(this.orientation, 30, true)
+        this.animations.play(this.orientation, 10, true)
       }
+
+      this.tween.start()
     }
+
     this.enemyHealthBar.setPosition(this.x, this.y)
     socket.emit('updatePosition', this.name, this.x, this.y)
   }
 
   attack() {
-    if (Date.now() - this.lastAttack < 900) return 0
-    this.lastAttack = Date.now()
-    return this.stats.attack
+    if (Date.now() - this.lastAttack > 1000) {
+      this.lastAttack = Date.now()
+      const damage = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, '-' + this.stats.attack, { font: '32px Times New Roman', fill: '#ff0000' })
+      setTimeout(() => damage.destroy(), 500)
+      return this.stats.attack
+    } else {
+      return 0
+    }
   }
 
   takeDamage(damage) {
@@ -98,9 +109,10 @@ export default class Enemy extends entityPrefab {
     this.alive = false
     this.delayedKill(500)
   }
+
   computeLifeBar() {
     if (this.stats.hp < 0) this.stats.hp = 0
-    let percent = Math.floor((this.stats.hp/this.maxLife)*100)
+    const percent = Math.floor((this.stats.hp / this.maxLife) * 100)
     this.enemyHealthBar.setPercent(percent)
   }
 }

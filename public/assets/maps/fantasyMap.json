@@ -38,6 +38,14 @@
          "height":60,
          "name":"collisions",
          "opacity":1,
+         "properties":
+            {
+             "collision":"true"
+            },
+         "propertytypes":
+            {
+             "collision":"string"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":60,
@@ -49,6 +57,14 @@
          "height":60,
          "name":"collisions_2",
          "opacity":1,
+         "properties":
+            {
+             "collision":"true"
+            },
+         "propertytypes":
+            {
+             "collision":"string"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":60,

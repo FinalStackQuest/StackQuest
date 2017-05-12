@@ -17,6 +17,7 @@
  SOFTWARE.
  */
 
+/* global Phaser */
 
 export default class HealthBar {
   constructor(game, providedConfig) {
@@ -27,10 +28,12 @@ export default class HealthBar {
     this.drawHealthBar()
     this.setFixedToCamera(this.config.isFixedToCamera)
   }
+
   setupConfiguration(providedConfig) {
     this.config = this.mergeWithDefaultConfiguration(providedConfig)
     this.flipped = this.config.flipped
   }
+
   mergeWithDefaultConfiguration(newConfig) {
     var defaultConfig = {
       width: 40,
@@ -48,18 +51,20 @@ export default class HealthBar {
       isFixedToCamera: false
     }
 
-    return this.mergeObjetcs(defaultConfig, newConfig)
+    return this.mergeObjects(defaultConfig, newConfig)
   }
-  mergeObjetcs(targetObj, newObj) {
+
+  mergeObjects(targetObj, newObj) {
     for (var p in newObj) {
       try {
-        targetObj[p] = newObj[p].constructor == Object ? mergeObjetcs(targetObj[p], newObj[p]) : newObj[p]
+        targetObj[p] = newObj[p].constructor === Object ? this.mergeObjects(targetObj[p], newObj[p]) : newObj[p]
       } catch (e) {
         targetObj[p] = newObj[p]
       }
     }
     return targetObj
   }
+
   drawBackground() {
     var bmd = this.game.add.bitmapData(this.config.width, this.config.height)
     bmd.ctx.fillStyle = this.config.bg.color
@@ -74,6 +79,7 @@ export default class HealthBar {
       this.bgSprite.scale.x = -1
     }
   }
+
   drawHealthBar() {
     var bmd = this.game.add.bitmapData(this.config.width, this.config.height)
     bmd.ctx.fillStyle = this.config.bar.color
@@ -81,13 +87,14 @@ export default class HealthBar {
     bmd.ctx.rect(0, 0, this.config.width, this.config.height)
     bmd.ctx.fill()
 
-    this.barSprite = this.game.add.sprite(this.x - this.bgSprite.width/2, this.y, bmd)
+    this.barSprite = this.game.add.sprite(this.x - this.bgSprite.width / 2, this.y, bmd)
     this.barSprite.anchor.y = 0.5
 
     if (this.flipped) {
       this.barSprite.scale.x = -1
     }
   }
+
   setPosition(x, y) {
     this.x = x
     this.y = y
@@ -96,26 +103,30 @@ export default class HealthBar {
       this.bgSprite.position.x = x
       this.bgSprite.position.y = y
 
-      this.barSprite.position.x = x - this.config.width/2
+      this.barSprite.position.x = x - this.config.width / 2
       this.barSprite.position.y = y
     }
   }
+
   setPercent(newValue) {
     if (newValue < 0) newValue = 0
     if (newValue > 100) newValue = 100
     var newWidth = (newValue * this.config.width) / 100
     this.setWidth(newWidth)
   }
+
   setWidth(newWidth) {
     if (this.flipped) {
       newWidth = -1 * newWidth
     }
     this.game.add.tween(this.barSprite).to({ width: newWidth }, this.config.animationDuration, Phaser.Easing.Linear.None, true)
   }
+
   setFixedToCamera(fixedToCamera) {
     this.bgSprite.fixedToCamera = fixedToCamera
     this.barSprite.fixedToCamera = fixedToCamera
   }
+
   kill() {
     this.bgSprite.kill()
     this.barSprite.kill()
