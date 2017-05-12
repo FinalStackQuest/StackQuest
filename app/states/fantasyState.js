@@ -74,26 +74,44 @@ const fantasyState = {
       this.enemyPathFinding(enemyKey)
     }
 
-    // should abstract into different fn
-    for (const itemKey in localState.loot) {
-      let self = this
-      const item = localState.loot[itemKey]
-      this.physics.arcade.collide(playerObject, item, function(player, loot) {
-        lootTouched++
-        const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
-        setTimeout(() => { lootCount.destroy() }, 3000)
-        loot.destroy()
-      })
-    }
-
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
 
     this.enemyCollision()
+    this.itemCollision()
   },
 
   render() {
     this.game.debug.cameraInfo(this.camera, 32, 32)
+  },
+
+  itemCollision() {
+    for (const itemKey in localState.loot) {
+      let self = this
+      const item = localState.loot[itemKey]
+      this.physics.arcade.collide(playerObject, item, function(player, item) {
+        if (item.type === 'loot') {
+          lootTouched++
+          const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
+          setTimeout(() => { lootCount.destroy() }, 3000)
+        } else if (item.type === 'weapon') {
+          const weaponNotice = self.game.add.text(player.x, player.y + 20, 'Weapon acquired, 2X Damage! ', { font: '22px Times New Roman', fill: '#ffffff' })
+          // for now, doubling our projectile damage
+          console.log('old proj damage', projectile.damage)
+          projectile.damage *= 2
+          console.log('new proj damage', projectile.damage)
+          setTimeout(() => { weaponNotice.destroy() }, 3000)
+        } else {
+          const armorNotice = self.game.add.text(player.x, player.y + 20, 'Armor acquired, 2X Health! ', { font: '22px Times New Roman', fill: '#ffffff' })
+          // for now, double's the player's internal HP stat
+          console.log('old hp', playerObject.internalStats.hp)
+          playerObject.internalStats.hp *= 2
+          console.log('new hp', playerObject.internalStats.hp)
+          setTimeout(() => { armorNotice.destroy() }, 3000)
+        }
+        item.destroy()
+      })
+    }
   },
 
   enemyCollision() {
