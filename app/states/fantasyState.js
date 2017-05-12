@@ -61,6 +61,9 @@ const fantasyState = {
   },
 
   update() {
+    StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions)
+    StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions_2)
+
     graveyard.forEach(enemy => {
       enemy.destroy()
       delete GameEnemies[enemy.name]
@@ -79,7 +82,7 @@ const fantasyState = {
     for (const itemKey in localState.loot) {
       const self = this
       const item = localState.loot[itemKey]
-      this.physics.arcade.collide(playerObject, item, function (player, loot) {
+      this.physics.arcade.collide(playerObject, item, function(player, loot) {
         lootTouched++
         const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
         setTimeout(() => { lootCount.destroy() }, 3000)

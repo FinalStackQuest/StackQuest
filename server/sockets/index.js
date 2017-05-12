@@ -97,8 +97,10 @@ const socketFunction = io => {
             Math.floor(closestPlayer.y / collisionArrays[room].length),
             path => {
               if (path && path[1]) {
-                enemy.x = (path[1].x * collisionArrays[room][0].length) - enemy.x
-                enemy.y = (path[1].y * collisionArrays[room].length) - enemy.y
+                const newX = path[1].x * collisionArrays[room][0].length
+                const newY = path[1].y * collisionArrays[room].length
+                enemy.x = newX
+                enemy.y = newY
                 const newPos = { x: enemy.x, y: enemy.y }
                 io.sockets.to(room).emit('foundPath', newPos, enemyName)
               }
@@ -109,12 +111,12 @@ const socketFunction = io => {
     }
 
     function spawnEnemy() {
-      // enemies[room].forEach((enemy) => {
-      //   if (!GameEnemies[room][enemy.name]) {
-      //     GameEnemies[room][enemy.name] = enemy
-      //     io.sockets.to(room).emit('enemyCreated', enemy)
-      //   }
-      // })
+      enemies[room].forEach((enemy) => {
+        if (!GameEnemies[room][enemy.name]) {
+          GameEnemies[room][enemy.name] = enemy
+          io.sockets.to(room).emit('enemyCreated', enemy)
+        }
+      })
     }
 
     socket.on('setupState', (player, newRoom) => {

@@ -43,11 +43,11 @@ export default class Enemy extends entityPrefab {
     // this.attackAction = this.attackAction.bind(this)
   }
 
-  move(path) {
-    if (this.body && path) {
+  move(newPos) {
+    if (this.body && newPos) {
       const speed = 100
-      const xDirection = this.x - path.x
-      const yDirection = this.y - path.y
+      const xDirection = this.x - newPos.x
+      const yDirection = this.y - newPos.y
       const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
       this.tween = this.game.tweens.create(this)
       let newOrientation
@@ -63,7 +63,7 @@ export default class Enemy extends entityPrefab {
         if (absDirection > 0) newOrientation = 'walk_right'
       }
 
-      // this.tween.to({ x: path.x, y: path.y }, 33)
+      // this.tween.to({ x: newPos.x, y: newPos.y }, 33)
 
       if (newOrientation !== this.orientation) {
         this.orientation = newOrientation
