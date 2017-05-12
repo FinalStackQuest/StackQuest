@@ -96,8 +96,8 @@ const socketFunction = io => {
       }
     })
 
-    socket.on('fireProjectile', (projectile, xCoord, yCoord) => {
-      socket.broadcast.to(room).emit('fireProjectile', socket.id, projectile, xCoord, yCoord)
+    socket.on('fireProjectile', (xCoord, yCoord) => {
+      socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
     })
 
     socket.on('killEnemy', name => {
