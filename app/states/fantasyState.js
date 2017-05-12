@@ -10,6 +10,7 @@ import playerMovement from './utils/playerMovement'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
+import itemCollision from './utils/itemCollision'
 import playerClass from '../classes/Player'
 
 /* global StackQuest, Phaser */
@@ -20,8 +21,7 @@ let map
   , player
   , projectile
   , graveyard = []
-  , lootCounter = 0
-  , lootTouched = 0
+  , lootGeneratedCounter = 0
 
 // TODO get rid of this (put in sockets) ?
 const localState = {
@@ -74,18 +74,8 @@ const fantasyState = {
       this.enemyPathFinding(enemyKey)
     }
 
-    // should abstract into different fn
-    for (const itemKey in localState.loot) {
-      const self = this
-      const item = localState.loot[itemKey]
-      this.physics.arcade.collide(playerObject, item, function(player, loot) {
-        lootTouched++
-        const lootCount = self.game.add.text(player.x, player.y + 20, 'Loot acquired ' + lootTouched, { font: '22px Times New Roman', fill: '#ffffff' })
-        setTimeout(() => { lootCount.destroy() }, 3000)
-        loot.destroy()
-      })
-    }
-
+    // this.itemCollision()
+    itemCollision(playerObject, projectile, localState.loot)
     enemyCollision(playerObject, projectile, graveyard)
     playerMovement(playerObject, cursors)
     mapTransition(player, playerObject, 'spaceState')
@@ -115,7 +105,7 @@ const fantasyState = {
   },
 
   spawnLoot() {
-    localState.loot[lootCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
+    localState.loot[lootGeneratedCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }
 }
 
