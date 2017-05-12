@@ -113,7 +113,7 @@ const socketFunction = io => {
     function spawnEnemy() {
       enemies[room].forEach((enemy) => {
         if (!GameEnemies[room][enemy.name]) {
-          GameEnemies[room][enemy.name] = enemy
+          GameEnemies[room][enemy.name] = Object.assign({}, enemy)
           io.sockets.to(room).emit('enemyCreated', enemy)
         }
       })
