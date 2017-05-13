@@ -15,7 +15,6 @@ let map
   , playerObject
   , player
   , graveyard = []
-  , lootGeneratedCounter = 0
 
 // TODO get rid of this (put in sockets) ?
 const localState = {
