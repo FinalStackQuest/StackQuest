@@ -1,9 +1,9 @@
 /* global StackQuest */
 
-import { GameEnemies, socket } from 'APP/app/sockets'
+import { GameEnemies, GameItems, socket } from 'APP/app/sockets'
 import Loot from 'APP/app/classes/Loot'
 
-const enemyCollision = (playerObject, graveyard, lootState) => {
+const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
     const projectile = playerObject.getProjectile()
@@ -15,7 +15,10 @@ const enemyCollision = (playerObject, graveyard, lootState) => {
       setTimeout(() => damage.destroy(), 500)
 
       if (didDie) {
-        lootState.push(new Loot(StackQuest.game, 'Item', { x: enemy.x, y: enemy.y }, 'item'))
+        const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
+        GameItems[newItemName] = new Loot(StackQuest.game, newItemName, { x: enemy.x, y: enemy.y }, 'item')
+        const newItem = GameItems[newItemName]
+        socket.emit('createItem', { itemPos: newItem.position, name: newItem.name, key: newItem.key })
         graveyard.push(enemy)
         delete GameEnemies[enemyKey]
       }
@@ -26,12 +29,6 @@ const enemyCollision = (playerObject, graveyard, lootState) => {
 
       if (playerObject.stats.hp <= 0) {
         playerObject.respawn()
-        // playerObject.position.x = 500
-        // playerObject.position.y = 500
-        //  reset internal health: TEMP
-        // playerObject.stats.hp = 100
-        // const damage = StackQuest.game.add.text(playerObject.position.x, playerObject.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
-        // setTimeout(() => damage.destroy(), 1000)
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: 0 })
       }
     })
