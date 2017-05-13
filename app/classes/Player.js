@@ -59,7 +59,7 @@ export default class Player extends Prefab {
     const xDirection = this.position.x - targetX
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-
+    this.playerHealthBar.setPosition(this.position.x, this.position.y-30)
 
     if (yDirection > 0) {
       this.orientation = 2
