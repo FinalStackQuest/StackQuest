@@ -9,17 +9,15 @@ const itemCollision = (playerObject, itemGraveyard) => {
       if (item.type === 'loot') {
         playerObject.lootCount++
         const lootCount = StackQuest.game.add.text(player.x, player.y + 20, 'Loot acquired ' + playerObject.lootCount, { font: '22px Times New Roman', fill: '#ffffff' })
-        setTimeout(() => { lootCount.destroy() }, 3000)
+        setTimeout(() => lootCount.destroy(), 3000)
       } else if (item.type === 'weapon') {
-        const weaponNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Weapon acquired, 2X Damage! ', { font: '22px Times New Roman', fill: '#ffffff' })
-        // for now, doubling our projectile damage
-        playerObject.weapon.damage *= 2
-        setTimeout(() => { weaponNotice.destroy() }, 3000)
+        const weaponNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Weapon acquired, Attack + 1 ', { font: '22px Times New Roman', fill: '#ffffff' })
+        playerObject.weapon.damage++
+        setTimeout(() => weaponNotice.destroy(), 3000)
       } else {
-        const armorNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Armor acquired, 2X Health! ', { font: '22px Times New Roman', fill: '#ffffff' })
-        // for now, double's the player's internal HP stat
-        playerObject.stats.hp *= 2
-        setTimeout(() => { armorNotice.destroy() }, 3000)
+        const armorNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Armor acquired, Defense + 1! ', { font: '22px Times New Roman', fill: '#ffffff' })
+        playerObject.stats.defense++
+        setTimeout(() => armorNotice.destroy(), 3000)
       }
       itemGraveyard.push(item)
       delete GameItems[itemKey]

@@ -1,4 +1,4 @@
-import { GamePlayers, GameEnemies, socket } from '../sockets'
+import { socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
 import makeCollisionMap from './utils/makeCollisionMap'
