@@ -153,7 +153,6 @@ const socketFunction = io => {
     })
 
     socket.on('savePlayer', player => {
-      console.log('player before update:', player)
       Character.update(player, {
         where: {
           id: player.id
