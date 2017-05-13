@@ -28,14 +28,10 @@ export default class entityPrefab extends Phaser.Sprite {
       3: 'right',
       4: 'down'
     }
-    // need this?
-    // gameState has prefabs object that allows access to current prefab sprite?
   }
 
   setAnimationFrames(targetObject) {
     const frames = targetObject.frames
-    // this.animations.add('death', [0, 1, 2, 3, 4, 5], 8, false)
-    // commented for now
     const rates = {
       'idle': 2,
       'walk': 16,

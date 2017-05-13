@@ -19,15 +19,17 @@ const enemyCollision = (playerObject, projectile, graveyard, lootState) => {
       }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-      playerObject.stats.hp -= enemy.attack()
+      console.log('playerObj is gonna get hurt:', playerObject)
+      playerObject.takeDamage(enemy.attack())
 
       if (playerObject.stats.hp <= 0) {
-        playerObject.position.x = 500
-        playerObject.position.y = 500
+        playerObject.respawn()
+        // playerObject.position.x = 500
+        // playerObject.position.y = 500
         //  reset internal health: TEMP
-        playerObject.stats.hp = 100
-        const damage = StackQuest.game.add.text(playerObject.position.x, playerObject.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
-        setTimeout(() => damage.destroy(), 1000)
+        // playerObject.stats.hp = 100
+        // const damage = StackQuest.game.add.text(playerObject.position.x, playerObject.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
+        // setTimeout(() => damage.destroy(), 1000)
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: 0 })
       }
     })

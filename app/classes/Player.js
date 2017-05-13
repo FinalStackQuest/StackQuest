@@ -1,6 +1,7 @@
 import Prefab from './entityPrefab'
 import playerProperties from '../properties/playerProperties'
 import { socket } from '../sockets'
+import HealthBar from '../states/utils/HealthBar.js'
 
 /* global Phaser */
 
@@ -11,8 +12,9 @@ export default class Player extends Prefab {
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
 
-    this.maxLife = this.game.playerLife
-    this.inFight = false
+    //  Hard code max life
+    // this.maxLife = 1
+    // this.inFight = false
 
     this.absorbProperties(playerProperties[property.class])
     this.stats.hp = property.hp
@@ -23,6 +25,9 @@ export default class Player extends Prefab {
     this.loadControls()
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
+    this.takeDamage = this.takeDamage.bind(this)
+    this.respawn = this.respawn.bind(this)
+    this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
   }
 
   equipWeapon(weaponKey) {
@@ -73,14 +78,40 @@ export default class Player extends Prefab {
       this.moveTween.start()
     }
   }
-
   completeMovement() {
     this.animations.stop()
+  }
+  takeDamage(damage) {
+    this.stats.hp -= (damage - this.stats.defense)
+    console.log('taking damage', damage, 'stats:', this.stats)
+    this.computeLifeBar()
+    //  check if dead
+    if (this.stats.hp <= 0) {
+      this.respawn()
+      //  function returns true if the enemy is dead
+      return true
+    }
+    //  returns false because the enemy didn't die
+    return false
+  }
+
+  respawn() {
+    const damage = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
+    setTimeout(() => damage.destroy(), 1000)
+    //  make them move to set location
+    this.position.x = 500
+    this.position.y = 500
+    // Revive health
+    this.stats.hp = this.stats.maxHp
+    //  compute health
+    this.computeLifeBar()
   }
 
   movePlayer() {
     this.body.velocity.x = 0
     this.body.velocity.y = 0
+
+    this.playerHealthBar.setPosition(this.position.x, this.position.y)
 
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200
@@ -106,5 +137,11 @@ export default class Player extends Prefab {
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
       this.animations.play(`walk_${this.orientationsDict[this.orientation]}`)
     }
+  }
+  computeLifeBar() {
+    // console.log('this player in computeLifeBar', this)
+    if (this.stats.hp < 0) this.stats.hp = 0
+    const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
+    this.playerHealthBar.setPercent(percent)
   }
 }
