@@ -9,32 +9,34 @@ const collisionArrays = {}
 const isUpdating = {}
 
 const EasystarConstructor = require('easystarjs')
-const Easystar = new EasystarConstructor.js()
 
 const findClosestPlayer = require('./utils').findClosestPlayer
+
+const mapWidth = 60
+const mapHeight = 60
 
 const enemyMovement = (io, state) => {
   Object.keys(GameEnemies[state]).forEach(enemyName => {
     const enemy = GameEnemies[state][enemyName]
     const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
     if (closestPlayer) {
-      Easystar.findPath(
-        Math.floor(enemy.x / collisionArrays[state][0].length),
-        Math.floor(enemy.y / collisionArrays[state].length),
-        Math.floor(closestPlayer.x / collisionArrays[state][0].length),
-        Math.floor(closestPlayer.y / collisionArrays[state].length),
+      collisionArrays[state].findPath(
+        Math.floor(enemy.x / mapWidth),
+        Math.floor(enemy.y / mapHeight),
+        Math.floor(closestPlayer.x / mapWidth),
+        Math.floor(closestPlayer.y / mapHeight),
         path => {
           if (path && path[1]) {
-            const newX = path[1].x * collisionArrays[state][0].length
-            const newY = path[1].y * collisionArrays[state].length
+            const newX = path[1].x * mapWidth
+            const newY = path[1].y * mapHeight
             const distance = 1
             enemy.x += newX - enemy.x > 0 ? distance : -distance
             enemy.y += newY - enemy.y > 0 ? distance : -distance
             const newPos = { x: enemy.x, y: enemy.y }
-            io.sockets.to(state).emit('foundPath', newPos, enemyName)
+            io.sockets.to(state).emit('updateEnemy', newPos, enemyName)
           }
         })
-      Easystar.calculate()
+      collisionArrays[state].calculate()
     }
   })
 }
@@ -43,7 +45,7 @@ const spawnEnemy = (io, state) => {
   enemies[state].forEach((enemy) => {
     if (!GameEnemies[state][enemy.name]) {
       GameEnemies[state][enemy.name] = Object.assign({}, enemy)
-      io.sockets.to(state).emit('enemyCreated', enemy)
+      io.sockets.to(state).emit('addEnemy', enemy)
     }
   })
 }
@@ -67,33 +69,10 @@ const socketFunction = io => {
       console.log(socket.id, 'disconnected')
     })
 
-    socket.on('joinroom', newRoom => {
-      socket.leave(room)
-      room = newRoom
-      socket.join(room)
-      if (!GamePlayers[room]) GamePlayers[room] = {}
-    })
-
-    socket.on('getPlayers', () => {
-      socket.emit('getPlayers', GamePlayers[room])
-    })
-
-    socket.on('addPlayer', player => {
-      GamePlayers[room][socket.id] = player
-      socket.broadcast.to(room).emit('addPlayer', socket.id, player)
-    })
-
     socket.on('updatePlayer', player => {
       if (GamePlayers[room]) {
         GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: player.playerPos.x, y: player.playerPos.y, lootCount: player.lootCount })
         socket.broadcast.to(room).emit('updatePlayer', socket.id, player)
-      }
-    })
-
-    socket.on('removePlayer', () => {
-      if (GamePlayers[room]) {
-        delete GamePlayers[room][socket.id]
-        socket.broadcast.to(room).emit('removePlayer', socket.id)
       }
     })
 
@@ -108,47 +87,39 @@ const socketFunction = io => {
       }
     })
 
-    socket.on('createCollisionArray', arr => {
-      if (!collisionArrays[room]) {
-        collisionArrays[room] = arr
-        Easystar.setGrid(arr)
-        Easystar.setAcceptableTiles([0])
-        Easystar.enableDiagonals()
-      }
-      io.sockets.to(room).emit('madeCollisionArray')
-    })
-
-    socket.on('setupState', (player, newRoom) => {
+    socket.on('setupState', (player, collisionMap, newRoom) => {
       // remove player from previous map (room)
       if (GamePlayers[room]) {
         delete GamePlayers[room][socket.id]
         socket.broadcast.to(room).emit('removePlayer', socket.id)
       }
+
       // join new map
       socket.leave(room)
       room = newRoom
       socket.join(room)
       if (!GamePlayers[room]) GamePlayers[room] = {}
+      if (!GameEnemies[room]) GameEnemies[room] = {}
+
+      // get all players and enemies on the map
+      socket.emit('getPlayers', GamePlayers[room])
+      socket.emit('getEnemies', GameEnemies[room])
+
+      // add player to map
+      GamePlayers[room][socket.id] = player
+      socket.broadcast.to(room).emit('addPlayer', socket.id, player)
+
+      if (!collisionArrays[room]) {
+        collisionArrays[room] = new EasystarConstructor.js()
+        collisionArrays[room].setGrid(collisionMap)
+        collisionArrays[room].setAcceptableTiles([0])
+        collisionArrays[room].enableDiagonals()
+      }
 
       if (!isUpdating[room]) {
         isUpdating[room] = true
         runIntervals(io, room)
       }
-
-      // get all players on the same map
-      socket.emit('getPlayers', GamePlayers[room])
-      // add player to map
-      GamePlayers[room][socket.id] = player
-
-      if (!GameEnemies[room]) GameEnemies[room] = {}
-
-      socket.emit('getEnemies', GameEnemies[room])
-
-      if (collisionArrays[room]) {
-        socket.emit('madeCollisionArray')
-      }
-
-      socket.broadcast.to(room).emit('addPlayer', socket.id, player)
     })
 
     socket.on('savePlayer', player => {
