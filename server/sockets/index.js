@@ -45,7 +45,9 @@ const enemyMovement = (io, state) => {
 const spawnEnemy = (io, state) => {
   enemySpawn[state].forEach((enemy) => {
     if (!GameEnemies[state][enemy.name]) {
-      GameEnemies[state][enemy.name] = Object.assign({}, enemy, enemies[enemy.spriteKey])
+      const enemyStats = Object.assign({}, enemies[enemy.spriteKey].stats)
+      console.log(enemies)
+      GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
       io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
     }
   })
@@ -84,7 +86,8 @@ const socketFunction = io => {
     socket.on('hitEnemy', (enemyName, damage) => {
       if (GameEnemies[room]) {
         const damageTaken = damage - GameEnemies[room][enemyName].stats.defense
-        // GameEnemies[room][enemyName].stats.hp -= damageTaken
+        GameEnemies[room][enemyName].stats.hp -= damageTaken
+        console.log(GameEnemies[room][enemyName])
         socket.broadcast.to(room).emit('hitEnemy', enemyName, damage)
       }
     })
