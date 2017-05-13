@@ -67,7 +67,7 @@ const spaceState = {
     playerObject.movePlayer()
 
     itemCollision(playerObject, localState.loot)
-    enemyCollision(playerObject, graveyard)
+    enemyCollision(playerObject, graveyard, localState.loot)
     mapTransition(player, playerObject, 'fantasyState')
   },
 
