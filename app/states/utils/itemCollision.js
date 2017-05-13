@@ -13,7 +13,7 @@ const itemCollision = (playerObject, itemGraveyard) => {
       } else if (item.type === 'weapon') {
         const weaponNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Weapon acquired, 2X Damage! ', { font: '22px Times New Roman', fill: '#ffffff' })
         // for now, doubling our projectile damage
-        playerObject.getProjectile().damage *= 2
+        playerObject.weapon.damage *= 2
         setTimeout(() => { weaponNotice.destroy() }, 3000)
       } else {
         const armorNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Armor acquired, 2X Health! ', { font: '22px Times New Roman', fill: '#ffffff' })
