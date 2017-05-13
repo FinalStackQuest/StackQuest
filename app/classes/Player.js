@@ -21,6 +21,7 @@ export default class Player extends Prefab {
     this.lootCount = 0
 
     this.loadControls()
+    this.loadProjectile()
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
   }
@@ -106,5 +107,27 @@ export default class Player extends Prefab {
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
       this.animations.play(`walk_${this.orientationsDict[this.orientation]}`)
     }
+  }
+
+  loadProjectile() {
+    //  Creates 3 bullets, using the 'bullet' graphic
+    this.projectile = this.game.add.weapon(3, 'bullet')
+
+    //  The bullet will be automatically killed when it leaves the world bounds
+    this.projectile.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS
+
+    //  The speed at which the bullet is fired
+    this.projectile.bulletSpeed = 2000
+
+    //  Speed-up the rate of fire, allowing them to shoot 3 bullet every second
+    this.projectile.fireRate = 333
+
+    //  Tell the Weapon to track the 'player' Sprite
+    //  With no offsets from the position
+    //  But the 'true' argument tells the weapon to track sprite rotation
+    this.projectile.trackSprite(this, 0, 0, false)
+
+    // //  adds damage associated with that player
+    this.projectile.damage = this.stats.attack
   }
 }

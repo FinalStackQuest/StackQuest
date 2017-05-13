@@ -45,8 +45,8 @@ const removePlayer = socketId => {
 
 const fireProjectile = (socketId, xCoord, yCoord) => {
   if (GamePlayers[socketId]) {
-    const projectile = createProjectile.bullet(GamePlayers[socketId])
-    projectile.fire(null, xCoord, yCoord)
+    // const projectile = createProjectile.bullet(GamePlayers[socketId])
+    GamePlayers[socketId].projectile.fire(null, xCoord, yCoord)
   }
 }
 
