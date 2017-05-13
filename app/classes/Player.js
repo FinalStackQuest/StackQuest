@@ -1,5 +1,9 @@
 import Prefab from './entityPrefab'
+import Weapon from './Weapon'
+
+import armorProperties from '../properties/armorProperties'
 import playerProperties from '../properties/playerProperties'
+
 import { socket } from '../sockets'
 
 /* global Phaser */
@@ -12,32 +16,38 @@ export default class Player extends Prefab {
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
 
-    this.maxLife = this.game.playerLife
     this.inFight = false
+    this.lootCount = 0
 
     this.absorbProperties(playerProperties[property.class])
+
     this.stats.hp = property.hp
     this.setAnimationFrames(this)
-
-    this.lootCount = 0
 
     this.loadControls()
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
+
+    this.equipWeapon = this.equipWeapon.bind(this)
+    this.equipWeapon(this.weaponKey)
+
+    this.equipArmor = this.equipArmor.bind(this)
+    this.equipArmor(this.armorKey)
+
+    this.attack = this.attack.bind(this)
   }
 
   equipWeapon(weaponKey) {
+    this.weapon = new Weapon(this.game, this, weaponKey)
     this.weapon.name = weaponKey
-    this.weapon = playerProperties[weaponKey] // assigns stats to weapon
-    this.stats.attack = this.weapon.stats.attack + this.stats.attack
-    this.setAnimations(this.weapon)
+    this.stats.attack = this.weapon.attack + this.stats.attack
     return true
   }
 
   equipArmor(armorKey) {
+    this.armor = armorProperties[armorKey]
     this.armor.name = armorKey
-    this.armor = playerProperties[armorKey]
-    this.stats.defense = this.armor.stats.defense + this.stats.defense
+    this.stats.defense = this.armor.defense + this.stats.defense
     return true
   }
 
@@ -104,6 +114,12 @@ export default class Player extends Prefab {
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
       this.animations.play(`walk_${this.orientationsDict[this.orientation]}`)
+    }
+  }
+
+  attack() {
+    if (this.cursors.click.isDown) {
+      this.weapon.fire(null, this.game.input.worldX, this.game.input.worldY)
     }
   }
 }

@@ -46,7 +46,6 @@ const fantasyState = {
     socket.emit('setupState', player, 'fantasyState')
 
     playerObject = createPlayer(player)
-    projectile = createProjectile.bullet(playerObject)
 
     if (!collisionArrayStatus) {
       makeCollisionMap(map)
@@ -55,8 +54,6 @@ const fantasyState = {
     this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
-
-    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
   },
 
   update() {
@@ -71,16 +68,16 @@ const fantasyState = {
     graveyard = []
 
     playerObject.movePlayer()
+    playerObject.attack()
 
-    // spawn loot
     if (Math.random() * 1000 <= 1) this.spawnLoot()
 
     for (const enemyKey in localState.enemies) {
       this.enemyPathFinding(enemyKey)
     }
 
-    itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard)
+    itemCollision(playerObject, playerObject.weapon, localState.loot)
+    enemyCollision(playerObject, playerObject.weapon, graveyard)
     mapTransition(player, playerObject, 'spaceState')
   },
 
