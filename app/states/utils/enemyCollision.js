@@ -15,10 +15,13 @@ const enemyCollision = (playerObject, graveyard) => {
       setTimeout(() => damage.destroy(), 500)
 
       if (didDie) {
-        const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
-        GameItems[newItemName] = new Loot(StackQuest.game, newItemName, { x: enemy.x, y: enemy.y }, 'item')
-        const newItem = GameItems[newItemName]
-        socket.emit('createItem', { itemPos: newItem.position, name: newItem.name, key: newItem.key })
+        const chance = Math.random() * 100
+        if (chance < 20) {
+          const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
+          GameItems[newItemName] = new Loot(StackQuest.game, newItemName, { x: enemy.x, y: enemy.y }, 'item')
+          const newItem = GameItems[newItemName]
+          socket.emit('createItem', { itemPos: newItem.position, name: newItem.name, key: newItem.key })
+        }
         graveyard.push(enemy)
         delete GameEnemies[enemyKey]
       }
