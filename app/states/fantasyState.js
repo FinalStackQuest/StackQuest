@@ -16,6 +16,7 @@ let map
   , player
   , projectile
   , graveyard = []
+  , itemGraveyard = []
   , lootGeneratedCounter = 0
 
 // TODO get rid of this (put in sockets) ?
@@ -46,8 +47,6 @@ const fantasyState = {
       makeCollisionMap(map)
     }
 
-    // this.spawnLoot()
-
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
     StackQuest.game.input.onDown.add(() => playerObject.attack())
@@ -63,18 +62,19 @@ const fantasyState = {
     })
     graveyard = []
 
-    // spawn loot
-    if (Math.random() * 1000 <= 1) this.spawnLoot()
+    // TODO make more sense...
+    itemGraveyard.forEach(item => {
+      item.destroy()
+      socket.emit('killItem', item.name)
+    })
+    itemGraveyard = []
 
     playerObject.movePlayer()
     itemCollision(playerObject, projectile, localState.loot)
     enemyCollision(playerObject, projectile, graveyard, localState.loot)
     mapTransition(player, playerObject, 'spaceState')
-  },
-
-  spawnLoot() {
-    localState.loot[lootGeneratedCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }
+
 }
 
 export default fantasyState

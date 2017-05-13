@@ -1,12 +1,14 @@
 import socketio from 'socket.io-client'
 import Enemy from './classes/Enemy'
 import Player from './classes/Player'
+import Loot from './classes/Loot'
 
 /* global StackQuest */
 
 export const socket = socketio.connect()
 export const GamePlayers = {}
 export const GameEnemies = {}
+export const GameItems = {}
 export let collisionArrayStatus = false
 
 const socketFunctions = socket => {
@@ -20,6 +22,7 @@ const socketFunctions = socket => {
   socket.on('getEnemies', getEnemies)
   socket.on('createdCollisionArray', createdCollisionArray)
   socket.on('removeEnemy', removeEnemy)
+  socket.on('addItem', addItem)
 }
 
 const getPlayers = players => {
@@ -70,6 +73,10 @@ const removeEnemy = enemyName => {
     GameEnemies[enemyName].destroy()
   }
   delete GameEnemies[enemyName]
+}
+
+const addItem = item => {
+  GameItems[item.name] = new Loot(StackQuest.game, item.name, {x: item.itemPos.x, y: item.itemPos.y}, 'item')
 }
 
 const createdCollisionArray = (state) => {

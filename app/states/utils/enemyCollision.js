@@ -1,6 +1,6 @@
 /* global StackQuest */
 
-import { GameEnemies, socket } from 'APP/app/sockets'
+import { GameEnemies, GameItems, socket } from 'APP/app/sockets'
 import Loot from 'APP/app/classes/Loot'
 
 const enemyCollision = (playerObject, projectile, graveyard, lootState) => {
@@ -13,7 +13,10 @@ const enemyCollision = (playerObject, projectile, graveyard, lootState) => {
       setTimeout(() => damage.destroy(), 500)
 
       if (didDie) {
-        lootState.push(new Loot(StackQuest.game, 'Item', { x: enemy.x, y: enemy.y }, 'item'))
+
+        const newItem = new Loot(StackQuest.game, 'Item', { x: enemy.x, y: enemy.y }, 'item')
+        // lootState.push(new Loot(StackQuest.game, 'Item', { x: enemy.x, y: enemy.y }, 'item'))
+        socket.emit('createItem', {itemPos: newItem.position, itemName: newItem.name, itemSpriteKey: newItem.spriteKey})
         graveyard.push(enemy)
         delete GameEnemies[enemyKey]
       }

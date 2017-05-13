@@ -118,6 +118,11 @@ const socketFunction = io => {
       io.sockets.to(room).emit('madeCollisionArray')
     })
 
+    socket.on('createItem', item => {
+      console.log('server get item?', item)
+      socket.broadcast.to(room).emit('addItem', item)
+    })
+
     socket.on('setupState', (player, newRoom) => {
       // remove player from previous map (room)
       if (GamePlayers[room]) {
