@@ -58,7 +58,7 @@ const fantasyState = {
     itemCollision(playerObject, localState.loot)
     enemyCollision(playerObject, graveyard, localState.loot)
     mapTransition(player, playerObject, 'spaceState')
-  }
+  },
 }
 
 export default fantasyState
