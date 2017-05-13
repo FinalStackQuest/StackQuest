@@ -6,7 +6,7 @@ import Loot from 'APP/app/classes/Loot'
 const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
-    const projectile = playerObject.getProjectile()
+    const projectile = playerObject.weapon
 
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       bullet.kill()
