@@ -43,6 +43,7 @@ class LocalContainer extends React.Component {
     this.props.whoami()
     this.props.showGameDisplay(true)
     const character = this.props.user.character
+    character.userName = this.props.user.userName
 
     StackQuest.game = new StackQuestGame()
     StackQuest.game.startGame(character)

@@ -5,19 +5,16 @@ import armorProperties from '../properties/armorProperties'
 import playerProperties from '../properties/playerProperties'
 
 import { socket } from '../sockets'
+import HealthBar from '../states/utils/HealthBar.js'
 
-/* global Phaser */
+/* global StackQuest, Phaser */
 
 // client side class for Playable Characters
 export default class Player extends Prefab {
   constructor(game, name, property) {
     super(game, name, { x: property.x, y: property.y }, property.class)
-
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
-
-    this.inFight = false
-    this.lootCount = 0
 
     this.absorbProperties(playerProperties[property.class])
 
@@ -25,16 +22,21 @@ export default class Player extends Prefab {
     this.setAnimationFrames(this)
 
     this.loadControls()
+
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
 
     this.equipWeapon = this.equipWeapon.bind(this)
     this.equipWeapon(this.weaponKey)
+    this.attack = this.attack.bind(this)
 
     this.equipArmor = this.equipArmor.bind(this)
     this.equipArmor(this.armorKey)
 
-    this.attack = this.attack.bind(this)
+    this.takeDamage = this.takeDamage.bind(this)
+    this.respawn = this.respawn.bind(this)
+    this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
+    this.recoverHp = this.recoverHp.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -78,18 +80,51 @@ export default class Player extends Prefab {
     }
 
     this.animations.play(`walk_${this.orientationsDict[this.orientation]}`, null, true)
-    this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
-    this.moveTween.onComplete.add(this.completeMovement, this)
-    this.moveTween.start()
+    if (this.game) {
+      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
+      this.moveTween.onComplete.add(this.completeMovement, this)
+      this.moveTween.start()
+    }
   }
 
   completeMovement() {
     this.animations.stop()
   }
 
+  takeDamage(damage) {
+    if (damage) this.stats.hp -= (damage - this.stats.defense)
+    this.computeLifeBar()
+    //  check if dead
+    if (this.stats.hp <= 0) {
+      this.respawn()
+      //  function returns true if the enemy is dead
+      return true
+    }
+    //  returns false because the enemy didn't die
+    return false
+  }
+
+  respawn() {
+    const damage = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
+    setTimeout(() => damage.destroy(), 1000)
+    //  make them move to set location
+    this.position.x = 500
+    this.position.y = 500
+
+    // Revive
+    setTimeout(this.recoverHp, 100)
+  }
+
+  recoverHp() {
+    this.stats.hp = this.stats.maxHp
+    this.computeLifeBar()
+  }
+
   movePlayer() {
     this.body.velocity.x = 0
     this.body.velocity.y = 0
+
+    this.playerHealthBar.setPosition(this.position.x, this.position.y-30)
 
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200
@@ -119,7 +154,17 @@ export default class Player extends Prefab {
 
   attack() {
     if (this.cursors.click.isDown) {
-      this.weapon.fire(null, this.game.input.worldX, this.game.input.worldY)
+      const targetX = this.game.input.worldX
+      const targetY = this.game.input.worldY
+      this.weapon.fire(null, targetX, targetY)
+      socket.emit('fireProjectile', targetX, targetY)
     }
   }
+
+  computeLifeBar() {
+    if (this.stats.hp < 0) this.stats.hp = 0
+    const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
+    this.playerHealthBar.setPercent(percent)
+  }
+
 }

@@ -35,6 +35,7 @@ class Weapon extends Phaser.Weapon {
 			}
 		}
 	}
+
 	absorbProperties(object) {
     	Object.assign(this, object)
   	}

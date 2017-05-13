@@ -1,14 +1,10 @@
-import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../sockets'
+import { GamePlayers, GameEnemies, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
-import createCursors from './utils/createCursors'
-import createPlayer from './utils/createPlayer'
-import createProjectile from './utils/createProjectile'
-import playerMovement from './utils/playerMovement'
-import playerAttack from './utils/playerAttack'
-import mapTransition from './utils/mapTransition'
-import enemyCollision from './utils/enemyCollision'
 import makeCollisionMap from './utils/makeCollisionMap'
+import createPlayer from './utils/createPlayer'
+import enemyCollision from './utils/enemyCollision'
+import mapTransition from './utils/mapTransition'
 import itemCollision from './utils/itemCollision'
 import playerClass from '../classes/Player'
 import Loot from '../classes/Loot'
@@ -16,17 +12,10 @@ import Loot from '../classes/Loot'
 /* global StackQuest, Phaser */
 
 let map
-  , cursors
   , playerObject
   , player
-  , projectile
   , graveyard = []
-  , lootGeneratedCounter = 0
-
-// TODO get rid of this (put in sockets) ?
-const localState = {
-  loot: []
-}
+  , itemGraveyard = []
 
 const spaceState = {
   init(character) {
@@ -40,18 +29,11 @@ const spaceState = {
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
-    cursors = createCursors()
     map = createMap.space()
 
-    socket.emit('setupState', player, 'spaceState')
+    socket.emit('setupState', player, makeCollisionMap(map), 'spaceState')
 
     playerObject = createPlayer(player)
-
-    if (!collisionArrayStatus) {
-      makeCollisionMap(map)
-    }
-
-    this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
   },
@@ -62,32 +44,23 @@ const spaceState = {
 
     graveyard.forEach(enemy => {
       enemy.destroy()
-      delete GameEnemies[enemy.name]
       socket.emit('killEnemy', enemy.name)
     })
     graveyard = []
 
+    itemGraveyard.forEach(item => {
+      item.destroy()
+      socket.emit('killItem', item.name)
+    })
+    itemGraveyard = []
+
     playerObject.movePlayer()
     playerObject.attack()
 
-    // spawn loot
-    if (Math.random() * 1000 <= 1) this.spawnLoot()
+    itemCollision(playerObject, itemGraveyard)
+    enemyCollision(playerObject, graveyard)
 
-    for (const enemyKey in localState.enemies) {
-      this.enemyPathFinding(enemyKey)
-    }
-
-    itemCollision(playerObject, playerObject.weapon, localState.loot)
-    enemyCollision(playerObject, playerObject.weapon, graveyard)
     mapTransition(player, playerObject, 'fantasyState')
-  },
-
-  render() {
-    this.game.debug.cameraInfo(this.camera, 32, 32)
-  },
-
-  spawnLoot() {
-    localState.loot[lootGeneratedCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }
 }
 
