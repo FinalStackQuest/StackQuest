@@ -15,7 +15,7 @@ const enemyCollision = (playerObject, graveyard) => {
       setTimeout(() => damage.destroy(), 500)
 
       if (didDie) {
-        const chance = Math.random() * 100
+        const chance = Math.floor(Math.random() * 100)
         if (chance < 20) {
           const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
           GameItems[newItemName] = new Loot(StackQuest.game, newItemName, { x: enemy.x, y: enemy.y }, 'item')
