@@ -19,9 +19,10 @@ const socketFunctions = socket => {
   socket.on('getEnemies', getEnemies)
   socket.on('addEnemy', addEnemy)
   socket.on('updateEnemy', updateEnemy)
+  socket.on('hitEnemy', hitEnemy)
   socket.on('removeEnemy', removeEnemy)
-  socket.on('addItem', addItem)
   socket.on('getItems', getItems)
+  socket.on('addItem', addItem)
   socket.on('removeItem', removeItem)
 }
 
@@ -58,16 +59,22 @@ const getEnemies = enemies => {
   for (const enemy in GameEnemies) delete GameEnemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
     const enemy = enemies[enemyName]
-    GameEnemies[enemyName] = new Enemy(StackQuest.game, enemyName, { x: enemy.x, y: enemy.y }, enemy.key)
+    GameEnemies[enemyName] = new Enemy(StackQuest.game, enemyName, { x: enemy.x, y: enemy.y }, enemy.spriteKey, enemy.stats)
   })
 }
 
 const addEnemy = enemy => {
-  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.key)
+  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.spriteKey, enemy.stats)
 }
 
 const updateEnemy = (newPos, name) => {
   if (GameEnemies[name]) GameEnemies[name].move(newPos)
+}
+
+const hitEnemy = (enemyName, damage) => {
+  if (GameEnemies[enemyName]) {
+    GameEnemies[enemyName].takeDamage(damage)
+  }
 }
 
 const removeEnemy = enemyName => {
@@ -82,7 +89,7 @@ const getItems = items => {
   for (const item in GameItems) delete GameItems[item]
   Object.keys(items).forEach(itemName => {
     const item = items[itemName]
-    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.x, y: item.y }, item.key)
+    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.itemPos.x, y: item.itemPos.y }, item.key)
   })
 }
 
