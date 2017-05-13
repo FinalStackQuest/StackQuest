@@ -38,8 +38,6 @@ export default class Player extends Prefab {
     this.respawn = this.respawn.bind(this)
     this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
     this.recoverHp = this.recoverHp.bind(this)
-
-    this.HUD = new HUD(game, this)
   }
 
   equipWeapon(weaponKey) {
@@ -97,6 +95,10 @@ export default class Player extends Prefab {
   takeDamage(damage) {
     if (damage) this.stats.hp -= (damage - this.stats.defense)
     this.computeLifeBar()
+
+    if (this.HUD) {
+      this.HUD.updateHealth()
+    }
     //  check if dead
     if (this.stats.hp <= 0) {
       this.respawn()
@@ -120,6 +122,9 @@ export default class Player extends Prefab {
 
   recoverHp() {
     this.stats.hp = this.stats.maxHp
+    if (this.HUD) {
+      this.HUD.updateHealth()
+    }
     this.computeLifeBar()
   }
 
@@ -168,10 +173,5 @@ export default class Player extends Prefab {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
-  }
-
-  update() {
-    console.log(this.HUD)
-    this.HUD.updateHealth()
   }
 }

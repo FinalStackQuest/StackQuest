@@ -11,7 +11,7 @@ class HUD extends Phaser.Group {
 		super(game)
 
 		this.player = player
-		this.HudElements = {}
+		this.HUDElement = {}
 
 		this.initHUD()
 
@@ -19,24 +19,46 @@ class HUD extends Phaser.Group {
 	}
 
 	updateHealth() {
-		this.HudElements.currentHealth.setText(`HP: ${this.player.stats.hp}/ ${this.player.stats.maxHp}`)
+		this.HUDElement.currentHealth.setText(`HP: ${this.player.stats.hp}/ ${this.player.stats.maxHp}`)
+	}
+
+	updateWeapon() {
+		this.HUDElement.currentWeapon.setText(`WEAPON: ${this.player.weaponKey}`)
+	}
+
+	updateStats() {
+		this.HUDElement.currentStats.setText(`ATK: ${this.player.stats.attack} / DEF: ${this.player.stats.defense}`)
 	}
 
 	initHUD() {
-		this.HudElements.playerName = this.game.add.text(30, 25, `${this.player.name}`, {
-	      font: '30px pixel',
+		const gameY = this.game.height
+
+		this.HUDElement.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, {
+	      font: '25px pixel',
 	      fill: '#2a2029',
 	      strokeThickness: 1
 	    })
 
-		this.HudElements.currentHealth = this.game.add.text(30, 70, `HP: ${this.player.stats.maxHp}/ ${this.player.stats.maxHp}`, {
-	      font: '30px pixel',
+		this.HUDElement.currentHealth = this.game.add.text(30, 65, `HP: ${this.player.stats.maxHp} / ${this.player.stats.maxHp}`, {
+	      font: '25px pixel',
 	      fill: '#2a2029',
 	      strokeThickness: 1
 	    })
 
-	    for (const elements in this.HudElements) {
-	    	this.add(this.HudElements[elements])
+	    this.HUDElement.currentStats = this.game.add.text(30, 105, `ATK: ${this.player.stats.attack} / DEF: ${this.player.stats.defense}`, {
+	      font: '25px pixel',
+	      fill: '#2a2029',
+	      strokeThickness: 1
+	    })
+
+	    this.HUDElement.currentWeapon = this.game.add.text(30, 145, `WEAPON: ${this.player.weaponKey}`, {
+	      font: '25px pixel',
+	      fill: '#2a2029',
+	      strokeThickness: 1
+	    })
+
+	    for (const elements in this.HUDElement) {
+	    	this.add(this.HUDElement[elements])
 	    }
 	}
 
