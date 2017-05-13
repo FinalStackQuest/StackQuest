@@ -36,8 +36,6 @@ const fantasyState = {
     playerObject = createPlayer(player)
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
-
-    StackQuest.game.input.onDown.add(() => playerObject.attack())
   },
 
   update() {
@@ -57,8 +55,11 @@ const fantasyState = {
     itemGraveyard = []
 
     playerObject.movePlayer()
+    playerObject.attack()
+
     itemCollision(playerObject, itemGraveyard)
     enemyCollision(playerObject, graveyard)
+
     mapTransition(player, playerObject, 'spaceState')
   }
 }
