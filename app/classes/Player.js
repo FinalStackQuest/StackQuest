@@ -1,5 +1,6 @@
 import Prefab from './entityPrefab'
 import Weapon from './Weapon'
+import HUD from './HUD'
 
 import armorProperties from '../properties/armorProperties'
 import playerProperties from '../properties/playerProperties'
@@ -37,6 +38,8 @@ export default class Player extends Prefab {
     this.respawn = this.respawn.bind(this)
     this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
     this.recoverHp = this.recoverHp.bind(this)
+
+    this.HUD = new HUD(game, this)
   }
 
   equipWeapon(weaponKey) {
@@ -167,4 +170,8 @@ export default class Player extends Prefab {
     this.playerHealthBar.setPercent(percent)
   }
 
+  update() {
+    console.log(this.HUD)
+    this.HUD.updateHealth()
+  }
 }
