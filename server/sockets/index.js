@@ -8,24 +8,26 @@ const collisionArrays = {}
 const isUpdating = {}
 
 const EasystarConstructor = require('easystarjs')
-const Easystar = new EasystarConstructor.js()
 
 const findClosestPlayer = require('./utils').findClosestPlayer
+
+const mapWidth = 60
+const mapHeight = 60
 
 const enemyMovement = (io, state) => {
   Object.keys(GameEnemies[state]).forEach(enemyName => {
     const enemy = GameEnemies[state][enemyName]
     const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
     if (closestPlayer) {
-      Easystar.findPath(
-        Math.floor(enemy.x / collisionArrays[state][0].length),
-        Math.floor(enemy.y / collisionArrays[state].length),
-        Math.floor(closestPlayer.x / collisionArrays[state][0].length),
-        Math.floor(closestPlayer.y / collisionArrays[state].length),
+      collisionArrays[state].findPath(
+        Math.floor(enemy.x / mapWidth),
+        Math.floor(enemy.y / mapHeight),
+        Math.floor(closestPlayer.x / mapWidth),
+        Math.floor(closestPlayer.y / mapHeight),
         path => {
           if (path && path[1]) {
-            const newX = path[1].x * collisionArrays[state][0].length
-            const newY = path[1].y * collisionArrays[state].length
+            const newX = path[1].x * mapWidth
+            const newY = path[1].y * mapHeight
             const distance = 1
             enemy.x += newX - enemy.x > 0 ? distance : -distance
             enemy.y += newY - enemy.y > 0 ? distance : -distance
@@ -33,7 +35,7 @@ const enemyMovement = (io, state) => {
             io.sockets.to(state).emit('updateEnemy', newPos, enemyName)
           }
         })
-      Easystar.calculate()
+      collisionArrays[state].calculate()
     }
   })
 }
@@ -107,10 +109,10 @@ const socketFunction = io => {
       socket.broadcast.to(room).emit('addPlayer', socket.id, player)
 
       if (!collisionArrays[room]) {
-        collisionArrays[room] = collisionMap
-        Easystar.setGrid(collisionMap)
-        Easystar.setAcceptableTiles([0])
-        Easystar.enableDiagonals()
+        collisionArrays[room] = new EasystarConstructor.js()
+        collisionArrays[room].setGrid(collisionMap)
+        collisionArrays[room].setAcceptableTiles([0])
+        collisionArrays[room].enableDiagonals()
       }
 
       if (!isUpdating[room]) {
