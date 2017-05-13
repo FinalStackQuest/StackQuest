@@ -1,5 +1,9 @@
 import Prefab from './entityPrefab'
+import Weapon from './Weapon'
+
+import armorProperties from '../properties/armorProperties'
 import playerProperties from '../properties/playerProperties'
+
 import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
 
@@ -13,35 +17,39 @@ export default class Player extends Prefab {
     this.orientation = 4 // down
 
     this.absorbProperties(playerProperties[property.class])
+
     this.stats.hp = property.hp
     this.setAnimationFrames(this)
 
-    this.lootCount = 0
-
     this.loadControls()
-    this.loadProjectile()
 
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
+
+    this.equipWeapon = this.equipWeapon.bind(this)
+    this.equipWeapon(this.weaponKey)
+    this.attack = this.attack.bind(this)
+
+    this.equipArmor = this.equipArmor.bind(this)
+    this.equipArmor(this.armorKey)
+
     this.takeDamage = this.takeDamage.bind(this)
     this.respawn = this.respawn.bind(this)
     this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
     this.recoverHp = this.recoverHp.bind(this)
-    this.getProjectile = this.getProjectile.bind(this)
   }
 
   equipWeapon(weaponKey) {
+    this.weapon = new Weapon(this.game, this, weaponKey)
     this.weapon.name = weaponKey
-    this.weapon = playerProperties[weaponKey] // assigns stats to weapon
-    this.stats.attack = this.weapon.stats.attack + this.stats.attack
-    this.setAnimations(this.weapon)
+    this.stats.attack = this.weapon.attack + this.stats.attack
     return true
   }
 
   equipArmor(armorKey) {
+    this.armor = armorProperties[armorKey]
     this.armor.name = armorKey
-    this.armor = playerProperties[armorKey]
-    this.stats.defense = this.armor.stats.defense + this.stats.defense
+    this.stats.defense = this.armor.defense + this.stats.defense
     return true
   }
 
@@ -79,9 +87,11 @@ export default class Player extends Prefab {
       this.moveTween.start()
     }
   }
+
   completeMovement() {
     this.animations.stop()
   }
+
   takeDamage(damage) {
     if (damage) this.stats.hp -= (damage - this.stats.defense)
     this.computeLifeBar()
@@ -105,6 +115,7 @@ export default class Player extends Prefab {
     // Revive
     setTimeout(this.recoverHp, 100)
   }
+
   recoverHp() {
     this.stats.hp = this.stats.maxHp
     this.computeLifeBar()
@@ -142,42 +153,19 @@ export default class Player extends Prefab {
     }
   }
 
+  attack() {
+    if (this.cursors.click.isDown) {
+      const targetX = this.game.input.worldX
+      const targetY = this.game.input.worldY
+      this.weapon.fire(null, targetX, targetY)
+      socket.emit('fireProjectile', targetX, targetY)
+    }
+  }
+
   computeLifeBar() {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
   }
 
-  loadProjectile(type = 'bullet') {
-    //  Creates 3 bullets, using the 'bullet' graphic
-    this.projectile = this.game.add.weapon(3, type)
-
-    //  The bullet will be automatically killed when it leaves the world bounds
-    this.projectile.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS
-
-    //  The speed at which the bullet is fired
-    this.projectile.bulletSpeed = 2000
-
-    //  Speed-up the rate of fire, allowing them to shoot 3 bullet every second
-    this.projectile.fireRate = 333
-
-    //  Tell the Weapon to track the 'player' Sprite
-    //  With no offsets from the position
-    //  But the 'true' argument tells the weapon to track sprite rotation
-    this.projectile.trackSprite(this, 0, 0, false)
-
-    // //  adds damage associated with that player
-    this.projectile.damage = this.stats.attack
-  }
-
-  getProjectile() {
-    return this.projectile
-  }
-
-  attack() {
-    const targetX = StackQuest.game.input.worldX
-    const targetY = StackQuest.game.input.worldY
-    this.projectile.fire(null, targetX, targetY)
-    socket.emit('fireProjectile', targetX, targetY)
-  }
 }

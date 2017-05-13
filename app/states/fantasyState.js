@@ -4,7 +4,6 @@ import createMap from './utils/createMap'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
 import enemyCollision from './utils/enemyCollision'
-import PVP from './utils/Pvp'
 import mapTransition from './utils/mapTransition'
 import itemCollision from './utils/itemCollision'
 import playerClass from '../classes/Player'
@@ -16,11 +15,7 @@ let map
   , playerObject
   , player
   , graveyard = []
-
-// TODO get rid of this (put in sockets) ?
-const localState = {
-  loot: []
-}
+  , itemGraveyard = []
 
 const fantasyState = {
   init(character) {
@@ -41,8 +36,6 @@ const fantasyState = {
     playerObject = createPlayer(player)
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
-
-    StackQuest.game.input.onDown.add(() => playerObject.attack())
   },
 
   update() {
@@ -55,12 +48,20 @@ const fantasyState = {
     })
     graveyard = []
 
+    itemGraveyard.forEach(item => {
+      item.destroy()
+      socket.emit('killItem', item.name)
+    })
+    itemGraveyard = []
+
     playerObject.movePlayer()
-    itemCollision(playerObject, localState.loot)
-    enemyCollision(playerObject, graveyard, localState.loot)
-    PVP(playerObject)
+    playerObject.attack()
+
+    itemCollision(playerObject, itemGraveyard)
+    enemyCollision(playerObject, graveyard)
+
     mapTransition(player, playerObject, 'spaceState')
-  },
+  }
 }
 
 export default fantasyState

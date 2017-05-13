@@ -37,7 +37,6 @@ export default class entityPrefab extends Phaser.Sprite {
       'walk': 16,
       'attack': 14
     }
-    // defines frame rate of each animation type
     const animationPrefixes = ['idle', 'walk', 'attack']
     const directions = ['up', 'down', 'left', 'right']
 
