@@ -93,7 +93,12 @@ export default class Player extends Prefab {
   }
 
   takeDamage(damage) {
-    if (damage) this.stats.hp -= (damage - this.stats.defense)
+    const damageTaken = damage - this.stats.defense
+    if (damageTaken > 0) {
+      this.stats.hp -= damageTaken
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      setTimeout(() => damageText.destroy(), 500)
+    }
     this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {

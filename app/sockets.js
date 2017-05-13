@@ -25,7 +25,7 @@ const socketFunctions = socket => {
   socket.on('addItem', addItem)
   socket.on('removeItem', removeItem)
   socket.on('updateStats', updateStats)
-  socket.on('hitPlayer', hitPlayer)
+  // socket.on('hitPlayer', hitPlayer)
 }
 
 const getPlayers = players => {
@@ -50,11 +50,13 @@ const removePlayer = socketId => {
   }
   delete GamePlayers[socketId]
 }
-const hitPlayer = (socketId, damageTaken) => {
-  if (socketId === socket.id) {
+// const hitPlayer = (socketId, damageTaken) => {
+//   if (socketId !== socket.id) {
+//     if (GamePlayers[socketId]) {
 
-  }
-}
+//     }
+//   }
+// }
 const updateStats = (socketId, stats) => {
   if (GamePlayers[socketId]) {
     GamePlayers[socketId].stats = stats

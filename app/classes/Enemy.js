@@ -66,8 +66,6 @@ export default class Enemy extends entityPrefab {
   attack() {
     if (Date.now() - this.lastAttack > 1000) {
       this.lastAttack = Date.now()
-      const damage = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, '-' + this.stats.attack, { font: '32px Times New Roman', fill: '#ff0000' })
-      setTimeout(() => damage.destroy(), 500)
       return this.stats.attack
     } else {
       return 0
