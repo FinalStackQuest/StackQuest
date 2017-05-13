@@ -1,4 +1,4 @@
-import { collisionArrayStatus, GamePlayers, GameEnemies, socket } from '../sockets'
+import { GamePlayers, GameEnemies, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
 import makeCollisionMap from './utils/makeCollisionMap'
@@ -36,13 +36,9 @@ const spaceState = {
 
     map = createMap.space()
 
-    socket.emit('setupState', player, 'spaceState')
+    socket.emit('setupState', player, makeCollisionMap(map), 'spaceState')
 
     playerObject = createPlayer(player)
-
-    if (!collisionArrayStatus) {
-      makeCollisionMap(map)
-    }
 
     this.spawnLoot()
 

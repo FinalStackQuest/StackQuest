@@ -7,7 +7,6 @@ import Player from './classes/Player'
 export const socket = socketio.connect()
 export const GamePlayers = {}
 export const GameEnemies = {}
-export let collisionArrayStatus = false
 
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
@@ -15,10 +14,9 @@ const socketFunctions = socket => {
   socket.on('updatePlayer', updatePlayer)
   socket.on('removePlayer', removePlayer)
   socket.on('fireProjectile', fireProjectile)
-  socket.on('enemyCreated', enemyCreated)
-  socket.on('foundPath', foundPath)
   socket.on('getEnemies', getEnemies)
-  socket.on('createdCollisionArray', createdCollisionArray)
+  socket.on('addEnemy', addEnemy)
+  socket.on('updateEnemy', updateEnemy)
   socket.on('removeEnemy', removeEnemy)
 }
 
@@ -48,14 +46,6 @@ const fireProjectile = (socketId, xCoord, yCoord) => {
   }
 }
 
-const enemyCreated = enemy => {
-  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.key)
-}
-
-const foundPath = (newPos, name) => {
-  if (GameEnemies[name]) GameEnemies[name].move(newPos)
-}
-
 const getEnemies = enemies => {
   for (const enemy in GameEnemies) delete GameEnemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
@@ -64,16 +54,20 @@ const getEnemies = enemies => {
   })
 }
 
+const addEnemy = enemy => {
+  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.key)
+}
+
+const updateEnemy = (newPos, name) => {
+  if (GameEnemies[name]) GameEnemies[name].move(newPos)
+}
+
 const removeEnemy = enemyName => {
   if (GameEnemies[enemyName]) {
     GameEnemies[enemyName].enemyHealthBar.kill()
     GameEnemies[enemyName].destroy()
   }
   delete GameEnemies[enemyName]
-}
-
-const createdCollisionArray = (state) => {
-  collisionArrayStatus = true
 }
 
 socketFunctions(socket)
