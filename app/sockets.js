@@ -20,8 +20,8 @@ const socketFunctions = socket => {
   socket.on('addEnemy', addEnemy)
   socket.on('updateEnemy', updateEnemy)
   socket.on('removeEnemy', removeEnemy)
-  socket.on('addItem', addItem)
   socket.on('getItems', getItems)
+  socket.on('addItem', addItem)
   socket.on('removeItem', removeItem)
 }
 
@@ -79,7 +79,7 @@ const getItems = items => {
   for (const item in GameItems) delete GameItems[item]
   Object.keys(items).forEach(itemName => {
     const item = items[itemName]
-    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.x, y: item.y }, item.key)
+    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.itemPos.x, y: item.itemPos.y }, item.key)
   })
 }
 
