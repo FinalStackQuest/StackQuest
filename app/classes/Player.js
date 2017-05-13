@@ -2,7 +2,7 @@ import Prefab from './entityPrefab'
 import playerProperties from '../properties/playerProperties'
 import { socket } from '../sockets'
 
-/* global Phaser */
+/* global StackQuest, Phaser */
 
 // client side class for Playable Characters
 export default class Player extends Prefab {
@@ -135,5 +135,12 @@ export default class Player extends Prefab {
 
   getProjectile() {
     return this.projectile
+  }
+
+  attack() {
+    const targetX = StackQuest.game.input.worldX
+    const targetY = StackQuest.game.input.worldY
+    this.projectile.fire(null, targetX, targetY)
+    socket.emit('fireProjectile', targetX, targetY)
   }
 }
