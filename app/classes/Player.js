@@ -167,5 +167,4 @@ export default class Player extends Prefab {
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
   }
-
 }
