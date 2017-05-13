@@ -46,7 +46,7 @@ const fantasyState = {
       makeCollisionMap(map)
     }
 
-    this.spawnLoot()
+    // this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -68,7 +68,7 @@ const fantasyState = {
 
     playerObject.movePlayer()
     itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard)
+    enemyCollision(playerObject, projectile, graveyard, localState.loot)
     mapTransition(player, playerObject, 'spaceState')
   },
 
