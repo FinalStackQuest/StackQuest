@@ -1,7 +1,6 @@
 import socketio from 'socket.io-client'
 import Enemy from './classes/Enemy'
 import Player from './classes/Player'
-import createProjectile from './states/utils/createProjectile'
 
 /* global StackQuest */
 
@@ -45,7 +44,6 @@ const removePlayer = socketId => {
 
 const fireProjectile = (socketId, xCoord, yCoord) => {
   if (GamePlayers[socketId]) {
-    // const projectile = createProjectile.bullet(GamePlayers[socketId])
     GamePlayers[socketId].projectile.fire(null, xCoord, yCoord)
   }
 }

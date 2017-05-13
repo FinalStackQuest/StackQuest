@@ -22,8 +22,10 @@ export default class Player extends Prefab {
 
     this.loadControls()
     this.loadProjectile()
+
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
+    this.getProjectile = this.getProjectile.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -109,9 +111,9 @@ export default class Player extends Prefab {
     }
   }
 
-  loadProjectile() {
+  loadProjectile(type = 'bullet') {
     //  Creates 3 bullets, using the 'bullet' graphic
-    this.projectile = this.game.add.weapon(3, 'bullet')
+    this.projectile = this.game.add.weapon(3, type)
 
     //  The bullet will be automatically killed when it leaves the world bounds
     this.projectile.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS
@@ -129,5 +131,9 @@ export default class Player extends Prefab {
 
     // //  adds damage associated with that player
     this.projectile.damage = this.stats.attack
+  }
+
+  getProjectile() {
+    return this.projectile
   }
 }

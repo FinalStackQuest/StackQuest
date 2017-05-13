@@ -2,7 +2,6 @@ import { collisionArrayStatus, GameEnemies, GamePlayers, socket } from '../socke
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
 import createPlayer from './utils/createPlayer'
-import createProjectile from './utils/createProjectile'
 import playerAttack from './utils/playerAttack'
 import mapTransition from './utils/mapTransition'
 import enemyCollision from './utils/enemyCollision'
@@ -14,7 +13,6 @@ import Loot from '../classes/Loot'
 /* global StackQuest, Phaser */
 
 let map
-  // , cursors
   , playerObject
   , player
   , projectile
@@ -38,13 +36,12 @@ const spaceState = {
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
-    // cursors = createCursors()
     map = createMap.space()
 
     socket.emit('setupState', player, 'spaceState')
 
     playerObject = createPlayer(player)
-    projectile = createProjectile.bullet(playerObject)
+    projectile = playerObject.getProjectile()
 
     if (!collisionArrayStatus) {
       makeCollisionMap(map)
@@ -54,7 +51,7 @@ const spaceState = {
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
-    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, playerObject, projectile), this)
+    StackQuest.game.input.onDown.add((pointer, mouseEvent) => playerAttack(pointer, mouseEvent, projectile), this)
   },
 
   update() {
@@ -63,7 +60,6 @@ const spaceState = {
 
     graveyard.forEach(enemy => {
       enemy.destroy()
-      delete GameEnemies[enemy.name]
       socket.emit('killEnemy', enemy.name)
     })
     graveyard = []
