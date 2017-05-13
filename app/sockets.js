@@ -90,7 +90,6 @@ const getItems = items => {
 }
 
 const removeItem = itemName => {
-  console.log('game item being removed client side', GameItems[itemName])
   if (GameItems[itemName]) {
     GameItems[itemName].destroy()
   }

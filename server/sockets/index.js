@@ -119,17 +119,13 @@ const socketFunction = io => {
     })
 
     socket.on('createItem', item => {
-      console.log('server get item?', item)
       GameItems[room][item.name] = Object.assign({}, item)
       socket.broadcast.to(room).emit('addItem', item)
     })
 
     socket.on('killItem', name => {
       if (GameItems[room]) {
-        console.log('item before', GameItems[room][name])
-        console.log('item named', name)
         delete GameItems[room][name]
-        console.log('Do we still have item?', GameItems[room][name])
         socket.broadcast.to(room).emit('removeItem', name)
       }
     })

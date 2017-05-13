@@ -65,7 +65,6 @@ const spaceState = {
 
     itemGraveyard.forEach(item => {
       item.destroy()
-      console.log('item killed ', item.name)
       socket.emit('killItem', item.name)
     })
     itemGraveyard = []

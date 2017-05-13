@@ -59,7 +59,6 @@ const fantasyState = {
     // TODO make more sense...
     itemGraveyard.forEach(item => {
       item.destroy()
-      console.log('item killed ', item.name)
       socket.emit('killItem', item.name)
     })
     itemGraveyard = []
