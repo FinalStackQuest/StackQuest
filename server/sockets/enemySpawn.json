@@ -1,0 +1,94 @@
+{
+  "fantasyState": [{
+    "name": "Soldier 1",
+    "x": 509,
+    "y": 1730,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 2",
+    "x": 1006,
+    "y": 257,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 3",
+    "x": 1075,
+    "y": 801,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 4",
+    "x": 745,
+    "y": 1601,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 5",
+    "x": 343,
+    "y": 1750,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 6",
+    "x": 1369,
+    "y": 623,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 7",
+    "x": 1052,
+    "y": 1570,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 8",
+    "x": 1447,
+    "y": 1308,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 9",
+    "x": 1806,
+    "y": 312,
+    "spriteKey": "soldier"
+  }],
+  "spaceState": [{
+    "name": "Soldier 1",
+    "x": 509,
+    "y": 1730,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 2",
+    "x": 806,
+    "y": 257,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 3",
+    "x": 1075,
+    "y": 801,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 4",
+    "x": 745,
+    "y": 1601,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 5",
+    "x": 343,
+    "y": 1750,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 6",
+    "x": 1369,
+    "y": 623,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 7",
+    "x": 1052,
+    "y": 1570,
+    "spriteKey": "soldier"
+  }, {
+    "name": "Soldier 8",
+    "x": 1447,
+    "y": 1308,
+    "spriteKey": "soldieralt"
+  }, {
+    "name": "Soldier 9",
+    "x": 1806,
+    "y": 312,
+    "spriteKey": "soldier"
+  }]
+}

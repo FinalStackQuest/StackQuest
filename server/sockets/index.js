@@ -2,6 +2,7 @@ const db = require('APP/db')
 const Character = db.model('characters')
 
 const enemies = require('./enemies.json')
+const enemySpawn = require('./enemySpawn.json')
 const GamePlayers = {}
 const GameEnemies = {}
 const GameItems = {}
@@ -42,10 +43,11 @@ const enemyMovement = (io, state) => {
 }
 
 const spawnEnemy = (io, state) => {
-  enemies[state].forEach((enemy) => {
+  enemySpawn[state].forEach((enemy) => {
     if (!GameEnemies[state][enemy.name]) {
-      GameEnemies[state][enemy.name] = Object.assign({}, enemy)
-      io.sockets.to(state).emit('addEnemy', enemy)
+      const enemyStats = Object.assign({}, enemies[enemy.spriteKey].stats)
+      GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
+      io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
     }
   })
 }
@@ -80,10 +82,18 @@ const socketFunction = io => {
       socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
     })
 
-    socket.on('killEnemy', name => {
+    socket.on('hitEnemy', (enemyName, damage) => {
       if (GameEnemies[room]) {
-        delete GameEnemies[room][name]
-        socket.broadcast.to(room).emit('removeEnemy', name)
+        const damageTaken = damage - GameEnemies[room][enemyName].stats.defense
+        GameEnemies[room][enemyName].stats.hp -= damageTaken
+        socket.broadcast.to(room).emit('hitEnemy', enemyName, damage)
+      }
+    })
+
+    socket.on('killEnemy', enemyName => {
+      if (GameEnemies[room]) {
+        delete GameEnemies[room][enemyName]
+        socket.broadcast.to(room).emit('removeEnemy', enemyName)
       }
     })
 

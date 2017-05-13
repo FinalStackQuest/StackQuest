@@ -6,15 +6,14 @@ import Loot from 'APP/app/classes/Loot'
 const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
-    const projectile = playerObject.getProjectile()
+    const projectile = playerObject.weapon
 
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
-      const didDie = enemy.takeDamage(projectile.damage)
       bullet.kill()
-      const damage = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, projectile.damage, { font: '32px Times New Roman', fill: '#ffa500' })
-      setTimeout(() => damage.destroy(), 500)
+      const damageTaken = enemy.takeDamage(projectile.damage)
+      socket.emit('hitEnemy', enemy.name, projectile.damage)
 
-      if (didDie) {
+      if (enemy.stats.hp <= 0) {
         const chance = Math.floor(Math.random() * 100)
         if (chance < 20) {
           const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
