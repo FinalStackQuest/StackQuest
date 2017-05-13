@@ -4,7 +4,7 @@ import { GameEnemies, socket } from 'APP/app/sockets'
 import Loot from 'APP/app/classes/Loot'
 
 
-const enemyCollision = (playerObject, graveyard) => {
+const enemyCollision = (playerObject, graveyard, lootState) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
     const projectile = playerObject.getProjectile()
