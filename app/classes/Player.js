@@ -60,6 +60,7 @@ export default class Player extends Prefab {
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
 
+
     if (yDirection > 0) {
       this.orientation = 2
     } else if (yDirection < 0) {

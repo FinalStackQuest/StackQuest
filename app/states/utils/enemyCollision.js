@@ -26,12 +26,6 @@ const enemyCollision = (playerObject, graveyard, lootState) => {
 
       if (playerObject.stats.hp <= 0) {
         playerObject.respawn()
-        // playerObject.position.x = 500
-        // playerObject.position.y = 500
-        //  reset internal health: TEMP
-        // playerObject.stats.hp = 100
-        // const damage = StackQuest.game.add.text(playerObject.position.x, playerObject.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
-        // setTimeout(() => damage.destroy(), 1000)
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: 0 })
       }
     })
