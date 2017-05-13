@@ -28,7 +28,7 @@ const enemyCollision = (playerObject, graveyard) => {
 
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
       playerObject.takeDamage(enemy.attack())
-
+      socket.emit('updateStats', playerObject.stats)
       if (playerObject.stats.hp <= 0) {
         playerObject.respawn()
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: 0 })

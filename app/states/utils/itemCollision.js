@@ -17,6 +17,7 @@ const itemCollision = (playerObject, itemGraveyard) => {
       } else {
         const armorNotice = StackQuest.game.add.text(player.x, player.y + 20, 'Armor acquired, Defense + 1! ', { font: '22px Times New Roman', fill: '#ffffff' })
         playerObject.stats.defense++
+        socket.emit('updateStats', playerObject.stats)
         setTimeout(() => armorNotice.destroy(), 3000)
       }
       itemGraveyard.push(item)
