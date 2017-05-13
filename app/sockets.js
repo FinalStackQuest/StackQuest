@@ -94,7 +94,7 @@ const getItems = items => {
 }
 
 const addItem = item => {
-  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.itemPos.x, y: item.itemPos.y }, 'item')
+  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.itemPos.x, y: item.itemPos.y }, item.key)
 }
 
 const removeItem = itemName => {
