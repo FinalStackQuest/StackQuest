@@ -4,7 +4,6 @@ import createMap from './utils/createMap'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
 import enemyCollision from './utils/enemyCollision'
-import PVP from './utils/Pvp'
 import mapTransition from './utils/mapTransition'
 import itemCollision from './utils/itemCollision'
 import playerClass from '../classes/Player'
@@ -58,7 +57,6 @@ const spaceState = {
     playerObject.movePlayer()
     itemCollision(playerObject, localState.loot)
     enemyCollision(playerObject, graveyard, localState.loot)
-    PVP(playerObject)
     mapTransition(player, playerObject, 'fantasyState')
   }
 }
