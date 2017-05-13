@@ -50,7 +50,7 @@ const removePlayer = socketId => {
 
 const fireProjectile = (socketId, xCoord, yCoord) => {
   if (GamePlayers[socketId]) {
-    GamePlayers[socketId].projectile.fire(null, xCoord, yCoord)
+    GamePlayers[socketId].weapon.fire(null, xCoord, yCoord)
   }
 }
 
