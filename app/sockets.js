@@ -9,7 +9,6 @@ export const socket = socketio.connect()
 export const GamePlayers = {}
 export const GameEnemies = {}
 export const GameItems = {}
-export let collisionArrayStatus = false
 
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
@@ -17,10 +16,9 @@ const socketFunctions = socket => {
   socket.on('updatePlayer', updatePlayer)
   socket.on('removePlayer', removePlayer)
   socket.on('fireProjectile', fireProjectile)
-  socket.on('enemyCreated', enemyCreated)
-  socket.on('foundPath', foundPath)
   socket.on('getEnemies', getEnemies)
-  socket.on('createdCollisionArray', createdCollisionArray)
+  socket.on('addEnemy', addEnemy)
+  socket.on('updateEnemy', updateEnemy)
   socket.on('removeEnemy', removeEnemy)
   socket.on('addItem', addItem)
   socket.on('getItems', getItems)
@@ -53,20 +51,20 @@ const fireProjectile = (socketId, xCoord, yCoord) => {
   }
 }
 
-const enemyCreated = enemy => {
-  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.key)
-}
-
-const foundPath = (newPos, name) => {
-  if (GameEnemies[name]) GameEnemies[name].move(newPos)
-}
-
 const getEnemies = enemies => {
   for (const enemy in GameEnemies) delete GameEnemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
     const enemy = enemies[enemyName]
     GameEnemies[enemyName] = new Enemy(StackQuest.game, enemyName, { x: enemy.x, y: enemy.y }, enemy.key)
   })
+}
+
+const addEnemy = enemy => {
+  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.key)
+}
+
+const updateEnemy = (newPos, name) => {
+  if (GameEnemies[name]) GameEnemies[name].move(newPos)
 }
 
 const removeEnemy = enemyName => {
@@ -77,10 +75,6 @@ const removeEnemy = enemyName => {
   delete GameEnemies[enemyName]
 }
 
-const addItem = item => {
-  GameItems[item.name] = new Loot(StackQuest.game, item.name, {x: item.itemPos.x, y: item.itemPos.y}, 'item')
-}
-
 const getItems = items => {
   for (const item in GameItems) delete GameItems[item]
   Object.keys(items).forEach(itemName => {
@@ -89,15 +83,15 @@ const getItems = items => {
   })
 }
 
+const addItem = item => {
+  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.itemPos.x, y: item.itemPos.y }, 'item')
+}
+
 const removeItem = itemName => {
   if (GameItems[itemName]) {
     GameItems[itemName].destroy()
   }
   delete GameItems[itemName]
-}
-
-const createdCollisionArray = (state) => {
-  collisionArrayStatus = true
 }
 
 socketFunctions(socket)

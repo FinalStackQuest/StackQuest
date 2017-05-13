@@ -5,23 +5,16 @@ import enemyProperties from '../properties/enemyProperties'
 
 /* global StackQuest, Phaser */
 
-// To Do:
-//  1. add correct animations using spritesheet
-//  2. resolve 'note' questions
-//  3. figure out how this works for all of the different enemies
-//  4. resolve Game vs game globals
 export default class Enemy extends entityPrefab {
   constructor(game, name, position, spriteKey) {
     super(game, name, position, spriteKey)
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     // this.inputEnabled = true
-    //  this.handlBeingAttack
 
     //  hardcoded for now
     this.maxLife = 30
     this.orientation = ''
-    // this.initialPosition = new Phaser.Point(position.x, position.y)
     this.lastAttack = Date.now()
     this.anchor.set(0.25, 0.2)
     //  NOTE this is hardcoded until internal stats determined and set on db

@@ -1,4 +1,4 @@
-import { collisionArrayStatus, GamePlayers, GameEnemies, socket } from '../sockets'
+import { GamePlayers, GameEnemies, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
 import makeCollisionMap from './utils/makeCollisionMap'
@@ -14,14 +14,8 @@ import Loot from '../classes/Loot'
 let map
   , playerObject
   , player
-  , projectile
   , graveyard = []
   , itemGraveyard = []
-
-// TODO get rid of this (put in sockets) ?
-const localState = {
-  loot: []
-}
 
 const spaceState = {
   init(character) {
@@ -37,16 +31,9 @@ const spaceState = {
 
     map = createMap.space()
 
-    socket.emit('setupState', player, 'spaceState')
+    socket.emit('setupState', player, makeCollisionMap(map), 'spaceState')
 
     playerObject = createPlayer(player)
-    projectile = playerObject.getProjectile()
-
-    if (!collisionArrayStatus) {
-      makeCollisionMap(map)
-    }
-
-    this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -69,12 +56,9 @@ const spaceState = {
     })
     itemGraveyard = []
 
-    // spawn loot
-    // if (Math.random() * 1000 <= 1) this.spawnLoot()
-
     playerObject.movePlayer()
-    itemCollision(playerObject, projectile, itemGraveyard)
-    enemyCollision(playerObject, projectile, graveyard)
+    itemCollision(playerObject, itemGraveyard)
+    enemyCollision(playerObject, graveyard)
     mapTransition(player, playerObject, 'fantasyState')
   }
 }

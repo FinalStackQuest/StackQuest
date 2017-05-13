@@ -1,4 +1,4 @@
-import { collisionArrayStatus, GamePlayers, GameEnemies, socket } from '../sockets'
+import { GamePlayers, GameEnemies, socket } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
 import makeCollisionMap from './utils/makeCollisionMap'
@@ -14,7 +14,6 @@ import Loot from '../classes/Loot'
 let map
   , playerObject
   , player
-  , projectile
   , graveyard = []
   , itemGraveyard = []
 
@@ -32,14 +31,9 @@ const fantasyState = {
 
     map = createMap.fantasy()
 
-    socket.emit('setupState', player, 'fantasyState')
+    socket.emit('setupState', player, makeCollisionMap(map), 'fantasyState')
 
     playerObject = createPlayer(player)
-    projectile = playerObject.getProjectile()
-
-    if (!collisionArrayStatus) {
-      makeCollisionMap(map)
-    }
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -56,7 +50,6 @@ const fantasyState = {
     })
     graveyard = []
 
-    // TODO make more sense...
     itemGraveyard.forEach(item => {
       item.destroy()
       socket.emit('killItem', item.name)
@@ -64,11 +57,10 @@ const fantasyState = {
     itemGraveyard = []
 
     playerObject.movePlayer()
-    itemCollision(playerObject, projectile, itemGraveyard)
-    enemyCollision(playerObject, projectile, graveyard)
+    itemCollision(playerObject, itemGraveyard)
+    enemyCollision(playerObject, graveyard)
     mapTransition(player, playerObject, 'spaceState')
   }
-
 }
 
 export default fantasyState
