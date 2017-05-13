@@ -112,10 +112,12 @@ const socketFunction = io => {
       socket.join(room)
       if (!GamePlayers[room]) GamePlayers[room] = {}
       if (!GameEnemies[room]) GameEnemies[room] = {}
+      if (!GameItems[room]) GameItems[room] = {}
 
       // get all players and enemies on the map
       socket.emit('getPlayers', GamePlayers[room])
       socket.emit('getEnemies', GameEnemies[room])
+      socket.emit('getItems', GameItems[room])
 
       // add player to map
       GamePlayers[room][socket.id] = player
