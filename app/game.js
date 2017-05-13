@@ -3,7 +3,6 @@ require('p2')
 require('phaser')
 
 import loadingScreen from './states/loadingScreen'
-// preloadTest is a clone of fantasyState to test loadingScreen state
 import fantasyState from './states/fantasyState'
 import spaceState from './states/spaceState'
 
@@ -12,14 +11,18 @@ import spaceState from './states/spaceState'
 class StackQuest extends Phaser.Game {
   // Initialize game
   constructor() {
-    super(1280, 720, Phaser.AUTO, 'game-container') // Add all the states
+    const width = window.innerWidth < 1280 ? window.innerWidth : 1280
+    const height = window.innerHeight < 720 ? window.innerHeight : 720
+
+    super(width, height, Phaser.AUTO, 'game-container')
+    // Add all the states
     this.state.add('loadingScreen', loadingScreen)
     this.state.add('fantasyState', fantasyState)
     this.state.add('spaceState', spaceState)
   }
 
+  // Start StackQuest Game
   startGame(character) {
-    // Start StackQuest Game
     this.state.start(character.currentMap, true, false, character)
   }
 }

@@ -3,7 +3,7 @@ import playerProperties from '../properties/playerProperties'
 import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
 
-/* global Phaser */
+/* global StackQuest, Phaser */
 
 // client side class for Playable Characters
 export default class Player extends Prefab {
@@ -13,19 +13,21 @@ export default class Player extends Prefab {
     this.orientation = 4 // down
 
     this.absorbProperties(playerProperties[property.class])
-    console.log('property is:', property)
     this.stats.hp = property.hp
     this.setAnimationFrames(this)
 
     this.lootCount = 0
 
     this.loadControls()
+    this.loadProjectile()
+
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
     this.takeDamage = this.takeDamage.bind(this)
     this.respawn = this.respawn.bind(this)
     this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
     this.recoverHp = this.recoverHp.bind(this)
+    this.getProjectile = this.getProjectile.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -139,11 +141,43 @@ export default class Player extends Prefab {
       this.animations.play(`walk_${this.orientationsDict[this.orientation]}`)
     }
   }
+
   computeLifeBar() {
-    // console.log('this player in computeLifeBar', this)
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
-    console.log('percent is:', percent)
     this.playerHealthBar.setPercent(percent)
+  }
+
+  loadProjectile(type = 'bullet') {
+    //  Creates 3 bullets, using the 'bullet' graphic
+    this.projectile = this.game.add.weapon(3, type)
+
+    //  The bullet will be automatically killed when it leaves the world bounds
+    this.projectile.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS
+
+    //  The speed at which the bullet is fired
+    this.projectile.bulletSpeed = 2000
+
+    //  Speed-up the rate of fire, allowing them to shoot 3 bullet every second
+    this.projectile.fireRate = 333
+
+    //  Tell the Weapon to track the 'player' Sprite
+    //  With no offsets from the position
+    //  But the 'true' argument tells the weapon to track sprite rotation
+    this.projectile.trackSprite(this, 0, 0, false)
+
+    // //  adds damage associated with that player
+    this.projectile.damage = this.stats.attack
+  }
+
+  getProjectile() {
+    return this.projectile
+  }
+
+  attack() {
+    const targetX = StackQuest.game.input.worldX
+    const targetY = StackQuest.game.input.worldY
+    this.projectile.fire(null, targetX, targetY)
+    socket.emit('fireProjectile', targetX, targetY)
   }
 }

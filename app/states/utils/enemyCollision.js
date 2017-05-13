@@ -3,9 +3,11 @@
 import { GameEnemies, socket } from 'APP/app/sockets'
 import Loot from 'APP/app/classes/Loot'
 
-const enemyCollision = (playerObject, projectile, graveyard, lootState) => {
+const enemyCollision = (playerObject, graveyard, lootState) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
+    const projectile = playerObject.getProjectile()
+
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       const didDie = enemy.takeDamage(projectile.damage)
       bullet.kill()
@@ -18,6 +20,7 @@ const enemyCollision = (playerObject, projectile, graveyard, lootState) => {
         delete GameEnemies[enemyKey]
       }
     })
+
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
       playerObject.takeDamage(enemy.attack())
 

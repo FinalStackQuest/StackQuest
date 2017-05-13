@@ -1,10 +1,12 @@
 import Player from '../../classes/Player'
+
 /* global StackQuest */
 
 const createPlayer = (player) => {
   console.log('player in createPlayer', player)
   const playerObject = new Player(StackQuest.game, player.userName, player)
   StackQuest.game.camera.follow(playerObject)
+
   return playerObject
 }
 
