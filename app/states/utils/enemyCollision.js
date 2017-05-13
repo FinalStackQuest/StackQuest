@@ -9,11 +9,9 @@ const enemyCollision = (playerObject, graveyard) => {
     const projectile = playerObject.getProjectile()
 
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
-      const damageTaken = enemy.takeDamage(projectile.damage)
-      socket.emit('enemyHit', enemy.stats.hp)
       bullet.kill()
-      const damage = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
-      setTimeout(() => damage.destroy(), 500)
+      const damageTaken = enemy.takeDamage(projectile.damage)
+      socket.emit('hitEnemy', enemy.name, projectile.damage)
 
       if (enemy.stats.hp <= 0) {
         const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name

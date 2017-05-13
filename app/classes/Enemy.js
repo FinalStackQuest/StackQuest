@@ -6,26 +6,19 @@ import enemyProperties from '../properties/enemyProperties'
 /* global StackQuest, Phaser */
 
 export default class Enemy extends entityPrefab {
-  constructor(game, name, position, spriteKey) {
+  constructor(game, name, position, spriteKey, stats) {
     super(game, name, position, spriteKey)
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     // this.inputEnabled = true
 
-    //  hardcoded for now
-    this.maxLife = 30
+    this.maxLife = stats.hp
     this.orientation = ''
     this.lastAttack = Date.now()
     this.anchor.set(0.25, 0.2)
-    //  NOTE this is hardcoded until internal stats determined and set on db
+
     this.absorbProperties(enemyProperties[spriteKey])
-    this.stats = {
-      hp: 30,
-      attack: 10,
-      defense: 4,
-      speed: 10,
-      loot: ['test']
-    }
+    this.stats = stats
 
     this.setAnimationFrames(this)
 
@@ -84,6 +77,10 @@ export default class Enemy extends entityPrefab {
   takeDamage(damage) {
     const damageTaken = damage - this.stats.defense
     this.stats.hp -= damageTaken
+
+    const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+    setTimeout(() => damageText.destroy(), 500)
+
     this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {
