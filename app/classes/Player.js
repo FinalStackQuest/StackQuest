@@ -83,7 +83,6 @@ export default class Player extends Prefab {
   }
   takeDamage(damage) {
     if (damage) this.stats.hp -= (damage - this.stats.defense)
-    // console.log('taking damage', damage, 'hp:', this.stats.hp)
     this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {
