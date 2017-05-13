@@ -1,6 +1,6 @@
 const projectileProperties = {
   missle: {
-    attack: 3,
+    attack: 15,
     quantity: 5,
     bulletSpeed: 1000,
     fireRate: 500,
@@ -9,7 +9,7 @@ const projectileProperties = {
     }
   },
   fireball: {
-    attack: 1,
+    attack: 12,
     quantity: 8,
     bulletSpeed: 350,
     fireRate: 250,

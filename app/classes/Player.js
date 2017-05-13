@@ -20,7 +20,7 @@ export default class Player extends Prefab {
 
     this.stats.hp = property.hp
     this.setAnimationFrames(this)
-
+    this.lootCount = 0
     this.loadControls()
 
     this.movePlayer = this.movePlayer.bind(this)
@@ -67,6 +67,7 @@ export default class Player extends Prefab {
     const xDirection = this.position.x - targetX
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y-30)
 
     if (yDirection > 0) {
       this.orientation = 2
@@ -92,7 +93,12 @@ export default class Player extends Prefab {
   }
 
   takeDamage(damage) {
-    if (damage) this.stats.hp -= (damage - this.stats.defense)
+    const damageTaken = damage - this.stats.defense
+    if (damageTaken > 0) {
+      this.stats.hp -= damageTaken
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      setTimeout(() => damageText.destroy(), 500)
+    }
     this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {
@@ -166,5 +172,4 @@ export default class Player extends Prefab {
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
   }
-
 }

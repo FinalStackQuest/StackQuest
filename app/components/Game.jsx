@@ -8,6 +8,7 @@ import Character from './Character'
 import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
 import { createCharacter } from 'APP/app/reducers/user'
+import playerProps from 'APP/app/properties/playerProperties'
 
 /* global StackQuest */
 
@@ -44,6 +45,7 @@ class LocalContainer extends React.Component {
     this.props.showGameDisplay(true)
     const character = this.props.user.character
     character.userName = this.props.user.userName
+    character.stats = playerProps[character.class].stats
 
     StackQuest.game = new StackQuestGame()
     StackQuest.game.startGame(character)

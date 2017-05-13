@@ -1,0 +1,30 @@
+/* global StackQuest */
+
+import { GamePlayers, socket } from 'APP/app/sockets'
+import Loot from 'APP/app/classes/Loot'
+
+const playerCollision = (playerObject) => {
+  Object.keys(GamePlayers).forEach(playerKey => {
+    const enemy = GamePlayers[playerKey]
+    const projectile = playerObject.weapon
+
+    StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
+      bullet.kill()
+      const damageTaken = projectile.damage - enemy.stats.defense
+      if (damageTaken >= 0) {
+        const damageText = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+        setTimeout(() => damageText.destroy(), 500)
+      }
+    })
+    StackQuest.game.physics.arcade.overlap(enemy.weapon.bullets, playerObject, (target, bullet) => {
+      bullet.kill()
+      playerObject.takeDamage(enemy.weapon.damage)
+      socket.emit('updateStats', playerObject.stats)
+      if (playerObject.stats.hp <= 0) {
+        socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: 0 })
+      }
+    })
+  })
+}
+
+export default playerCollision

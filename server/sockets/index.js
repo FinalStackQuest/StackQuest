@@ -77,6 +77,12 @@ const socketFunction = io => {
         socket.broadcast.to(room).emit('updatePlayer', socket.id, player)
       }
     })
+    socket.on('updateStats', stats => {
+      if (GamePlayers[room]) {
+        GamePlayers[room][socket.id].stats = stats
+      }
+      socket.broadcast.to(room).emit('updateStats', socket.id, stats)
+    })
 
     socket.on('fireProjectile', (xCoord, yCoord) => {
       socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
