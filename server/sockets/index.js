@@ -97,6 +97,10 @@ const socketFunction = io => {
       }
     })
 
+    socket.on('fireProjectile', (xCoord, yCoord) => {
+      socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
+    })
+
     socket.on('killEnemy', name => {
       if (GameEnemies[room]) {
         delete GameEnemies[room][name]

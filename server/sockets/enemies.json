@@ -42,7 +42,7 @@
   }, {
     "name": "Soldier 9",
     "x": 1806,
-    "y": 1012,
+    "y": 312,
     "key": "soldier"
   }],
   "spaceState": [{
@@ -88,7 +88,7 @@
   }, {
     "name": "Soldier 9",
     "x": 1806,
-    "y": 1012,
+    "y": 312,
     "key": "soldier"
   }]
 }
