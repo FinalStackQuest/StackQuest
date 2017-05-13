@@ -41,7 +41,10 @@ const updatePlayer = (socketId, player) => {
 }
 
 const removePlayer = socketId => {
-  if (GamePlayers[socketId]) GamePlayers[socketId].destroy()
+  if (GamePlayers[socketId]) {
+    GamePlayers[socketId].playerHealthBar.kill()
+    GamePlayers[socketId].destroy()
+  }
   delete GamePlayers[socketId]
 }
 
