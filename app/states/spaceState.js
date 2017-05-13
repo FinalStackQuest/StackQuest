@@ -62,9 +62,10 @@ const spaceState = {
     graveyard = []
 
     // spawn loot
-    if (Math.random() * 1000 <= 1) this.spawnLoot()
+    // if (Math.random() * 1000 <= 1) this.spawnLoot()
 
     playerObject.movePlayer()
+
     itemCollision(playerObject, localState.loot)
     enemyCollision(playerObject, graveyard)
     mapTransition(player, playerObject, 'fantasyState')

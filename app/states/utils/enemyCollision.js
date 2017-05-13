@@ -1,6 +1,8 @@
 /* global StackQuest */
 
 import { GameEnemies, socket } from 'APP/app/sockets'
+import Loot from 'APP/app/classes/Loot'
+
 
 const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
@@ -14,6 +16,7 @@ const enemyCollision = (playerObject, graveyard) => {
       setTimeout(() => damage.destroy(), 500)
 
       if (didDie) {
+        lootState.push(new Loot(StackQuest.game, 'Item', { x: enemy.x, y: enemy.y }, 'item'))
         graveyard.push(enemy)
         delete GameEnemies[enemyKey]
       }
