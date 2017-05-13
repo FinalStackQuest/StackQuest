@@ -15,11 +15,7 @@ let map
   , playerObject
   , player
   , graveyard = []
-
-// TODO get rid of this (put in sockets) ?
-const localState = {
-  loot: []
-}
+  , itemGraveyard = []
 
 const fantasyState = {
   init(character) {
@@ -54,11 +50,17 @@ const fantasyState = {
     })
     graveyard = []
 
+    itemGraveyard.forEach(item => {
+      item.destroy()
+      socket.emit('killItem', item.name)
+    })
+    itemGraveyard = []
+
     playerObject.movePlayer()
     itemCollision(playerObject, localState.loot)
     enemyCollision(playerObject, graveyard, localState.loot)
     mapTransition(player, playerObject, 'spaceState')
-  },
+  }
 }
 
 export default fantasyState
