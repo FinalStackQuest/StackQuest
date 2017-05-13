@@ -82,16 +82,15 @@ export default class Enemy extends entityPrefab {
   }
 
   takeDamage(damage) {
-    this.stats.hp -= (damage - this.stats.defense)
+    const damageTaken = damage - this.stats.defense
+    this.stats.hp -= damageTaken
     this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {
       this.die()
-      //  function returns true if the enemy is dead
-      return true
     }
-    //  returns false because the enemy didn't die
-    return false
+    // return damage
+    return damageTaken
   }
 
   die() {
