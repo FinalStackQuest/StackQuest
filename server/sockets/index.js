@@ -4,6 +4,7 @@ const Character = db.model('characters')
 const enemies = require('./enemies.json')
 const GamePlayers = {}
 const GameEnemies = {}
+const GameItems = {}
 const collisionArrays = {}
 const isUpdating = {}
 
