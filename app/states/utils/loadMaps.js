@@ -10,7 +10,9 @@ const loadMaps = {
     StackQuest.game.load.spritesheet('bat', 'assets/tilesets/LPC Base Assets/sprites/monsters/bat.png', 32, 32)
     StackQuest.game.load.spritesheet('wizard', 'assets/tilesets/LPC Base Assets/sprites/people/male_walkcycle.png', 64, 64)
     StackQuest.game.load.spritesheet('cyborg', 'assets/tilesets/LPC Base Assets/sprites/people/princess.png', 64, 64)
-    StackQuest.game.load.spritesheet('item', 'assets/tilesets/LPC Base Assets/sprites/monsters/eyeball.png', 32, 32)
+    StackQuest.game.load.spritesheet('loot', 'assets/tilesets/LPC Base Assets/sprites/monsters/eyeball.png', 32, 32)
+    StackQuest.game.load.spritesheet('weapon', 'assets/sprites/sword.png', 25, 64)
+    StackQuest.game.load.spritesheet('armor', 'assets/sprites/shield.png', 64, 64)
   },
 
   fantasy() {
