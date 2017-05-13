@@ -14,7 +14,6 @@ import Loot from '../classes/Loot'
 let map
   , playerObject
   , player
-  , projectile
   , graveyard = []
   , lootGeneratedCounter = 0
 
@@ -40,7 +39,6 @@ const fantasyState = {
     socket.emit('setupState', player, 'fantasyState')
 
     playerObject = createPlayer(player)
-    projectile = playerObject.getProjectile()
 
     if (!collisionArrayStatus) {
       makeCollisionMap(map)
@@ -67,8 +65,8 @@ const fantasyState = {
     if (Math.random() * 1000 <= 1) this.spawnLoot()
 
     playerObject.movePlayer()
-    itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard)
+    itemCollision(playerObject, localState.loot)
+    enemyCollision(playerObject, graveyard)
     mapTransition(player, playerObject, 'spaceState')
   },
 

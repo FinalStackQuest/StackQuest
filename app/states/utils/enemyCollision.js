@@ -2,9 +2,10 @@
 
 import { GameEnemies, socket } from 'APP/app/sockets'
 
-const enemyCollision = (playerObject, projectile, graveyard) => {
+const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
+    const projectile = playerObject.getProjectile()
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       const didDie = enemy.takeDamage(projectile.damage)
       bullet.kill()
