@@ -24,6 +24,7 @@ const socketFunctions = socket => {
   socket.on('getItems', getItems)
   socket.on('addItem', addItem)
   socket.on('removeItem', removeItem)
+  socket.on('updateStats', updateStats)
 }
 
 const getPlayers = players => {
@@ -47,6 +48,12 @@ const removePlayer = socketId => {
     GamePlayers[socketId].destroy()
   }
   delete GamePlayers[socketId]
+}
+const updateStats = (socketId, stats) => {
+  if (GamePlayers[socketId]) {
+    GamePlayers[socketId].stats = stats
+    GamePlayers[socketId].computeLifeBar()
+  }
 }
 
 const fireProjectile = (socketId, xCoord, yCoord) => {
