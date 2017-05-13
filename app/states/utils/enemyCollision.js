@@ -6,6 +6,7 @@ const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
     const projectile = playerObject.getProjectile()
+
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       const didDie = enemy.takeDamage(projectile.damage)
       bullet.kill()
@@ -17,6 +18,7 @@ const enemyCollision = (playerObject, graveyard) => {
         delete GameEnemies[enemyKey]
       }
     })
+
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
       playerObject.stats.hp -= enemy.attack()
 

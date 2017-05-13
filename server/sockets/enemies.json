@@ -1,12 +1,12 @@
 {
   "fantasyState": [{
     "name": "Soldier 1",
-    "x": 309,
-    "y": 430,
+    "x": 509,
+    "y": 1730,
     "key": "soldier"
   }, {
     "name": "Soldier 2",
-    "x": 806,
+    "x": 1006,
     "y": 257,
     "key": "soldieralt"
   }, {
@@ -47,8 +47,8 @@
   }],
   "spaceState": [{
     "name": "Soldier 1",
-    "x": 309,
-    "y": 430,
+    "x": 509,
+    "y": 1730,
     "key": "soldier"
   }, {
     "name": "Soldier 2",

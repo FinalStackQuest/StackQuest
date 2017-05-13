@@ -4,9 +4,8 @@ import { socket } from 'APP/app/sockets'
 
 const itemCollision = (playerObject, items) => {
   for (const itemKey in items) {
-    // const self = this
     const item = items[itemKey]
-    StackQuest.game.physics.arcade.collide(playerObject, item, function(player, item) {
+    StackQuest.game.physics.arcade.collide(playerObject, item, (player, item) => {
       if (item.type === 'loot') {
         playerObject.lootCount++
         const lootCount = StackQuest.game.add.text(player.x, player.y + 20, 'Loot acquired ' + playerObject.lootCount, { font: '22px Times New Roman', fill: '#ffffff' })
