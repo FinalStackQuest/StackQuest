@@ -93,10 +93,7 @@ const socketFunction = io => {
         console.log('player hit is:', GamePlayers[room][playerName])
         const damageTaken = damage - GamePlayers[room][playerName].stats.defense
         GamePlayers[room][playerName].stats.hp -= damageTaken
-        if (GamePlayers[room][playerName].stats.hp <= 0) {
-
-        }
-        socket.broadcast.to(room).emit('hitPlayer', playerName, damage)
+        socket.broadcast.to(room).emit('hitPlayer', playerName, damageTaken)
       }
     })
     socket.on('hitEnemy', (enemyName, damage) => {
