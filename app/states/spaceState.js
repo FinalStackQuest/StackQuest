@@ -16,7 +16,7 @@ let map
   , player
   , projectile
   , graveyard = []
-  , lootGeneratedCounter = 0
+  , itemGraveyard = []
 
 // TODO get rid of this (put in sockets) ?
 const localState = {
@@ -63,17 +63,20 @@ const spaceState = {
     })
     graveyard = []
 
+    itemGraveyard.forEach(item => {
+      item.destroy()
+      console.log('item killed ', item.name)
+      socket.emit('killItem', item.name)
+    })
+    itemGraveyard = []
+
     // spawn loot
     // if (Math.random() * 1000 <= 1) this.spawnLoot()
 
     playerObject.movePlayer()
-    itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard, localState.loot)
+    itemCollision(playerObject, projectile, itemGraveyard)
+    enemyCollision(playerObject, projectile, graveyard)
     mapTransition(player, playerObject, 'fantasyState')
-  },
-
-  spawnLoot() {
-    localState.loot[lootGeneratedCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }
 }
 

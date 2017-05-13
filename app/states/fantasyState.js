@@ -17,12 +17,6 @@ let map
   , projectile
   , graveyard = []
   , itemGraveyard = []
-  , lootGeneratedCounter = 0
-
-// TODO get rid of this (put in sockets) ?
-const localState = {
-  loot: []
-}
 
 const fantasyState = {
   init(character) {
@@ -65,13 +59,14 @@ const fantasyState = {
     // TODO make more sense...
     itemGraveyard.forEach(item => {
       item.destroy()
+      console.log('item killed ', item.name)
       socket.emit('killItem', item.name)
     })
     itemGraveyard = []
 
     playerObject.movePlayer()
-    itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard, localState.loot)
+    itemCollision(playerObject, projectile, itemGraveyard)
+    enemyCollision(playerObject, projectile, graveyard)
     mapTransition(player, playerObject, 'spaceState')
   }
 

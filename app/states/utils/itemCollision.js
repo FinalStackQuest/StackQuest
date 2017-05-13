@@ -1,11 +1,11 @@
-import { socket } from 'APP/app/sockets'
+import { socket, GameItems } from 'APP/app/sockets'
 
 /* global StackQuest */
 
-const itemCollision = (playerObject, projectile, items) => {
-  for (const itemKey in items) {
+const itemCollision = (playerObject, projectile, itemGraveyard) => {
+  Object.keys(GameItems).forEach(itemKey => {
     // const self = this
-    const item = items[itemKey]
+    const item = GameItems[itemKey]
     StackQuest.game.physics.arcade.collide(playerObject, item, function(player, item) {
       if (item.type === 'loot') {
         playerObject.lootCount++
@@ -22,10 +22,11 @@ const itemCollision = (playerObject, projectile, items) => {
         playerObject.stats.hp *= 2
         setTimeout(() => { armorNotice.destroy() }, 3000)
       }
-      item.destroy()
+      itemGraveyard.push(item)
+      delete GameItems[itemKey]
       socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount })
     })
-  }
+  })
 }
 
 export default itemCollision

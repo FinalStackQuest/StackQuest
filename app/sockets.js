@@ -23,6 +23,8 @@ const socketFunctions = socket => {
   socket.on('createdCollisionArray', createdCollisionArray)
   socket.on('removeEnemy', removeEnemy)
   socket.on('addItem', addItem)
+  socket.on('getItems', getItems)
+  socket.on('removeItem', removeItem)
 }
 
 const getPlayers = players => {
@@ -77,6 +79,22 @@ const removeEnemy = enemyName => {
 
 const addItem = item => {
   GameItems[item.name] = new Loot(StackQuest.game, item.name, {x: item.itemPos.x, y: item.itemPos.y}, 'item')
+}
+
+const getItems = items => {
+  for (const item in GameItems) delete GameItems[item]
+  Object.keys(items).forEach(itemName => {
+    const item = items[itemName]
+    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.x, y: item.y }, item.key)
+  })
+}
+
+const removeItem = itemName => {
+  console.log('game item being removed client side', GameItems[itemName])
+  if (GameItems[itemName]) {
+    GameItems[itemName].destroy()
+  }
+  delete GameItems[itemName]
 }
 
 const createdCollisionArray = (state) => {
