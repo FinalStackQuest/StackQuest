@@ -19,7 +19,6 @@ const enemyCollision = (playerObject, projectile, graveyard, lootState) => {
       }
     })
     StackQuest.game.physics.arcade.overlap(enemy, playerObject, () => {
-      console.log('playerObj is gonna get hurt:', playerObject)
       playerObject.takeDamage(enemy.attack())
 
       if (playerObject.stats.hp <= 0) {

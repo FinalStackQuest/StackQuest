@@ -12,11 +12,8 @@ export default class Player extends Prefab {
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
 
-    //  Hard code max life
-    // this.maxLife = 1
-    // this.inFight = false
-
     this.absorbProperties(playerProperties[property.class])
+    console.log('property is:', property)
     this.stats.hp = property.hp
     this.setAnimationFrames(this)
 
@@ -28,6 +25,7 @@ export default class Player extends Prefab {
     this.takeDamage = this.takeDamage.bind(this)
     this.respawn = this.respawn.bind(this)
     this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
+    this.recoverHp = this.recoverHp.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -82,8 +80,8 @@ export default class Player extends Prefab {
     this.animations.stop()
   }
   takeDamage(damage) {
-    this.stats.hp -= (damage - this.stats.defense)
-    console.log('taking damage', damage, 'stats:', this.stats)
+    if (damage) this.stats.hp -= (damage - this.stats.defense)
+    // console.log('taking damage', damage, 'hp:', this.stats.hp)
     this.computeLifeBar()
     //  check if dead
     if (this.stats.hp <= 0) {
@@ -101,9 +99,12 @@ export default class Player extends Prefab {
     //  make them move to set location
     this.position.x = 500
     this.position.y = 500
-    // Revive health
+
+    // Revive
+    setTimeout(this.recoverHp, 100)
+  }
+  recoverHp() {
     this.stats.hp = this.stats.maxHp
-    //  compute health
     this.computeLifeBar()
   }
 
@@ -111,7 +112,7 @@ export default class Player extends Prefab {
     this.body.velocity.x = 0
     this.body.velocity.y = 0
 
-    this.playerHealthBar.setPosition(this.position.x, this.position.y)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y-30)
 
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200
@@ -142,6 +143,7 @@ export default class Player extends Prefab {
     // console.log('this player in computeLifeBar', this)
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
+    console.log('percent is:', percent)
     this.playerHealthBar.setPercent(percent)
   }
 }
