@@ -14,7 +14,6 @@ import Loot from '../classes/Loot'
 let map
   , playerObject
   , player
-  , projectile
   , graveyard = []
   , lootGeneratedCounter = 0
 
@@ -40,13 +39,10 @@ const spaceState = {
     socket.emit('setupState', player, 'spaceState')
 
     playerObject = createPlayer(player)
-    projectile = playerObject.getProjectile()
 
     if (!collisionArrayStatus) {
       makeCollisionMap(map)
     }
-
-    this.spawnLoot()
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
 
@@ -63,17 +59,10 @@ const spaceState = {
     })
     graveyard = []
 
-    // spawn loot
-    // if (Math.random() * 1000 <= 1) this.spawnLoot()
-
     playerObject.movePlayer()
-    itemCollision(playerObject, projectile, localState.loot)
-    enemyCollision(playerObject, projectile, graveyard, localState.loot)
+    itemCollision(playerObject, localState.loot)
+    enemyCollision(playerObject, graveyard, localState.loot)
     mapTransition(player, playerObject, 'fantasyState')
-  },
-
-  spawnLoot() {
-    localState.loot[lootGeneratedCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
   }
 }
 
