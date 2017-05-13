@@ -1,12 +1,14 @@
 import socketio from 'socket.io-client'
 import Enemy from './classes/Enemy'
 import Player from './classes/Player'
+import Loot from './classes/Loot'
 
 /* global StackQuest */
 
 export const socket = socketio.connect()
 export const GamePlayers = {}
 export const GameEnemies = {}
+export const GameItems = {}
 
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
@@ -18,6 +20,9 @@ const socketFunctions = socket => {
   socket.on('addEnemy', addEnemy)
   socket.on('updateEnemy', updateEnemy)
   socket.on('removeEnemy', removeEnemy)
+  socket.on('addItem', addItem)
+  socket.on('getItems', getItems)
+  socket.on('removeItem', removeItem)
 }
 
 const getPlayers = players => {
@@ -68,6 +73,25 @@ const removeEnemy = enemyName => {
     GameEnemies[enemyName].destroy()
   }
   delete GameEnemies[enemyName]
+}
+
+const getItems = items => {
+  for (const item in GameItems) delete GameItems[item]
+  Object.keys(items).forEach(itemName => {
+    const item = items[itemName]
+    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.x, y: item.y }, item.key)
+  })
+}
+
+const addItem = item => {
+  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.itemPos.x, y: item.itemPos.y }, 'item')
+}
+
+const removeItem = itemName => {
+  if (GameItems[itemName]) {
+    GameItems[itemName].destroy()
+  }
+  delete GameItems[itemName]
 }
 
 socketFunctions(socket)

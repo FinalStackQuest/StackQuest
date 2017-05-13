@@ -1,23 +1,25 @@
 /* global StackQuest */
 
-import { GameEnemies, socket } from 'APP/app/sockets'
+import { GameEnemies, GameItems, socket } from 'APP/app/sockets'
 import Loot from 'APP/app/classes/Loot'
 
-const enemyCollision = (playerObject, graveyard, lootState) => {
+const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
     const enemy = GameEnemies[enemyKey]
     const projectile = playerObject.getProjectile()
 
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       const damageTaken = enemy.takeDamage(projectile.damage)
-      console.log(enemy.stats.hp)
       socket.emit('enemyHit', enemy.stats.hp)
       bullet.kill()
       const damage = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
       setTimeout(() => damage.destroy(), 500)
 
       if (enemy.stats.hp <= 0) {
-        lootState.push(new Loot(StackQuest.game, 'Item', { x: enemy.x, y: enemy.y }, 'item'))
+        const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
+        GameItems[newItemName] = new Loot(StackQuest.game, newItemName, { x: enemy.x, y: enemy.y }, 'item')
+        const newItem = GameItems[newItemName]
+        socket.emit('createItem', { itemPos: newItem.position, name: newItem.name, key: newItem.key })
         graveyard.push(enemy)
         delete GameEnemies[enemyKey]
       }

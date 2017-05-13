@@ -87,6 +87,18 @@ const socketFunction = io => {
       }
     })
 
+    socket.on('createItem', item => {
+      GameItems[room][item.name] = Object.assign({}, item)
+      socket.broadcast.to(room).emit('addItem', item)
+    })
+
+    socket.on('killItem', name => {
+      if (GameItems[room]) {
+        delete GameItems[room][name]
+        socket.broadcast.to(room).emit('removeItem', name)
+      }
+    })
+
     socket.on('setupState', (player, collisionMap, newRoom) => {
       // remove player from previous map (room)
       if (GamePlayers[room]) {
@@ -100,10 +112,12 @@ const socketFunction = io => {
       socket.join(room)
       if (!GamePlayers[room]) GamePlayers[room] = {}
       if (!GameEnemies[room]) GameEnemies[room] = {}
+      if (!GameItems[room]) GameItems[room] = {}
 
       // get all players and enemies on the map
       socket.emit('getPlayers', GamePlayers[room])
       socket.emit('getEnemies', GameEnemies[room])
+      socket.emit('getItems', GameItems[room])
 
       // add player to map
       GamePlayers[room][socket.id] = player
