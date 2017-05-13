@@ -84,9 +84,7 @@ const spaceState = {
     mapTransition(player, playerObject, 'fantasyState')
   },
 
-  render() {
-    this.game.debug.cameraInfo(this.camera, 32, 32)
-  },
+  render() {},
 
   spawnLoot() {
     localState.loot[lootGeneratedCounter++] = new Loot(this.game, 'Item', { x: Math.random() * 1920, y: Math.random() * 1080 }, 'item')
