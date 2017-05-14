@@ -18,7 +18,6 @@ const playerCollision = (playerObject) => {
     StackQuest.game.physics.arcade.overlap(enemy.weapon.bullets, playerObject, (target, bullet) => {
       bullet.kill()
       playerObject.takeDamage(enemy.weapon.damage())
-      console.log(enemy.weapon)
     })
   })
 }
