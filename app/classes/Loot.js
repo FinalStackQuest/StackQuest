@@ -22,7 +22,7 @@ export default class Loot extends entityPrefab {
       displayText = 'Armor acquired, Defense +1'
       break
     }
-    const notice = StackQuest.game.add.text(this.x, this.y + 20, displayText, { font: '22px Times New Roman', fill: '#ffffff' })
+    const notice = StackQuest.game.add.text(this.x, this.y, displayText, { font: '22px Times New Roman', fill: '#ffffff' })
     setTimeout(() => notice.destroy(), 3000)
   }
 }
