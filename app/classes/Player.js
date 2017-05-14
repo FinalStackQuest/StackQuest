@@ -3,10 +3,13 @@ import Weapon from './Weapon'
 import HUD from './HUD'
 
 import armorProperties from '../properties/armorProperties'
+import itemProperties from '../properties/itemProperties.js'
 import playerProperties from '../properties/playerProperties'
 
 import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
+
+import {GameGroups} from '../sockets'
 
 /* global StackQuest, Phaser */
 
@@ -14,6 +17,9 @@ import HealthBar from '../states/utils/HealthBar.js'
 export default class Player extends Prefab {
   constructor(game, name, property) {
     super(game, name, { x: property.x, y: property.y }, property.class)
+
+    GameGroups.players.add(this)
+
     this.anchor.set(0.5, 0.5)
     this.orientation = 4 // down
 
@@ -38,6 +44,8 @@ export default class Player extends Prefab {
     this.respawn = this.respawn.bind(this)
     this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
     this.recoverHp = this.recoverHp.bind(this)
+
+    this.pickUpItem = this.pickUpItem.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -173,5 +181,35 @@ export default class Player extends Prefab {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
+  }
+
+  pickUpItem(item) {
+
+    const itemProperty = itemProperties[item]
+
+    switch(itemProperty.type) {
+      case 'attack':
+        this.weapon.damage += itemProperty.buff
+        break;
+
+      case 'defense':
+        this.stats.defense += itemProperty.buff
+        break;
+
+      case 'loot':
+        this.loot += itemProperty.buff
+        break;
+    }
+
+    if (this.HUD) {
+      let text = `Acquired ${item}`
+
+      if (itemProperty.type === 'attack' || itemProperty.type === 'defense') {
+        this.HUD.updateStats()
+        text += `, ${itemProperty.type}+${itemProperty.buff} `
+      }
+
+      this.HUD.updateFeed(text)
+    }
   }
 }

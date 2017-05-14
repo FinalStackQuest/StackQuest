@@ -2,6 +2,7 @@ import entityPrefab from './entityPrefab'
 import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
 import enemyProperties from '../properties/enemyProperties'
+import {GameGroups} from '../sockets'
 
 /* global StackQuest, Phaser */
 
@@ -11,6 +12,8 @@ export default class Enemy extends entityPrefab {
     //  Note: need this for allowing enemy to have inout events
     //  may not be necessary for how we set it up with actions, but needed for clicks
     // this.inputEnabled = true
+
+    GameGroups.enemies.add(this)
 
     this.maxLife = stats.hp
     this.orientation = ''

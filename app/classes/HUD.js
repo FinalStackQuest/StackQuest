@@ -1,25 +1,25 @@
 require('pixi')
 require('p2')
 require('phaser')
+import {GameGroups}from '../sockets'
 
 // const HudElements = {
 
 // }
 
-class HUD extends Phaser.Group {
+class HUD {
 	constructor(game, player) {
-		super(game)
+		this.game = game
 
 		this.player = player
 		this.HUDElement = {}
-
 		this.initHUD()
 
-	    this.setAll('fixedToCamera', true)
+	    GameGroups.HUD.setAll('fixedToCamera', true)
 	}
 
 	updateHealth() {
-		this.HUDElement.currentHealth.setText(`HP: ${this.player.stats.hp}/ ${this.player.stats.maxHp}`)
+		this.HUDElement.currentHealth.setText(`HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`)
 	}
 
 	updateWeapon() {
@@ -27,38 +27,50 @@ class HUD extends Phaser.Group {
 	}
 
 	updateStats() {
-		this.HUDElement.currentStats.setText(`ATK: ${this.player.stats.attack} / DEF: ${this.player.stats.defense}`)
+		this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage} / DEF: ${this.player.stats.defense}`)
+	}
+
+	updateFeed(newFeed) {
+		this.HUDElement.currentFeed.setText(`${newFeed}`)
 	}
 
 	initHUD() {
+		const gameX = this.game.width
 		const gameY = this.game.height
 
 		this.HUDElement.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, {
-	      font: '25px pixel',
+	      font: '20px Press Start 2P',
 	      fill: '#2a2029',
 	      strokeThickness: 1
 	    })
 
-		this.HUDElement.currentHealth = this.game.add.text(30, 65, `HP: ${this.player.stats.maxHp} / ${this.player.stats.maxHp}`, {
-	      font: '25px pixel',
+		this.HUDElement.currentHealth = this.game.add.text(30, 65, `HP: ${this.player.stats.maxHp}/${this.player.stats.maxHp}`, {
+	      font: '20px Press Start 2P',
 	      fill: '#2a2029',
 	      strokeThickness: 1
 	    })
 
 	    this.HUDElement.currentStats = this.game.add.text(30, 105, `ATK: ${this.player.stats.attack} / DEF: ${this.player.stats.defense}`, {
-	      font: '25px pixel',
+	      font: '20px Press Start 2P',
 	      fill: '#2a2029',
 	      strokeThickness: 1
 	    })
 
 	    this.HUDElement.currentWeapon = this.game.add.text(30, 145, `WEAPON: ${this.player.weaponKey}`, {
-	      font: '25px pixel',
+	      font: '20px Press Start 2P',
 	      fill: '#2a2029',
 	      strokeThickness: 1
 	    })
 
+	    this.HUDElement.currentFeed = this.game.add.text(gameX/2, gameY-40, `Cool, this is a feed`, {
+	      font: '20px Press Start 2P',
+	      fill: '#2a2029',
+	      strokeThickness: 1
+	    })
+	    this.HUDElement.currentFeed.anchor.set(0.5)
+
 	    for (const elements in this.HUDElement) {
-	    	this.add(this.HUDElement[elements])
+	    	GameGroups.HUD.add(this.HUDElement[elements])
 	    }
 	}
 

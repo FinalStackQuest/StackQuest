@@ -8,6 +8,7 @@ import mapTransition from './utils/mapTransition'
 import itemCollision from './utils/itemCollision'
 import playerClass from '../classes/Player'
 import Loot from '../classes/Loot'
+import {GameGroups} from '../sockets'
 
 /* global StackQuest, Phaser */
 
@@ -23,13 +24,18 @@ const spaceState = {
   },
 
   preload() {
-    loadMaps.space()
+
   },
 
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
     map = createMap.space()
+
+    GameGroups.items = this.game.add.group()
+    GameGroups.enemies = this.game.add.group()
+    GameGroups.players = this.game.add.group()
+    GameGroups.HUD = this.game.add.group()
 
     socket.emit('setupState', player, makeCollisionMap(map), 'spaceState')
 
