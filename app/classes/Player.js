@@ -13,6 +13,7 @@ import HealthBar from '../states/utils/HealthBar.js'
 export default class Player extends Prefab {
   constructor(game, name, player) {
     super(game, name, { x: player.x, y: player.y }, player.class)
+    this.player = player
     this.anchor.set(0.5, 0.2)
     this.orientation = 4 // down
 
@@ -38,6 +39,8 @@ export default class Player extends Prefab {
     this.playerHealthBar = new HealthBar(game, { x: player.x, y: player.y - 10 })
     this.computeLifeBar()
     this.recoverHp = this.recoverHp.bind(this)
+
+    this.savePlayer = this.savePlayer.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -114,6 +117,7 @@ export default class Player extends Prefab {
     // Revive
     setTimeout(this.recoverHp, 100)
     socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
+    this.savePlayer()
 
     const respawnText = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
     setTimeout(() => respawnText.destroy(), 1000)
@@ -169,5 +173,13 @@ export default class Player extends Prefab {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
+  }
+
+  savePlayer() {
+    this.player.x = this.x
+    this.player.y = this.y
+    this.player.hp = this.stats.hp
+
+    socket.emit('savePlayer', this.player)
   }
 }
