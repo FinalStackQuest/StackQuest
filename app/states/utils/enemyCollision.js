@@ -11,7 +11,6 @@ const enemyCollision = (playerObject, graveyard) => {
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       bullet.kill()
       const damageTaken = enemy.takeDamage(projectile.damage)
-      socket.emit('hitEnemy', enemy.name, projectile.damage)
 
       if (enemy.stats.hp <= 0) {
         const chance = Math.floor(Math.random() * 100)

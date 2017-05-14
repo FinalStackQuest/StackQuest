@@ -27,6 +27,7 @@ export default class Enemy extends entityPrefab {
     this.takeDamage = this.takeDamage.bind(this)
     this.die = this.die.bind(this)
     this.attack = this.attack.bind(this)
+    this.dropLoot = this.dropLoot.bind(this)
     this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y })
   }
 
@@ -74,16 +75,18 @@ export default class Enemy extends entityPrefab {
 
   takeDamage(damage) {
     const damageTaken = damage - this.stats.defense
-    this.stats.hp -= damageTaken
+    if (damageTaken > 0) {
+      this.stats.hp -= damageTaken
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      setTimeout(() => damageText.destroy(), 500)
 
-    const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
-    setTimeout(() => damageText.destroy(), 500)
+      socket.emit('hitEnemy', this.name, damageTaken)
 
-    this.computeLifeBar()
-    //  check if dead
-    if (this.stats.hp <= 0) {
-      this.die()
+      this.computeLifeBar()
+      //  check if dead
+      if (this.stats.hp <= 0) this.die()
     }
+
     // return damage
     return damageTaken
   }
@@ -94,11 +97,16 @@ export default class Enemy extends entityPrefab {
     this.target = null
     this.alive = false
     this.delayedKill(500)
+    this.dropLoot()
   }
 
   computeLifeBar() {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.maxLife) * 100)
     this.enemyHealthBar.setPercent(percent)
+  }
+
+  dropLoot() {
+
   }
 }
