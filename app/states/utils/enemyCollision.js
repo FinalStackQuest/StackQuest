@@ -9,7 +9,7 @@ const enemyCollision = (playerObject, graveyard) => {
 
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
       bullet.kill()
-      enemy.takeDamage(projectile.damage)
+      enemy.takeDamage(projectile.damage())
 
       if (enemy.stats.hp <= 0) {
         graveyard.push(enemy)

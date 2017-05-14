@@ -9,7 +9,7 @@
     }
   },
   "fireball": {
-    "attack": 12,
+    "attack": 13,
     "quantity": 8,
     "bulletSpeed": 350,
     "fireRate": 250,

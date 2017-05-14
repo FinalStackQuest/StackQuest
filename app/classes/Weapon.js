@@ -11,15 +11,20 @@ class Weapon extends Phaser.Weapon {
     super(game)
 
     this.game = game
+    this.player = player
     this.absorbProperties(weaponProperties[weaponKey])
 
     this.createBullets(this.quantity, weaponKey, 0)
     this.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS
-    this.damage = player.stats.attack + this.attack
 
     this.trackSprite(player, 0, 0, false)
     this.setBulletAnimationFrames()
     this.bulletAnimation = 'launch'
+    this.damage = this.damage.bind(this)
+  }
+
+  damage() {
+    return this.player.stats.attack + this.attack
   }
 
   setBulletAnimationFrames() {
