@@ -4,7 +4,7 @@ require('phaser')
 
 /* global Phaser */
 
-import weaponProperties from '../properties/weaponProperties'
+import weaponProperties from '../properties/weaponProperties.json'
 
 class Weapon extends Phaser.Weapon {
   constructor(game, player, weaponKey) {

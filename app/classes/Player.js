@@ -1,8 +1,8 @@
 import Prefab from './entityPrefab'
 import Weapon from './Weapon'
 
-import armorProperties from '../properties/armorProperties'
-import playerProperties from '../properties/playerProperties'
+import armorProperties from '../properties/armorProperties.json'
+import playerProperties from '../properties/playerProperties.json'
 
 import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
