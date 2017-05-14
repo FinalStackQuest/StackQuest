@@ -112,7 +112,7 @@ export default class Enemy extends entityPrefab {
       const itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)]
       GameItems[newItemName] = new Loot(StackQuest.game, itemType, { x: this.x, y: this.y }, itemType)
       const newItem = GameItems[newItemName]
-      socket.emit('createItem', { itemPos: newItem.position, name: newItem.name, key: newItem.key })
+      socket.emit('createItem', { name: newItem.name, position: newItem.position, key: newItem.key })
     }
   }
 }

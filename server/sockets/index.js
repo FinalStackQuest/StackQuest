@@ -104,7 +104,7 @@ const socketFunction = io => {
     })
 
     socket.on('createItem', item => {
-      GameItems[room][item.name] = Object.assign({}, item)
+      GameItems[room][item.name] = item
       socket.broadcast.to(room).emit('addItem', item)
     })
 

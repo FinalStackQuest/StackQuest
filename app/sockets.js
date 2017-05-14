@@ -98,12 +98,12 @@ const getItems = items => {
   for (const item in GameItems) delete GameItems[item]
   Object.keys(items).forEach(itemName => {
     const item = items[itemName]
-    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.itemPos.x, y: item.itemPos.y }, item.key)
+    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.position.x, y: item.position.y }, item.key)
   })
 }
 
 const addItem = item => {
-  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.itemPos.x, y: item.itemPos.y }, item.key)
+  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.position.x, y: item.position.y }, item.key)
 }
 
 const removeItem = itemName => {
