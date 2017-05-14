@@ -42,7 +42,6 @@ export default class Player extends Prefab {
   equipWeapon(weaponKey) {
     this.weapon = new Weapon(this.game, this, weaponKey)
     this.weapon.name = weaponKey
-    this.stats.attack = this.weapon.attack + this.stats.attack
     return true
   }
 
