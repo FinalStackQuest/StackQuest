@@ -4,7 +4,7 @@ import { socket } from 'APP/app/sockets'
 
 const copyToPlayer = (player, playerObject, nextMap) => {
   player.currentMap = nextMap
-  player.stats = playerObject.stats
+  player.hp = playerObject.stats.hp
 
   return player
 }

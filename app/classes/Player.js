@@ -11,14 +11,14 @@ import HealthBar from '../states/utils/HealthBar.js'
 
 // client side class for Playable Characters
 export default class Player extends Prefab {
-  constructor(game, name, property) {
-    super(game, name, { x: property.x, y: property.y }, property.class)
+  constructor(game, name, player) {
+    super(game, name, { x: player.x, y: player.y }, player.class)
     this.anchor.set(0.5, 0.2)
     this.orientation = 4 // down
 
-    this.absorbProperties(playerProperties[property.class])
+    this.absorbProperties(playerProperties[player.class])
 
-    this.stats.hp = property.hp
+    this.stats.hp = player.hp
     this.setAnimationFrames(this)
     this.lootCount = 0
     this.loadControls()
@@ -35,7 +35,8 @@ export default class Player extends Prefab {
 
     this.takeDamage = this.takeDamage.bind(this)
     this.respawn = this.respawn.bind(this)
-    this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y - 10 })
+    this.playerHealthBar = new HealthBar(game, { x: player.x, y: player.y - 10 })
+    this.computeLifeBar()
     this.recoverHp = this.recoverHp.bind(this)
   }
 
