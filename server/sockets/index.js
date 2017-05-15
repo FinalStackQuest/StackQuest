@@ -1,7 +1,7 @@
 const db = require('APP/db')
 const Character = db.model('characters')
 
-const enemies = require('./enemies.json')
+const enemyProperties = require('APP/app/properties/enemyProperties')
 const enemySpawn = require('./enemySpawn.json')
 const GamePlayers = {}
 const GameEnemies = {}
@@ -45,7 +45,7 @@ const enemyMovement = (io, state) => {
 const spawnEnemy = (io, state) => {
   enemySpawn[state].forEach((enemy) => {
     if (!GameEnemies[state][enemy.name]) {
-      const enemyStats = Object.assign({}, enemies[enemy.spriteKey].stats)
+      const enemyStats = Object.assign({}, enemyProperties[enemy.spriteKey].stats)
       GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
       io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
     }
@@ -77,6 +77,12 @@ const socketFunction = io => {
         socket.broadcast.to(room).emit('updatePlayer', socket.id, player)
       }
     })
+    socket.on('updateStats', stats => {
+      if (GamePlayers[room]) {
+        GamePlayers[room][socket.id].stats = stats
+      }
+      socket.broadcast.to(room).emit('updateStats', socket.id, stats)
+    })
 
     socket.on('fireProjectile', (xCoord, yCoord) => {
       socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
@@ -98,7 +104,7 @@ const socketFunction = io => {
     })
 
     socket.on('createItem', item => {
-      GameItems[room][item.name] = Object.assign({}, item)
+      GameItems[room][item.name] = item
       socket.broadcast.to(room).emit('addItem', item)
     })
 
@@ -133,6 +139,8 @@ const socketFunction = io => {
       GamePlayers[room][socket.id] = player
       socket.broadcast.to(room).emit('addPlayer', socket.id, player)
 
+      // check if collision array exist for this map
+      // creates collision array if it does not exist
       if (!collisionArrays[room]) {
         collisionArrays[room] = new EasystarConstructor.js()
         collisionArrays[room].setGrid(collisionMap)

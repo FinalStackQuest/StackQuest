@@ -1,7 +1,8 @@
 import entityPrefab from './entityPrefab'
-import { socket } from '../sockets'
+import { GameItems, socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
-import enemyProperties from '../properties/enemyProperties'
+import enemyProperties from '../properties/enemyProperties.json'
+import Loot from 'APP/app/classes/Loot'
 import {GameGroups} from '../sockets'
 
 /* global StackQuest, Phaser */
@@ -9,16 +10,13 @@ import {GameGroups} from '../sockets'
 export default class Enemy extends entityPrefab {
   constructor(game, name, position, spriteKey, stats) {
     super(game, name, position, spriteKey)
-    //  Note: need this for allowing enemy to have inout events
-    //  may not be necessary for how we set it up with actions, but needed for clicks
-    // this.inputEnabled = true
 
     GameGroups.enemies.add(this)
 
     this.maxLife = stats.hp
     this.orientation = ''
     this.lastAttack = Date.now()
-    this.anchor.set(0.25, 0.2)
+    this.anchor.set(0.5, 0.2)
 
     this.absorbProperties(enemyProperties[spriteKey])
     this.stats = stats
@@ -30,7 +28,8 @@ export default class Enemy extends entityPrefab {
     this.takeDamage = this.takeDamage.bind(this)
     this.die = this.die.bind(this)
     this.attack = this.attack.bind(this)
-    this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y })
+    this.dropLoot = this.dropLoot.bind(this)
+    this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y - 10 })
   }
 
   move(newPos) {
@@ -63,14 +62,12 @@ export default class Enemy extends entityPrefab {
       this.tween.start()
     }
 
-    this.enemyHealthBar.setPosition(this.x, this.y)
+    this.enemyHealthBar.setPosition(this.x, this.y - 10)
   }
 
   attack() {
     if (Date.now() - this.lastAttack > 1000) {
       this.lastAttack = Date.now()
-      const damage = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, '-' + this.stats.attack, { font: '32px Times New Roman', fill: '#ff0000' })
-      setTimeout(() => damage.destroy(), 500)
       return this.stats.attack
     } else {
       return 0
@@ -79,16 +76,18 @@ export default class Enemy extends entityPrefab {
 
   takeDamage(damage) {
     const damageTaken = damage - this.stats.defense
-    this.stats.hp -= damageTaken
+    if (damageTaken > 0) {
+      this.stats.hp -= damageTaken
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      setTimeout(() => damageText.destroy(), 500)
 
-    const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
-    setTimeout(() => damageText.destroy(), 500)
+      socket.emit('hitEnemy', this.name, damageTaken)
 
-    this.computeLifeBar()
-    //  check if dead
-    if (this.stats.hp <= 0) {
-      this.die()
+      this.computeLifeBar()
+      //  check if dead
+      if (this.stats.hp <= 0) this.die()
     }
+
     // return damage
     return damageTaken
   }
@@ -99,11 +98,24 @@ export default class Enemy extends entityPrefab {
     this.target = null
     this.alive = false
     this.delayedKill(500)
+    this.dropLoot()
   }
 
   computeLifeBar() {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.maxLife) * 100)
     this.enemyHealthBar.setPercent(percent)
+  }
+
+  dropLoot() {
+    const chance = Math.floor(Math.random() * 100)
+    if (chance < 20) {
+      const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
+      const itemTypes = ['weapon', 'armor', 'loot']
+      const itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)]
+      GameItems[newItemName] = new Loot(StackQuest.game, itemType, { x: this.x, y: this.y }, itemType)
+      const newItem = GameItems[newItemName]
+      socket.emit('createItem', { name: newItem.name, position: newItem.position, key: newItem.key })
+    }
   }
 }

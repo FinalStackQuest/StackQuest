@@ -2,13 +2,14 @@ import {GameGroups}from '../sockets'
 
 import entityPrefab from './entityPrefab'
 
-const lootTypes = ['weapon', 'armor', 'loot']
+/* global StackQuest */
 
 export default class Loot extends entityPrefab {
   constructor(game, name, position, spriteKey) {
-    // set loot type to be random
     super(game, name, position, spriteKey)
+
     GameGroups.items.add(this)
-    this.type = lootTypes[Math.floor(Math.random() * lootTypes.length)]
+    this.type = spriteKey
+    this.pickUp = this.pickUp.bind(this)
   }
 }

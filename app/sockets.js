@@ -25,6 +25,8 @@ const socketFunctions = socket => {
   socket.on('getItems', getItems)
   socket.on('addItem', addItem)
   socket.on('removeItem', removeItem)
+  socket.on('updateStats', updateStats)
+  // socket.on('hitPlayer', hitPlayer)
 }
 
 const getPlayers = players => {
@@ -48,6 +50,13 @@ const removePlayer = socketId => {
     GamePlayers[socketId].destroy()
   }
   delete GamePlayers[socketId]
+}
+
+const updateStats = (socketId, stats) => {
+  if (GamePlayers[socketId]) {
+    GamePlayers[socketId].stats = stats
+    GamePlayers[socketId].computeLifeBar()
+  }
 }
 
 const fireProjectile = (socketId, xCoord, yCoord) => {
@@ -90,12 +99,12 @@ const getItems = items => {
   for (const item in GameItems) delete GameItems[item]
   Object.keys(items).forEach(itemName => {
     const item = items[itemName]
-    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.itemPos.x, y: item.itemPos.y }, item.key)
+    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.position.x, y: item.position.y }, item.key)
   })
 }
 
 const addItem = item => {
-  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.itemPos.x, y: item.itemPos.y }, 'item')
+  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.position.x, y: item.position.y }, item.key)
 }
 
 const removeItem = itemName => {

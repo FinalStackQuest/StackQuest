@@ -2,9 +2,9 @@ import Prefab from './entityPrefab'
 import Weapon from './Weapon'
 import HUD from './HUD'
 
-import armorProperties from '../properties/armorProperties'
-import itemProperties from '../properties/itemProperties.js'
-import playerProperties from '../properties/playerProperties'
+import armorProperties from '../properties/armorProperties.json'
+import playerProperties from '../properties/playerProperties.json'
+import itemProperties from '../properties/itemProperties.json'
 
 import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
@@ -19,15 +19,15 @@ export default class Player extends Prefab {
     super(game, name, { x: property.x, y: property.y }, property.class)
 
     GameGroups.players.add(this)
-
-    this.anchor.set(0.5, 0.5)
+    this.player = player
+    this.anchor.set(0.5, 0.2)
     this.orientation = 4 // down
 
-    this.absorbProperties(playerProperties[property.class])
+    this.absorbProperties(playerProperties[player.class])
 
-    this.stats.hp = property.hp
+    this.stats.hp = player.hp
     this.setAnimationFrames(this)
-
+    this.lootCount = 0
     this.loadControls()
 
     this.movePlayer = this.movePlayer.bind(this)
@@ -42,23 +42,23 @@ export default class Player extends Prefab {
 
     this.takeDamage = this.takeDamage.bind(this)
     this.respawn = this.respawn.bind(this)
-    this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
+    this.playerHealthBar = new HealthBar(game, { x: player.x, y: player.y - 10 })
+    this.computeLifeBar()
     this.recoverHp = this.recoverHp.bind(this)
 
     this.pickUpItem = this.pickUpItem.bind(this)
+    this.savePlayer = this.savePlayer.bind(this)
   }
 
   equipWeapon(weaponKey) {
     this.weapon = new Weapon(this.game, this, weaponKey)
     this.weapon.name = weaponKey
-    this.stats.attack = this.weapon.attack + this.stats.attack
     return true
   }
 
   equipArmor(armorKey) {
     this.armor = armorProperties[armorKey]
     this.armor.name = armorKey
-    this.stats.defense = this.armor.defense + this.stats.defense
     return true
   }
 
@@ -76,6 +76,7 @@ export default class Player extends Prefab {
     const xDirection = this.position.x - targetX
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (yDirection > 0) {
       this.orientation = 2
@@ -101,31 +102,38 @@ export default class Player extends Prefab {
   }
 
   takeDamage(damage) {
-    if (damage) this.stats.hp -= (damage - this.stats.defense)
-    this.computeLifeBar()
+    const damageTaken = damage - (this.stats.defense + this.armor.defense)
+    if (damageTaken > 0) {
+      this.stats.hp -= damageTaken
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      setTimeout(() => damageText.destroy(), 500)
 
-    if (this.HUD) {
-      this.HUD.updateHealth()
+      if (this.HUD) {
+        this.HUD.updateHealth()
+      }
+
+      socket.emit('updateStats', this.stats)
+
+      this.computeLifeBar()
+      //  check if dead
+      if (this.stats.hp <= 0) this.respawn()
     }
-    //  check if dead
-    if (this.stats.hp <= 0) {
-      this.respawn()
-      //  function returns true if the enemy is dead
-      return true
-    }
-    //  returns false because the enemy didn't die
-    return false
   }
 
   respawn() {
-    const damage = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
-    setTimeout(() => damage.destroy(), 1000)
     //  make them move to set location
     this.position.x = 500
     this.position.y = 500
 
     // Revive
-    setTimeout(this.recoverHp, 100)
+    setTimeout(() => {
+      this.recoverHp()
+      this.savePlayer()
+    }, 100)
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
+
+    const respawnText = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
+    setTimeout(() => respawnText.destroy(), 1000)
   }
 
   recoverHp() {
@@ -140,7 +148,7 @@ export default class Player extends Prefab {
     this.body.velocity.x = 0
     this.body.velocity.y = 0
 
-    this.playerHealthBar.setPosition(this.position.x, this.position.y-30)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200
@@ -211,5 +219,13 @@ export default class Player extends Prefab {
 
       this.HUD.updateFeed(text)
     }
+  }
+
+  savePlayer() {
+    this.player.x = this.x
+    this.player.y = this.y
+    this.player.hp = this.stats.hp
+
+    socket.emit('savePlayer', this.player)
   }
 }
