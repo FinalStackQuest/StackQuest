@@ -18,7 +18,7 @@ export default {
     this.game.load.webfont('Press Start 2P', 'Press Start 2P')
 
     loadingText = this.game.add.text(this.world.width / 2, this.world.height / 2, '0% / 100%', {
-      font: '50px Press Start 2P',
+      font: '40px Press Start 2P',
       fill: '#fff',
       align: 'center'
     })
