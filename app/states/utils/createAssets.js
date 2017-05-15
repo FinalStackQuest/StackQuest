@@ -2,7 +2,7 @@
 
 let music
 
-const createMap = {
+const createAssets = {
   fantasy() {
     if (music) music.stop()
     music = StackQuest.game.add.audio('grasslands')
@@ -59,4 +59,4 @@ const setCollision = map => {
   StackQuest.game.layers[map.layer.name].resizeWorld()
 }
 
-export default createMap
+export default createAssets

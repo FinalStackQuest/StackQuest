@@ -1,5 +1,6 @@
 /* global StackQuest, Phaser */
-const loadMaps = {
+
+const loadAssets = {
   common() {
     StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
     StackQuest.game.load.image('missle', 'assets/sprites/tank_bulletFly4.png')
@@ -33,4 +34,4 @@ const loadMaps = {
   }
 }
 
-export default loadMaps
+export default loadAssets

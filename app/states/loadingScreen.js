@@ -1,4 +1,4 @@
-import loadMaps from './utils/loadMaps'
+import loadAssets from './utils/loadAssets'
 import CustomLoader from '../utils/CustomLoader'
 
 /* global StackQuest, Phaser */
@@ -25,9 +25,9 @@ export default {
 
     loadingText.anchor.setTo(0.5)
 
-    for (const map in loadMaps) {
-      if (loadMaps.hasOwnProperty(map)) {
-        loadMaps[map].call()
+    for (const map in loadAssets) {
+      if (loadAssets.hasOwnProperty(map)) {
+        loadAssets[map].call()
       }
     }
   },
