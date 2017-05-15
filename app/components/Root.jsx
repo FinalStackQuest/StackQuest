@@ -26,7 +26,7 @@ const Root = ({ user, game, children }) =>
       </div>
     </nav>
     <div className="stackquest-logo">
-      <img src="/stackquest_logo.png" />
+      <img src="/stackquest_logo.png" className="no-select" alt="stackquest_logo" />
     </div>
     {children}
     <footer className="footer footer-container">
