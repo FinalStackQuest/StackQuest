@@ -1,14 +1,16 @@
-import entityPrefab from './entityPrefab'
-import { GameItems, socket } from '../sockets'
-import HealthBar from '../states/utils/HealthBar.js'
+import EntityPrefab from './EntityPrefab'
+import HealthBar from './HealthBar.js'
+import { socket, GameItems, GameGroups } from '../sockets'
 import enemyProperties from '../properties/enemyProperties.json'
 import Loot from 'APP/app/classes/Loot'
 
 /* global StackQuest, Phaser */
 
-export default class Enemy extends entityPrefab {
+export default class Enemy extends EntityPrefab {
   constructor(game, name, position, spriteKey, stats) {
     super(game, name, position, spriteKey)
+
+    GameGroups.enemies.add(this)
 
     this.maxLife = stats.hp
     this.orientation = ''
@@ -75,7 +77,7 @@ export default class Enemy extends entityPrefab {
     const damageTaken = damage - this.stats.defense
     if (damageTaken > 0) {
       this.stats.hp -= damageTaken
-      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
       setTimeout(() => damageText.destroy(), 500)
 
       socket.emit('hitEnemy', this.name, damageTaken)

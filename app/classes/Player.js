@@ -1,18 +1,22 @@
-import Prefab from './entityPrefab'
+import EntityPrefab from './EntityPrefab'
+import HealthBar from './HealthBar.js'
 import Weapon from './Weapon'
+import HUD from './HUD'
 
 import armorProperties from '../properties/armorProperties.json'
 import playerProperties from '../properties/playerProperties.json'
+import itemProperties from '../properties/itemProperties.json'
 
-import { socket } from '../sockets'
-import HealthBar from '../states/utils/HealthBar.js'
+import { socket, GameGroups } from '../sockets'
 
 /* global StackQuest, Phaser */
 
 // client side class for Playable Characters
-export default class Player extends Prefab {
+export default class Player extends EntityPrefab {
   constructor(game, name, player) {
     super(game, name, { x: player.x, y: player.y }, player.class)
+
+    GameGroups.players.add(this)
     this.player = player
     this.anchor.set(0.5, 0.2)
     this.orientation = 4 // down
@@ -40,6 +44,7 @@ export default class Player extends Prefab {
     this.computeLifeBar()
     this.recoverHp = this.recoverHp.bind(this)
 
+    this.pickUpItem = this.pickUpItem.bind(this)
     this.savePlayer = this.savePlayer.bind(this)
   }
 
@@ -98,8 +103,12 @@ export default class Player extends Prefab {
     const damageTaken = damage - (this.stats.defense + this.armor.defense)
     if (damageTaken > 0) {
       this.stats.hp -= damageTaken
-      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
       setTimeout(() => damageText.destroy(), 500)
+
+      if (this.HUD) {
+        this.HUD.updateHealth()
+      }
 
       socket.emit('updateStats', this.stats)
 
@@ -121,12 +130,16 @@ export default class Player extends Prefab {
     }, 100)
     socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
 
-    const respawnText = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
-    setTimeout(() => respawnText.destroy(), 1000)
+    if (this.HUD) {
+      this.HUD.updateFeed('You Died')
+    }
   }
 
   recoverHp() {
     this.stats.hp = this.stats.maxHp
+    if (this.HUD) {
+      this.HUD.updateHealth()
+    }
     this.computeLifeBar()
   }
 
@@ -175,6 +188,35 @@ export default class Player extends Prefab {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
+  }
+
+  pickUpItem(item) {
+    const itemProperty = itemProperties[item]
+
+    switch (itemProperty.type) {
+    case 'attack':
+      this.stats.attack += itemProperty.buff
+      break
+
+    case 'defense':
+      this.stats.defense += itemProperty.buff
+      break
+
+    case 'loot':
+      this.loot += itemProperty.buff
+      break
+    }
+
+    if (this.HUD) {
+      let text = `Acquired ${item}`
+
+      if (itemProperty.type === 'attack' || itemProperty.type === 'defense') {
+        this.HUD.updateStats()
+        text += `, ${itemProperty.type}+${itemProperty.buff} `
+      }
+
+      this.HUD.updateFeed(text)
+    }
   }
 
   savePlayer() {

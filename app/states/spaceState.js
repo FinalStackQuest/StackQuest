@@ -1,6 +1,5 @@
-import { socket } from '../sockets'
-import loadMaps from './utils/loadMaps'
-import createMap from './utils/createMap'
+import { socket, GameGroups } from '../sockets'
+import createAssets from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
 import enemyCollision from './utils/enemyCollision'
@@ -24,13 +23,18 @@ const spaceState = {
   },
 
   preload() {
-    loadMaps.space()
+
   },
 
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
-    map = createMap.space()
+    map = createAssets.space()
+
+    GameGroups.items = this.game.add.group()
+    GameGroups.enemies = this.game.add.group()
+    GameGroups.players = this.game.add.group()
+    GameGroups.HUD = this.game.add.group()
 
     socket.emit('setupState', player, makeCollisionMap(map), 'spaceState')
 

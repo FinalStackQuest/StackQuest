@@ -9,24 +9,24 @@ const Signup = ({ user, register, userNameChangeHandler, emailChangeHandler, pas
       : <form className="form-horizontal" onSubmit={submitHandler}>
         <fieldset>
           <div id="legend">
-            <legend className="">Register</legend>
+            <legend className="register-text">Register</legend>
           </div>
           <div className="control-group input-group">
-            <label className="control-label">Username</label>
+            <label className="control-label register-text">Username</label>
             <div className="controls">
               <input type="text" name="username" placeholder="" className="form-control input-lg" onChange={userNameChangeHandler} />
             </div>
           </div>
 
           <div className="control-group input-group">
-            <label className="control-label">E-mail</label>
+            <label className="control-label register-text">E-mail</label>
             <div className="controls">
               <input type="text" name="email" placeholder="" className="form-control input-lg" onChange={emailChangeHandler} />
             </div>
           </div>
 
           <div className="control-group input-group">
-            <label className="control-label">Password</label>
+            <label className="control-label register-text">Password</label>
             <div className="controls">
               <input type="password" name="password" placeholder="" className="form-control input-lg" onChange={passwordChangeHandler} />
             </div>

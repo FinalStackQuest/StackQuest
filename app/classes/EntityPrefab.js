@@ -14,7 +14,7 @@ export default class entityPrefab extends Phaser.Sprite {
     this.attackTarget = null
     this.game = game
     this.nameHolder = game.add.text(0, 60, `${name}`, {
-      font: '14px pixel',
+      font: '14px Press Start 2P',
       fill: '#ffffff',
       stroke: '#000000',
       strokeThickness: 1
@@ -53,7 +53,8 @@ export default class entityPrefab extends Phaser.Sprite {
     }
   }
 
-  idle(force) { // Start idling animation, in the appropriate orientation
+  // Start idling animation, in the appropriate orientation
+  idle(force) {
     // force is a boolean to indicate if the animation should be forced to play, or if it can depend from the situation (see animate() )
     this.animate('idle_' + this.orientationsDict[this.orientation], force)
   }
