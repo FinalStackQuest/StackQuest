@@ -6,10 +6,8 @@ import armorProperties from '../properties/armorProperties.json'
 import playerProperties from '../properties/playerProperties.json'
 import itemProperties from '../properties/itemProperties.json'
 
-import { socket } from '../sockets'
+import { socket, GameGroups } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
-
-import {GameGroups} from '../sockets'
 
 /* global StackQuest, Phaser */
 
@@ -135,7 +133,6 @@ export default class Player extends Prefab {
     if (this.HUD) {
       this.HUD.updateFeed('You Died')
     }
-    setTimeout(() => respawnText.destroy(), 1000)
   }
 
   recoverHp() {
@@ -194,21 +191,20 @@ export default class Player extends Prefab {
   }
 
   pickUpItem(item) {
-
     const itemProperty = itemProperties[item]
 
-    switch(itemProperty.type) {
-      case 'attack':
-        this.stats.attack += itemProperty.buff
-        break;
+    switch (itemProperty.type) {
+    case 'attack':
+      this.stats.attack += itemProperty.buff
+      break
 
-      case 'defense':
-        this.stats.defense += itemProperty.buff
-        break;
+    case 'defense':
+      this.stats.defense += itemProperty.buff
+      break
 
-      case 'loot':
-        this.loot += itemProperty.buff
-        break;
+    case 'loot':
+      this.loot += itemProperty.buff
+      break
     }
 
     if (this.HUD) {

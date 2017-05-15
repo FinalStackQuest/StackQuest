@@ -1,9 +1,8 @@
 import entityPrefab from './entityPrefab'
-import { GameItems, socket } from '../sockets'
+import { socket, GameItems, GameGroups } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
 import enemyProperties from '../properties/enemyProperties.json'
 import Loot from 'APP/app/classes/Loot'
-import {GameGroups} from '../sockets'
 
 /* global StackQuest, Phaser */
 

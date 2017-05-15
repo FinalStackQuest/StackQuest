@@ -1,7 +1,13 @@
 /* global StackQuest */
 
-const createMap = {
+let music
+
+const createAssets = {
   fantasy() {
+    if (music) music.stop()
+    music = StackQuest.game.add.audio('grasslands')
+    music.play('', 0, 1, true)
+
     const map = StackQuest.game.add.tilemap('fantasyMap')
 
     map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
@@ -16,6 +22,10 @@ const createMap = {
   },
 
   space() {
+    if (music) music.stop()
+    music = StackQuest.game.add.audio('mines')
+    music.play('', 0, 1, true)
+
     const map = StackQuest.game.add.tilemap('marsMap')
 
     map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
@@ -49,4 +59,4 @@ const setCollision = map => {
   StackQuest.game.layers[map.layer.name].resizeWorld()
 }
 
-export default createMap
+export default createAssets

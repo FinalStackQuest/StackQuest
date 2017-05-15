@@ -26,7 +26,6 @@ const socketFunctions = socket => {
   socket.on('addItem', addItem)
   socket.on('removeItem', removeItem)
   socket.on('updateStats', updateStats)
-  // socket.on('hitPlayer', hitPlayer)
 }
 
 const getPlayers = players => {
