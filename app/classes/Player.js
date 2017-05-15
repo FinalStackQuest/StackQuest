@@ -11,14 +11,15 @@ import HealthBar from '../states/utils/HealthBar.js'
 
 // client side class for Playable Characters
 export default class Player extends Prefab {
-  constructor(game, name, property) {
-    super(game, name, { x: property.x, y: property.y }, property.class)
+  constructor(game, name, player) {
+    super(game, name, { x: player.x, y: player.y }, player.class)
+    this.player = player
     this.anchor.set(0.5, 0.2)
     this.orientation = 4 // down
 
-    this.absorbProperties(playerProperties[property.class])
+    this.absorbProperties(playerProperties[player.class])
 
-    this.stats.hp = property.hp
+    this.stats.hp = player.hp
     this.setAnimationFrames(this)
     this.lootCount = 0
     this.loadControls()
@@ -35,8 +36,11 @@ export default class Player extends Prefab {
 
     this.takeDamage = this.takeDamage.bind(this)
     this.respawn = this.respawn.bind(this)
-    this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y - 10 })
+    this.playerHealthBar = new HealthBar(game, { x: player.x, y: player.y - 10 })
+    this.computeLifeBar()
     this.recoverHp = this.recoverHp.bind(this)
+
+    this.savePlayer = this.savePlayer.bind(this)
   }
 
   equipWeapon(weaponKey) {
@@ -111,7 +115,10 @@ export default class Player extends Prefab {
     this.position.y = 500
 
     // Revive
-    setTimeout(this.recoverHp, 100)
+    setTimeout(() => {
+      this.recoverHp()
+      this.savePlayer()
+    }, 100)
     socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
 
     const respawnText = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
@@ -168,5 +175,13 @@ export default class Player extends Prefab {
     if (this.stats.hp < 0) this.stats.hp = 0
     const percent = Math.floor((this.stats.hp / this.stats.maxHp) * 100)
     this.playerHealthBar.setPercent(percent)
+  }
+
+  savePlayer() {
+    this.player.x = this.x
+    this.player.y = this.y
+    this.player.hp = this.stats.hp
+
+    socket.emit('savePlayer', this.player)
   }
 }
