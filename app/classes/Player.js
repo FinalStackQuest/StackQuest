@@ -50,6 +50,11 @@ export default class Player extends EntityPrefab {
     this.savePlayer = this.savePlayer.bind(this)
   }
 
+  equipSpecial(specialKey) {
+    this.special = new Weapon(this.game, this, specialKey)
+    this.special.name = specialKey
+    return true
+  }
   equipWeapon(weaponKey) {
     this.weapon = new Weapon(this.game, this, weaponKey)
     this.weapon.name = weaponKey
@@ -68,6 +73,7 @@ export default class Player extends EntityPrefab {
     this.cursors.down = this.game.input.keyboard.addKey(Phaser.Keyboard.S)
     this.cursors.right = this.game.input.keyboard.addKey(Phaser.Keyboard.D)
     this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
+    this.cursors.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
     this.cursors.click = this.game.input.activePointer
   }
@@ -178,13 +184,14 @@ export default class Player extends EntityPrefab {
   }
 
   specialAttack() {
-    // if correct key is down
-    if (Date.now() - this.lastSpecialAttack > 5000) {
-      this.lastSpecialAttack = Date.now()
-      const targetX = this.game.input.worldX
-      const targetY = this.game.input.worldY
-      // this.special.fire(null, targetX, targetY)
-      socket.emit('fireSpecial', targetX, targetY)
+    if (this.cursors.space.isDown) {
+      if (Date.now() - this.lastSpecialAttack > 5000) {
+        this.lastSpecialAttack = Date.now()
+        const targetX = this.game.input.worldX
+        const targetY = this.game.input.worldY
+        // this.special.fire(null, targetX, targetY)
+        socket.emit('fireSpecial', targetX, targetY)
+      }
     }
   }
   attack() {

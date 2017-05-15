@@ -16,5 +16,23 @@
     "frames": {
       "launch": [0, 1, 2, 3]
     }
+  },
+  "wizardSpecial": {
+    "attack": 30,
+    "quantity": 1,
+    "bulletSpeed": 500,
+    "fireRate": 250,
+    "frames": {
+      "Placeholder": [0, 1, 2, 3]
+    }
+  },
+  "cyborgSpecial": {
+    "attack": 30,
+    "quantity": 1,
+    "bulletSpeed": 500,
+    "fireRate": 250,
+    "frames": {
+      "Placeholder": [0, 1, 2, 3]
+    }
   }
 }
