@@ -21,6 +21,8 @@ export default class Player extends EntityPrefab {
     this.anchor.set(0.5, 0.2)
     this.orientation = 4 // down
 
+    this.lastSpecialAttack = Date.now()
+
     this.absorbProperties(playerProperties[player.class])
 
     this.stats.hp = player.hp
@@ -175,6 +177,16 @@ export default class Player extends EntityPrefab {
     }
   }
 
+  specialAttack() {
+    // if correct key is down
+    if (Date.now() - this.lastSpecialAttack > 5000) {
+      this.lastSpecialAttack = Date.now()
+      const targetX = this.game.input.worldX
+      const targetY = this.game.input.worldY
+      // this.special.fire(null, targetX, targetY)
+      socket.emit('fireSpecial', targetX, targetY)
+    }
+  }
   attack() {
     if (this.cursors.click.isDown) {
       const targetX = this.game.input.worldX
