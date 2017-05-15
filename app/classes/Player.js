@@ -34,6 +34,8 @@ export default class Player extends EntityPrefab {
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
 
+    this.bulletPool = this.game.add.group()
+
     this.equipSpecial = this.equipSpecial.bind(this)
     this.equipSpecial(this.specialKey)
     this.specialAttack = this.specialAttack.bind(this)

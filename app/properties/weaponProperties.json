@@ -5,7 +5,8 @@
     "bulletSpeed": 1000,
     "fireRate": 500,
     "frames": {
-      "launch": [0]
+      "launch": [0],
+      "rate": 16
     }
   },
   "fireball": {
@@ -14,7 +15,8 @@
     "bulletSpeed": 350,
     "fireRate": 250,
     "frames": {
-      "launch": [0, 1, 2, 3]
+      "launch": [0, 1, 2, 3],
+      "rate": 16
     }
   },
   "wizardSpecial": {
@@ -23,7 +25,8 @@
     "bulletSpeed": 500,
     "fireRate": 250,
     "frames": {
-      "launch": [0, 1, 2, 3, 4, 5, 6, 7]
+      "launch": [0, 1, 2, 3, 4, 5, 6, 7],
+      "rate": 100
     }
   },
   "cyborgSpecial": {
@@ -32,7 +35,8 @@
     "bulletSpeed": 500,
     "fireRate": 250,
     "frames": {
-      "launch": [0, 1, 2, 3]
+      "launch": [0, 1, 2, 3],
+      "rate": 2
     }
   }
 }
