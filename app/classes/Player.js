@@ -1,8 +1,8 @@
 import Prefab from './entityPrefab'
 import Weapon from './Weapon'
 
-import armorProperties from '../properties/armorProperties'
-import playerProperties from '../properties/playerProperties'
+import armorProperties from '../properties/armorProperties.json'
+import playerProperties from '../properties/playerProperties.json'
 
 import { socket } from '../sockets'
 import HealthBar from '../states/utils/HealthBar.js'
@@ -48,7 +48,6 @@ export default class Player extends Prefab {
   equipArmor(armorKey) {
     this.armor = armorProperties[armorKey]
     this.armor.name = armorKey
-    this.stats.defense = this.armor.defense + this.stats.defense
     return true
   }
 
@@ -92,7 +91,7 @@ export default class Player extends Prefab {
   }
 
   takeDamage(damage) {
-    const damageTaken = damage - this.stats.defense
+    const damageTaken = damage - (this.stats.defense + this.armor.defense)
     if (damageTaken > 0) {
       this.stats.hp -= damageTaken
       const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })

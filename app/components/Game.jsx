@@ -8,7 +8,7 @@ import Character from './Character'
 import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
 import { createCharacter } from 'APP/app/reducers/user'
-import playerProps from 'APP/app/properties/playerProperties'
+import playerProps from 'APP/app/properties/playerProperties.json'
 
 /* global StackQuest */
 

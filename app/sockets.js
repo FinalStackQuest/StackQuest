@@ -50,13 +50,7 @@ const removePlayer = socketId => {
   }
   delete GamePlayers[socketId]
 }
-// const hitPlayer = (socketId, damageTaken) => {
-//   if (socketId !== socket.id) {
-//     if (GamePlayers[socketId]) {
 
-//     }
-//   }
-// }
 const updateStats = (socketId, stats) => {
   if (GamePlayers[socketId]) {
     GamePlayers[socketId].stats = stats
