@@ -27,6 +27,10 @@ class HUD {
     this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage()}/DEF: ${this.player.stats.defense + this.player.armor.defense}`)
   }
 
+  updateNumPlayers() {
+    this.HUDElement.numPlayers.setText(`Players in World: ${Object.keys(GamePlayers).length + 1}`)
+  }
+
   updateFeed(newFeed) {
     this.HUDElement.currentFeed.setText(`${newFeed}`)
     setTimeout(() => this.HUDElement.currentFeed.setText(''), 4000)
@@ -60,7 +64,7 @@ class HUD {
       strokeThickness: 1
     })
 
-    this.HUDElement.numPlayers = this.game.add.text(30, 115, `Players in World: ${Object.keys(GamePlayers).length + 1}`, {
+    this.HUDElement.numPlayers = this.game.add.text(30, 145, `Players in World: ${Object.keys(GamePlayers).length + 1}`, {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
