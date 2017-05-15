@@ -36,7 +36,7 @@
     "fireRate": 250,
     "frames": {
       "launch": [0, 1, 2, 3],
-      "rate": 2
+      "rate": 15
     }
   }
 }

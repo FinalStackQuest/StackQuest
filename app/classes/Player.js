@@ -58,7 +58,6 @@ export default class Player extends EntityPrefab {
   }
 
   equipSpecial(specialKey) {
-    console.log('player props in special:', this, specialKey)
     this.special = new Weapon(this.game, this, specialKey)
     this.special.name = specialKey
     return true
@@ -192,7 +191,6 @@ export default class Player extends EntityPrefab {
   }
   specialAttack() {
     if (this.cursors.space.isDown && this.cursors.click.isDown) {
-      console.log('special')
       if (Date.now() - this.lastSpecialAttack > 5000) {
         this.lastSpecialAttack = Date.now()
         const targetX = this.game.input.worldX
