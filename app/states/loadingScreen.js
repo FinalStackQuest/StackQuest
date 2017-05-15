@@ -10,7 +10,7 @@ let loadingText
 export default {
   init(character) {
     player = character
-    nextState = character.currentMap || 'fantasyState'
+    nextState = character.currentMap
     this.game.load = new CustomLoader(this.game)
   },
 
@@ -25,11 +25,7 @@ export default {
 
     loadingText.anchor.setTo(0.5)
 
-    for (const map in loadAssets) {
-      if (loadAssets.hasOwnProperty(map)) {
-        loadAssets[map].call()
-      }
-    }
+    loadAssets()
   },
 
   loadUpdate() {

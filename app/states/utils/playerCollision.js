@@ -1,6 +1,6 @@
 /* global StackQuest */
 
-import { GamePlayers, socket } from 'APP/app/sockets'
+import { GamePlayers } from 'APP/app/sockets'
 import Loot from 'APP/app/classes/Loot'
 
 const playerCollision = (playerObject) => {

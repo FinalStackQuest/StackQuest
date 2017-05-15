@@ -17,39 +17,44 @@ const mapWidth = 60
 const mapHeight = 60
 
 const enemyMovement = (io, state) => {
-  Object.keys(GameEnemies[state]).forEach(enemyName => {
-    const enemy = GameEnemies[state][enemyName]
-    const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
-    if (closestPlayer) {
-      collisionArrays[state].findPath(
-        Math.floor(enemy.x / mapWidth),
-        Math.floor(enemy.y / mapHeight),
-        Math.floor(closestPlayer.x / mapWidth),
-        Math.floor(closestPlayer.y / mapHeight),
-        path => {
-          if (path && path[1]) {
-            const newX = path[1].x * mapWidth
-            const newY = path[1].y * mapHeight
-            const distance = 1
-            enemy.x += newX - enemy.x > 0 ? distance : -distance
-            enemy.y += newY - enemy.y > 0 ? distance : -distance
-            const newPos = { x: enemy.x, y: enemy.y }
-            io.sockets.to(state).emit('updateEnemy', newPos, enemyName)
+  if (Object.keys(GamePlayers[state])) {
+    Object.keys(GameEnemies[state]).forEach(enemyName => {
+      const enemy = GameEnemies[state][enemyName]
+      const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
+      if (closestPlayer) {
+        collisionArrays[state].findPath(
+          Math.floor(enemy.x / mapWidth),
+          Math.floor(enemy.y / mapHeight),
+          Math.floor(closestPlayer.x / mapWidth),
+          Math.floor(closestPlayer.y / mapHeight),
+          path => {
+            if (path && path[1]) {
+              const newX = path[1].x * mapWidth
+              const newY = path[1].y * mapHeight
+              const distance = 1
+              enemy.x += newX - enemy.x > 0 ? distance : -distance
+              enemy.y += newY - enemy.y > 0 ? distance : -distance
+              const newPos = { x: enemy.x, y: enemy.y }
+              io.sockets.to(state).emit('updateEnemy', newPos, enemyName)
+            }
           }
-        })
-      collisionArrays[state].calculate()
-    }
-  })
+        )
+        collisionArrays[state].calculate()
+      }
+    })
+  }
 }
 
 const spawnEnemy = (io, state) => {
-  enemySpawn[state].forEach((enemy) => {
-    if (!GameEnemies[state][enemy.name]) {
-      const enemyStats = Object.assign({}, enemyProperties[enemy.spriteKey].stats)
-      GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
-      io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
-    }
-  })
+  if (Object.keys(GamePlayers[state])) {
+    enemySpawn[state].forEach((enemy) => {
+      if (!GameEnemies[state][enemy.name]) {
+        const enemyStats = Object.assign({}, enemyProperties[enemy.spriteKey].stats)
+        GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
+        io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
+      }
+    })
+  }
 }
 
 const runIntervals = (io, state) => {

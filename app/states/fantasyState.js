@@ -1,5 +1,5 @@
 import { socket, GameGroups } from '../sockets'
-import createAssets from './utils/createAssets'
+import { createFantasyAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
 import enemyCollision from './utils/enemyCollision'
@@ -22,14 +22,10 @@ const fantasyState = {
     if (character) player = character
   },
 
-  preload() {
-
-  },
-
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
-    map = createAssets.fantasy()
+    map = createFantasyAssets()
 
     GameGroups.items = this.game.add.group()
     GameGroups.enemies = this.game.add.group()

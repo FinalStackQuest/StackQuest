@@ -2,40 +2,38 @@
 
 let music
 
-const createAssets = {
-  fantasy() {
-    if (music) music.stop()
-    music = StackQuest.game.add.audio('grasslands')
-    music.play('', 0, 1, true)
+export const createFantasyAssets = () => {
+  if (music) music.stop()
+  music = StackQuest.game.add.audio('grasslands')
+  music.play('', 0, 1, true)
 
-    const map = StackQuest.game.add.tilemap('fantasyMap')
+  const map = StackQuest.game.add.tilemap('fantasyMap')
 
-    map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
-    map.addTilesetImage('fishTilesheet@2', 'fishTileSheet2')
-    map.addTilesetImage('RTS_medieval@2', 'rtsTileSheet2')
-    map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
-    map.addTilesetImage('sokoban_tilesheet@2', 'sokobanTileSheet2')
+  map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
+  map.addTilesetImage('fishTilesheet@2', 'fishTileSheet2')
+  map.addTilesetImage('RTS_medieval@2', 'rtsTileSheet2')
+  map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
+  map.addTilesetImage('sokoban_tilesheet@2', 'sokobanTileSheet2')
 
-    setCollision(map)
+  setCollision(map)
 
-    return map
-  },
+  return map
+}
 
-  space() {
-    if (music) music.stop()
-    music = StackQuest.game.add.audio('mines')
-    music.play('', 0, 1, true)
+export const createSpaceAssets = () => {
+  if (music) music.stop()
+  music = StackQuest.game.add.audio('mines')
+  music.play('', 0, 1, true)
 
-    const map = StackQuest.game.add.tilemap('marsMap')
+  const map = StackQuest.game.add.tilemap('marsMap')
 
-    map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
-    map.addTilesetImage('scifi_tilesheet@2', 'scifiTileSheet')
-    map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
+  map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
+  map.addTilesetImage('scifi_tilesheet@2', 'scifiTileSheet')
+  map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
 
-    setCollision(map)
+  setCollision(map)
 
-    return map
-  }
+  return map
 }
 
 const setCollision = map => {
@@ -58,5 +56,3 @@ const setCollision = map => {
 
   StackQuest.game.layers[map.layer.name].resizeWorld()
 }
-
-export default createAssets

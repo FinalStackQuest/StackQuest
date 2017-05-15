@@ -217,6 +217,9 @@ export default class Player extends EntityPrefab {
 
       this.HUD.updateFeed(text)
     }
+
+    socket.emit('updateStats', this.stats)
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
   }
 
   savePlayer() {
