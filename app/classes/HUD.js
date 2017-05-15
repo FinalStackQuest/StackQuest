@@ -1,6 +1,7 @@
 require('pixi')
 require('p2')
 require('phaser')
+
 import { GameGroups } from '../sockets'
 
 class HUD {
