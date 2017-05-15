@@ -23,7 +23,7 @@ class HUD {
   }
 
   updateStats() {
-    this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense}`)
+    this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense + this.player.armor.defense}`)
   }
 
   updateFeed(newFeed) {
@@ -46,7 +46,7 @@ class HUD {
       strokeThickness: 1
     })
 
-    this.HUDElement.currentStats = this.game.add.text(30, 105, `ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense}`, {
+    this.HUDElement.currentStats = this.game.add.text(30, 105, `ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
       font: '20px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
@@ -58,7 +58,7 @@ class HUD {
       strokeThickness: 1
     })
 
-    this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 40, `Cool, this is a feed`, {
+    this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 40, `Welcome to StackQuest`, {
       font: '20px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1

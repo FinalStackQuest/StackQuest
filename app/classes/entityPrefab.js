@@ -53,7 +53,8 @@ export default class entityPrefab extends Phaser.Sprite {
     }
   }
 
-  idle(force) { // Start idling animation, in the appropriate orientation
+  // Start idling animation, in the appropriate orientation
+  idle(force) {
     // force is a boolean to indicate if the animation should be forced to play, or if it can depend from the situation (see animate() )
     this.animate('idle_' + this.orientationsDict[this.orientation], force)
   }

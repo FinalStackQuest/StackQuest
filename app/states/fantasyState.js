@@ -9,7 +9,6 @@ import itemCollision from './utils/itemCollision'
 import playerCollision from './utils/playerCollision'
 import playerClass from '../classes/Player'
 import Loot from '../classes/Loot'
-import HUD from '../classes/HUD'
 
 /* global StackQuest, Phaser */
 
