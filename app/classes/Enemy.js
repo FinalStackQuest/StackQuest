@@ -9,14 +9,11 @@ import Loot from 'APP/app/classes/Loot'
 export default class Enemy extends entityPrefab {
   constructor(game, name, position, spriteKey, stats) {
     super(game, name, position, spriteKey)
-    //  Note: need this for allowing enemy to have inout events
-    //  may not be necessary for how we set it up with actions, but needed for clicks
-    // this.inputEnabled = true
 
     this.maxLife = stats.hp
     this.orientation = ''
     this.lastAttack = Date.now()
-    this.anchor.set(0.25, 0.2)
+    this.anchor.set(0.5, 0.2)
 
     this.absorbProperties(enemyProperties[spriteKey])
     this.stats = stats
@@ -29,7 +26,7 @@ export default class Enemy extends entityPrefab {
     this.die = this.die.bind(this)
     this.attack = this.attack.bind(this)
     this.dropLoot = this.dropLoot.bind(this)
-    this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y })
+    this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y - 10 })
   }
 
   move(newPos) {
@@ -62,7 +59,7 @@ export default class Enemy extends entityPrefab {
       this.tween.start()
     }
 
-    this.enemyHealthBar.setPosition(this.x, this.y)
+    this.enemyHealthBar.setPosition(this.x, this.y - 10)
   }
 
   attack() {
@@ -113,9 +110,9 @@ export default class Enemy extends entityPrefab {
       const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
       const itemTypes = ['weapon', 'armor', 'loot']
       const itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)]
-      GameItems[newItemName] = new Loot(StackQuest.game, newItemName, { x: this.x, y: this.y }, itemType)
+      GameItems[newItemName] = new Loot(StackQuest.game, itemType, { x: this.x, y: this.y }, itemType)
       const newItem = GameItems[newItemName]
-      socket.emit('createItem', { itemPos: newItem.position, name: newItem.name, key: newItem.key })
+      socket.emit('createItem', { name: newItem.name, position: newItem.position, key: newItem.key })
     }
   }
 }

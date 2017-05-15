@@ -13,7 +13,7 @@ import HealthBar from '../states/utils/HealthBar.js'
 export default class Player extends Prefab {
   constructor(game, name, property) {
     super(game, name, { x: property.x, y: property.y }, property.class)
-    this.anchor.set(0.5, 0.5)
+    this.anchor.set(0.5, 0.2)
     this.orientation = 4 // down
 
     this.absorbProperties(playerProperties[property.class])
@@ -35,7 +35,7 @@ export default class Player extends Prefab {
 
     this.takeDamage = this.takeDamage.bind(this)
     this.respawn = this.respawn.bind(this)
-    this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y })
+    this.playerHealthBar = new HealthBar(game, { x: property.x, y: property.y - 10 })
     this.recoverHp = this.recoverHp.bind(this)
   }
 
@@ -65,7 +65,7 @@ export default class Player extends Prefab {
     const xDirection = this.position.x - targetX
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-    this.playerHealthBar.setPosition(this.position.x, this.position.y - 30)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (yDirection > 0) {
       this.orientation = 2
@@ -127,7 +127,7 @@ export default class Player extends Prefab {
     this.body.velocity.x = 0
     this.body.velocity.y = 0
 
-    this.playerHealthBar.setPosition(this.position.x, this.position.y - 30)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200
