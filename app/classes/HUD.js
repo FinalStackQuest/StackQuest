@@ -2,7 +2,7 @@ require('pixi')
 require('p2')
 require('phaser')
 
-import { GameGroups } from '../sockets'
+import { GameGroups, GamePlayers } from '../sockets'
 
 class HUD {
   constructor(game, player) {
@@ -60,8 +60,14 @@ class HUD {
       strokeThickness: 1
     })
 
+    this.HUDElement.numPlayers = this.game.add.text(30, 115, `Players in World: ${Object.keys(GamePlayers).length + 1}`, {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+
     this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 35, `Welcome to StackQuest`, {
-      font: '17px Press Start 2P',
+      font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })
