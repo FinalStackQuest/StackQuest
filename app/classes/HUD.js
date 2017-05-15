@@ -24,11 +24,12 @@ class HUD {
   }
 
   updateStats() {
-    this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense + this.player.armor.defense}`)
+    this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage()}/DEF: ${this.player.stats.defense + this.player.armor.defense}`)
   }
 
   updateFeed(newFeed) {
     this.HUDElement.currentFeed.setText(`${newFeed}`)
+    setTimeout(() => this.HUDElement.currentFeed.setText(''), 4000)
   }
 
   initHUD() {
@@ -36,31 +37,31 @@ class HUD {
     const gameY = this.game.height
 
     this.HUDElement.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, {
-      font: '20px Press Start 2P',
+      font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })
 
-    this.HUDElement.currentHealth = this.game.add.text(30, 65, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, {
-      font: '20px Press Start 2P',
+    this.HUDElement.currentHealth = this.game.add.text(30, 55, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, {
+      font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })
 
-    this.HUDElement.currentStats = this.game.add.text(30, 105, `ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
-      font: '20px Press Start 2P',
+    this.HUDElement.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.weapon.damage()}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
+      font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })
 
-    this.HUDElement.currentWeapon = this.game.add.text(30, 145, `WEAPON: ${this.player.weaponKey}`, {
-      font: '20px Press Start 2P',
+    this.HUDElement.currentWeapon = this.game.add.text(30, 115, `WEAPON: ${this.player.weaponKey}`, {
+      font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })
 
-    this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 40, `Welcome to StackQuest`, {
-      font: '20px Press Start 2P',
+    this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 35, `Welcome to StackQuest`, {
+      font: '17px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })

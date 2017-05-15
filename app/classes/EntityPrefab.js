@@ -10,11 +10,13 @@ require('phaser')
 export default class entityPrefab extends Phaser.Sprite {
   constructor(game, name, position, spriteKey) {
     super(game, position.x, position.y, spriteKey)
-    this.name = name
-    this.attackTarget = null
     this.game = game
+    this.name = name
+    console.log(this)
+    this.anchor.setTo(0.5)
+    this.attackTarget = null
     this.nameHolder = game.add.text(0, 60, `${name}`, {
-      font: '14px Press Start 2P',
+      font: '12px Press Start 2P',
       fill: '#ffffff',
       stroke: '#000000',
       strokeThickness: 1
