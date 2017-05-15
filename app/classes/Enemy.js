@@ -12,15 +12,12 @@ export default class Enemy extends EntityPrefab {
 
     GameGroups.enemies.add(this)
 
-    console.log(stats)
-
     this.maxLife = stats.maxhp
     this.orientation = ''
     this.lastAttack = Date.now()
     this.anchor.set(0.5, 0.2)
 
     this.absorbProperties(enemyProperties[spriteKey])
-    this.stats = stats
 
     this.setAnimationFrames(this)
 
