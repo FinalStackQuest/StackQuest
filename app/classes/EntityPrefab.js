@@ -24,13 +24,6 @@ export default class entityPrefab extends Phaser.Sprite {
     this.addChild(this.nameHolder)
     game.add.existing(this)
     game.physics.arcade.enable(this)
-
-    this.orientationsDict = {
-      1: 'left',
-      2: 'up',
-      3: 'right',
-      4: 'down'
-    }
   }
 
   setAnimationFrames(targetObject) {

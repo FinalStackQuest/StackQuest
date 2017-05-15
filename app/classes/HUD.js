@@ -24,7 +24,7 @@ class HUD {
   }
 
   updateStats() {
-    this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage()}/DEF: ${this.player.stats.defense + this.player.armor.defense}`)
+    this.HUDElement.currentStats.setText(`ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`)
   }
 
   updateNumPlayers() {
@@ -52,7 +52,7 @@ class HUD {
       strokeThickness: 1
     })
 
-    this.HUDElement.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.weapon.damage()}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
+    this.HUDElement.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
