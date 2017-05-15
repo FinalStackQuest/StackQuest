@@ -5,6 +5,7 @@ import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
 import Character from './Character'
+import Instructions from './Instructions'
 import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
 import { createCharacter } from 'APP/app/reducers/user'
@@ -16,6 +17,7 @@ const Game = ({ loggedIn, gameExist, startGame }) =>
   <div id="game-container">
     {loggedIn && !gameExist &&
       <div>
+        <Instructions />
         {loggedIn.character
           ? <button className="btn btn-primary" onClick={startGame}>Start Game</button>
           : <Character />
