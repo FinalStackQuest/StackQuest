@@ -60,7 +60,7 @@ class HUD {
       strokeThickness: 1
     })
 
-    this.HUDElement.numPlayers = this.game.add.text(30, 115, `Players in World: ${Object.keys(GamePlayers).length}`, {
+    this.HUDElement.numPlayers = this.game.add.text(30, 115, `Players in World: ${Object.keys(GamePlayers).length + 1}`, {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
