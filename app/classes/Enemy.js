@@ -12,7 +12,9 @@ export default class Enemy extends EntityPrefab {
 
     GameGroups.enemies.add(this)
 
-    this.maxLife = stats.hp
+    console.log(stats)
+
+    this.maxLife = stats.maxhp
     this.orientation = ''
     this.lastAttack = Date.now()
     this.anchor.set(0.5, 0.2)
@@ -29,6 +31,7 @@ export default class Enemy extends EntityPrefab {
     this.attack = this.attack.bind(this)
     this.dropLoot = this.dropLoot.bind(this)
     this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y - 10 })
+    this.computeLifeBar()
   }
 
   move(newPos) {
