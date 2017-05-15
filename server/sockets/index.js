@@ -94,11 +94,10 @@ const socketFunction = io => {
       socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
     })
 
-    socket.on('hitEnemy', (enemyName, damage) => {
+    socket.on('hitEnemy', (enemyName, damageTaken) => {
       if (GameEnemies[room]) {
-        const damageTaken = damage - GameEnemies[room][enemyName].stats.defense
         GameEnemies[room][enemyName].stats.hp -= damageTaken
-        socket.broadcast.to(room).emit('hitEnemy', enemyName, damage)
+        socket.broadcast.to(room).emit('hitEnemy', enemyName, damageTaken)
       }
     })
 

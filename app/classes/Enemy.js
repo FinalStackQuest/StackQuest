@@ -90,9 +90,14 @@ export default class Enemy extends EntityPrefab {
       //  check if dead
       if (this.stats.hp <= 0) this.die()
     }
+  }
 
-    // return damage
-    return damageTaken
+  loseHealth(damageTaken) {
+    this.stats.hp -= damageTaken
+    const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
+    setTimeout(() => damageText.destroy(), 500)
+
+    this.computeLifeBar()
   }
 
   die() {
