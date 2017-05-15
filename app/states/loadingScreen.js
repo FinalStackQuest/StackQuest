@@ -1,5 +1,5 @@
 import loadMaps from './utils/loadMaps'
-import CustomLoader from '../classes/CustomLoader'
+import CustomLoader from '../utils/CustomLoader'
 
 /* global StackQuest, Phaser */
 

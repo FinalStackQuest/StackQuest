@@ -132,7 +132,9 @@ export default class Player extends Prefab {
     }, 100)
     socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
 
-    const respawnText = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
+    if (this.HUD) {
+      this.HUD.updateFeed('You Died')
+    }
     setTimeout(() => respawnText.destroy(), 1000)
   }
 
