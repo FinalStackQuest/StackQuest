@@ -1,17 +1,38 @@
+.stackquest-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.root-container {
+  height: 100vh;
+  background-color: #1a1a1a;
+}
+
+.black-background {
+  height: 100vh;
+  background-color: black;
+}
+
 #game-container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.register-text {
+  color: #cccccc;
+}
+
 .footer-container {
   bottom: 0;
-  margin: 20px;
+  margin: 20px auto;
   text-align: center;
 }
 
 .input-group {
   margin: auto;
+  margin-bottom: 1%;
 }
 
 .login-input {

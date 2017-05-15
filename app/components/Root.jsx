@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
 
-const Root = ({ user, children }) =>
-  <div>
+const Root = ({ user, game, children }) =>
+  <div className={`${game ? 'black-background' : ''} root-container`}>
     <nav className="navbar navbar-inverse">
       <div className="container-fluid">
         <div className="container">
@@ -25,6 +25,9 @@ const Root = ({ user, children }) =>
         </div>
       </div>
     </nav>
+    <div className="stackquest-logo">
+      <img src="/stackquest_logo.png" />
+    </div>
     {children}
     <footer className="footer footer-container">
       <div className="container">
@@ -35,6 +38,6 @@ const Root = ({ user, children }) =>
     </footer>
   </div>
 
-const RootContainer = connect(({ auth }) => ({ user: auth }))(Root)
+const RootContainer = connect(({ auth, game }) => ({ user: auth, game }))(Root)
 
 export default RootContainer
