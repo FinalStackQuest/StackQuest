@@ -1,7 +1,13 @@
 /* global StackQuest */
 
+let music
+
 const createMap = {
   fantasy() {
+    if (music) music.stop()
+    music = StackQuest.game.add.audio('grasslands')
+    music.play()
+
     const map = StackQuest.game.add.tilemap('fantasyMap')
 
     map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
@@ -16,6 +22,10 @@ const createMap = {
   },
 
   space() {
+    if (music) music.stop()
+    music = StackQuest.game.add.audio('mines')
+    music.play()
+
     const map = StackQuest.game.add.tilemap('marsMap')
 
     map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
