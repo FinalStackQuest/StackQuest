@@ -1,4 +1,4 @@
-import { socket, GameItems } from 'APP/app/sockets'
+import { GameItems } from 'APP/app/sockets'
 
 /* global StackQuest */
 
@@ -9,8 +9,6 @@ const itemCollision = (playerObject, itemGraveyard) => {
       playerObject.pickUpItem(item.type)
       itemGraveyard.push(item)
       delete GameItems[itemKey]
-      socket.emit('updateStats', playerObject.stats)
-      socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount })
     })
   })
 }

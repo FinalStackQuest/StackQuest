@@ -1,6 +1,6 @@
 /* global StackQuest */
 
-import { GameEnemies, socket } from 'APP/app/sockets'
+import { GameEnemies } from 'APP/app/sockets'
 
 const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
