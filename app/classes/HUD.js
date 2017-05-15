@@ -50,7 +50,7 @@ class HUD {
 	      strokeThickness: 1
 	    })
 
-	    this.HUDElement.currentStats = this.game.add.text(30, 105, `ATK: ${this.player.stats.attack} / DEF: ${this.player.stats.defense}`, {
+	    this.HUDElement.currentStats = this.game.add.text(30, 105, `ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense}`, {
 	      font: '20px Press Start 2P',
 	      fill: '#2a2029',
 	      strokeThickness: 1
