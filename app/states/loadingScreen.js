@@ -1,4 +1,5 @@
 import loadMaps from './utils/loadMaps'
+import CustomLoader from '../classes/CustomLoader'
 
 /* global StackQuest, Phaser */
 
@@ -10,14 +11,18 @@ export default {
   init(character) {
     player = character
     nextState = character.currentMap || 'fantasyState'
+    this.game.load = new CustomLoader(this.game)
   },
 
   preload() {
+    this.game.load.webfont('Press Start 2P', 'Press Start 2P')
+
     loadingText = this.game.add.text(this.world.width/2, this.world.height/2, '0% / 100%', {
-      font: '65px Arial',
+      font: '50px Press Start 2P',
       fill: '#fff',
       align: 'center'
     })
+
     loadingText.anchor.setTo(0.5)
 
     for (const map in loadMaps) { 
@@ -29,7 +34,7 @@ export default {
   },
 
   loadUpdate() {
-    loadingText.setText(`${this.load.progress}% / 100%`)
+    loadingText.setText(`${this.game.load.progress}% / 100%`)
   },
 
   create() {
