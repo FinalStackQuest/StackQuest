@@ -44,7 +44,7 @@ class HUD {
 	      strokeThickness: 1
 	    })
 
-		this.HUDElement.currentHealth = this.game.add.text(30, 65, `HP: ${this.player.stats.maxHp}/${this.player.stats.maxHp}`, {
+		this.HUDElement.currentHealth = this.game.add.text(30, 65, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, {
 	      font: '20px Press Start 2P',
 	      fill: '#2a2029',
 	      strokeThickness: 1
