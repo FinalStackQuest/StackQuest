@@ -1,5 +1,5 @@
 {
-  "missle": {
+  "missile": {
     "attack": 15,
     "quantity": 5,
     "bulletSpeed": 1000,
