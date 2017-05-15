@@ -15,8 +15,8 @@ import {GameGroups} from '../sockets'
 
 // client side class for Playable Characters
 export default class Player extends Prefab {
-  constructor(game, name, property) {
-    super(game, name, { x: property.x, y: property.y }, property.class)
+  constructor(game, name, player) {
+    super(game, name, { x: player.x, y: player.y }, player.class)
 
     GameGroups.players.add(this)
     this.player = player
@@ -197,7 +197,7 @@ export default class Player extends Prefab {
 
     switch(itemProperty.type) {
       case 'attack':
-        this.weapon.damage += itemProperty.buff
+        this.stats.attack += itemProperty.buff
         break;
 
       case 'defense':

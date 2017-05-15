@@ -10,6 +10,5 @@ export default class Loot extends entityPrefab {
 
     GameGroups.items.add(this)
     this.type = spriteKey
-    this.pickUp = this.pickUp.bind(this)
   }
 }

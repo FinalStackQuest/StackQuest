@@ -27,7 +27,7 @@ class HUD {
 	}
 
 	updateStats() {
-		this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage} / DEF: ${this.player.stats.defense}`)
+		this.HUDElement.currentStats.setText(`ATK: ${this.player.weapon.damage()} / DEF: ${this.player.stats.defense}`)
 	}
 
 	updateFeed(newFeed) {
