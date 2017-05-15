@@ -6,7 +6,7 @@ const createMap = {
   fantasy() {
     if (music) music.stop()
     music = StackQuest.game.add.audio('grasslands')
-    music.play()
+    music.play('', 0, 1, true)
 
     const map = StackQuest.game.add.tilemap('fantasyMap')
 
@@ -24,7 +24,7 @@ const createMap = {
   space() {
     if (music) music.stop()
     music = StackQuest.game.add.audio('mines')
-    music.play()
+    music.play('', 0, 1, true)
 
     const map = StackQuest.game.add.tilemap('marsMap')
 
