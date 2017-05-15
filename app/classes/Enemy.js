@@ -78,7 +78,7 @@ export default class Enemy extends entityPrefab {
     const damageTaken = damage - this.stats.defense
     if (damageTaken > 0) {
       this.stats.hp -= damageTaken
-      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
       setTimeout(() => damageText.destroy(), 500)
 
       socket.emit('hitEnemy', this.name, damageTaken)
