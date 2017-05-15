@@ -1,12 +1,12 @@
-import entityPrefab from './entityPrefab'
+import EntityPrefab from './EntityPrefab'
+import HealthBar from './HealthBar.js'
 import { socket, GameItems, GameGroups } from '../sockets'
-import HealthBar from '../states/utils/HealthBar.js'
 import enemyProperties from '../properties/enemyProperties.json'
 import Loot from 'APP/app/classes/Loot'
 
 /* global StackQuest, Phaser */
 
-export default class Enemy extends entityPrefab {
+export default class Enemy extends EntityPrefab {
   constructor(game, name, position, spriteKey, stats) {
     super(game, name, position, spriteKey)
 
