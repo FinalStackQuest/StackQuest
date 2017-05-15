@@ -13,8 +13,8 @@ const EasystarConstructor = require('easystarjs')
 
 const findClosestPlayer = require('./utils').findClosestPlayer
 
-const mapWidth = 60
-const mapHeight = 60
+const tileWidth = 32
+const tileHeight = 32
 
 const enemyMovement = (io, state) => {
   if (Object.keys(GamePlayers[state])) {
@@ -23,14 +23,14 @@ const enemyMovement = (io, state) => {
       const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
       if (closestPlayer) {
         collisionArrays[state].findPath(
-          Math.floor(enemy.x / mapWidth),
-          Math.floor(enemy.y / mapHeight),
-          Math.floor(closestPlayer.x / mapWidth),
-          Math.floor(closestPlayer.y / mapHeight),
+          Math.floor(enemy.x / tileWidth),
+          Math.floor(enemy.y / tileHeight),
+          Math.floor(closestPlayer.x / tileWidth),
+          Math.floor(closestPlayer.y / tileHeight),
           path => {
             if (path && path[1]) {
-              const newX = path[1].x * mapWidth
-              const newY = path[1].y * mapHeight
+              const newX = path[1].x * tileWidth
+              const newY = path[1].y * tileHeight
               const distance = 1
               enemy.x += newX - enemy.x > 0 ? distance : -distance
               enemy.y += newY - enemy.y > 0 ? distance : -distance

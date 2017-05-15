@@ -32,7 +32,7 @@ const socketFunctions = socket => {
 const getPlayers = players => {
   for (const player in GamePlayers) delete GamePlayers[player]
   Object.keys(players).forEach(playerSocketId => {
-    GamePlayers[playerSocketId] = new Player(StackQuest.game, players[playerSocketId].userName, players[playerSocketId])
+    addPlayer(playerSocketId, players[playerSocketId])
   })
 }
 
@@ -74,8 +74,7 @@ const fireSpecial = (socketId, xCoord, yCoord) => {
 const getEnemies = enemies => {
   for (const enemy in GameEnemies) delete GameEnemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
-    const enemy = enemies[enemyName]
-    GameEnemies[enemyName] = new Enemy(StackQuest.game, enemyName, { x: enemy.x, y: enemy.y }, enemy.spriteKey, enemy.stats)
+    addEnemy(enemies[enemyName])
   })
 }
 
@@ -104,8 +103,7 @@ const removeEnemy = enemyName => {
 const getItems = items => {
   for (const item in GameItems) delete GameItems[item]
   Object.keys(items).forEach(itemName => {
-    const item = items[itemName]
-    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.position.x, y: item.position.y }, item.key)
+    addItem(items[itemName])
   })
 }
 
