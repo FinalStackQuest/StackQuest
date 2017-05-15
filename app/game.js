@@ -11,8 +11,8 @@ import spaceState from './states/spaceState'
 class StackQuest extends Phaser.Game {
   // Initialize game
   constructor() {
-    const width = window.innerWidth < 1280 ? window.innerWidth : 1280
-    const height = window.innerHeight < 720 ? window.innerHeight : 720
+    const width = Math.min(window.innerWidth, 960)
+    const height = Math.min(window.innerHeight, 540)
 
     super(width, height, Phaser.AUTO, 'game-container')
     // Add all the states
