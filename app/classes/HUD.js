@@ -35,14 +35,16 @@ class HUD {
     // add player names and score to array
     const playerScores = []
     for (const player in GamePlayers) {
-      playerScores.push({name: player.name, score: player.lootCount})
+      playerScores.push({name: GamePlayers[player].name, score: GamePlayers[player].lootCount})
     }
+    // add our player object to playerScores
     playerScores.push({name: this.player.name, score: this.player.lootCount})
     // sort the array based on lootCount
-    playerScores.sort((p1, p2) => p1.score > p2.score)
-    // add these as text nodes to the
-
-    // this.HUDElement.scoreboard =
+    playerScores.sort((p1, p2) => p1.score < p2.score)
+    // add these as text nodes to the HUD
+    if (playerScores[0]) this.HUDElement.scoreboardOne.setText(`${playerScores[0].name} : ${playerScores[0].score}`)
+    if (playerScores[1]) this.HUDElement.scoreboardTwo.setText(`${playerScores[1].name} : ${playerScores[1].score}`)
+    if (playerScores[2]) this.HUDElement.scoreboardThree.setText(`${playerScores[2].name} : ${playerScores[2].score}`)
   }
 
   updateFeed(newFeed) {
@@ -54,11 +56,6 @@ class HUD {
     const gameX = this.game.width
     const gameY = this.game.height
     // const sortedPlayers = GamePlayers.sort()
-    for (const player in GamePlayers) {
-      console.log('name: ', player.name)
-      console.log('lootCount', player.lootCount)
-    }
-    console.log('GamePlayers', GamePlayers)
 
     this.HUDElement.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, {
       font: '15px Press Start 2P',
@@ -91,6 +88,24 @@ class HUD {
     })
 
     this.HUDElement.scoreboardTitle = this.game.add.text(600, 25, `Top 3 GREEDIEST Players`, {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+    // We are initializing the top scoring players to be empty text nodes
+    this.HUDElement.scoreboardOne = this.game.add.text(600, 55, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+
+    this.HUDElement.scoreboardTwo = this.game.add.text(600, 85, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+
+    this.HUDElement.scoreboardThree = this.game.add.text(600, 115, '', {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
