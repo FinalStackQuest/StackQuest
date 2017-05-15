@@ -23,7 +23,7 @@
     "bulletSpeed": 500,
     "fireRate": 250,
     "frames": {
-      "Placeholder": [0, 1, 2, 3]
+      "launch": [0, 1, 2, 3, 4, 5, 6, 7]
     }
   },
   "cyborgSpecial": {
@@ -32,7 +32,7 @@
     "bulletSpeed": 500,
     "fireRate": 250,
     "frames": {
-      "Placeholder": [0, 1, 2, 3]
+      "launch": [0, 1, 2, 3]
     }
   }
 }
