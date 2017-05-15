@@ -1,10 +1,10 @@
 import { GameGroups } from '../sockets'
 
-import entityPrefab from './entityPrefab'
+import EntityPrefab from './EntityPrefab'
 
 /* global StackQuest */
 
-export default class Loot extends entityPrefab {
+export default class Loot extends EntityPrefab {
   constructor(game, name, position, spriteKey) {
     super(game, name, position, spriteKey)
 

@@ -1,4 +1,5 @@
-import Prefab from './entityPrefab'
+import EntityPrefab from './EntityPrefab'
+import HealthBar from './HealthBar.js'
 import Weapon from './Weapon'
 import HUD from './HUD'
 
@@ -7,12 +8,11 @@ import playerProperties from '../properties/playerProperties.json'
 import itemProperties from '../properties/itemProperties.json'
 
 import { socket, GameGroups } from '../sockets'
-import HealthBar from '../states/utils/HealthBar.js'
 
 /* global StackQuest, Phaser */
 
 // client side class for Playable Characters
-export default class Player extends Prefab {
+export default class Player extends EntityPrefab {
   constructor(game, name, player) {
     super(game, name, { x: player.x, y: player.y }, player.class)
 
