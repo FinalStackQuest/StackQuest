@@ -150,20 +150,20 @@ export default class Player extends EntityPrefab {
     this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (this.cursors.up.isDown) {
-      this.body.velocity.y = -200
+      this.body.velocity.y = -this.stats.speed
       this.orientation = 'up'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     } else if (this.cursors.down.isDown) {
-      this.body.velocity.y = 200
+      this.body.velocity.y = this.stats.speed
       this.orientation = 'down'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     }
     if (this.cursors.left.isDown) {
-      this.body.velocity.x = -200
+      this.body.velocity.x = -this.stats.speed
       this.orientation = 'left'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     } else if (this.cursors.right.isDown) {
-      this.body.velocity.x = 200
+      this.body.velocity.x = this.stats.speed
       this.orientation = 'right'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
     }
