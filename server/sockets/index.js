@@ -13,8 +13,8 @@ const EasystarConstructor = require('easystarjs')
 
 const findClosestPlayer = require('./utils').findClosestPlayer
 
-const mapWidth = 60
-const mapHeight = 60
+const mapWidth = 32
+const mapHeight = 32
 
 const enemyMovement = (io, state) => {
   if (Object.keys(GamePlayers[state])) {

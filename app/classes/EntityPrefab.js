@@ -12,7 +12,6 @@ export default class entityPrefab extends Phaser.Sprite {
     super(game, position.x, position.y, spriteKey)
     this.game = game
     this.name = name
-    console.log(this)
     this.anchor.setTo(0.5)
     this.attackTarget = null
     this.nameHolder = game.add.text(0, 60, `${name}`, {
