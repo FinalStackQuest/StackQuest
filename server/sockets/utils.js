@@ -1,6 +1,6 @@
 const findClosestPlayer = (currentPlayers, enemy) => {
   const playerIds = Object.keys(currentPlayers)
-  let maxDist = Infinity
+  let maxDist = 400
   let closestPlayer
   for (const playerId of playerIds) {
     const player = currentPlayers[playerId]
