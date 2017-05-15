@@ -66,7 +66,7 @@ export default class Player extends Prefab {
     const xDirection = this.position.x - targetX
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-    this.playerHealthBar.setPosition(this.position.x, this.position.y-30)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y - 30)
 
     if (yDirection > 0) {
       this.orientation = 2
@@ -97,27 +97,26 @@ export default class Player extends Prefab {
       this.stats.hp -= damageTaken
       const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
       setTimeout(() => damageText.destroy(), 500)
+
+      socket.emit('updateStats', this.stats)
+
+      this.computeLifeBar()
+      //  check if dead
+      if (this.stats.hp <= 0) this.respawn()
     }
-    this.computeLifeBar()
-    //  check if dead
-    if (this.stats.hp <= 0) {
-      this.respawn()
-      //  function returns true if the enemy is dead
-      return true
-    }
-    //  returns false because the enemy didn't die
-    return false
   }
 
   respawn() {
-    const damage = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
-    setTimeout(() => damage.destroy(), 1000)
     //  make them move to set location
     this.position.x = 500
     this.position.y = 500
 
     // Revive
     setTimeout(this.recoverHp, 100)
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
+
+    const respawnText = this.game.add.text(this.position.x, this.position.y, 'YOU DIED', { font: '32px Times New Roman', fill: '#ff0000' })
+    setTimeout(() => respawnText.destroy(), 1000)
   }
 
   recoverHp() {
@@ -129,7 +128,7 @@ export default class Player extends Prefab {
     this.body.velocity.x = 0
     this.body.velocity.y = 0
 
-    this.playerHealthBar.setPosition(this.position.x, this.position.y-30)
+    this.playerHealthBar.setPosition(this.position.x, this.position.y - 30)
 
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -200

@@ -139,6 +139,8 @@ const socketFunction = io => {
       GamePlayers[room][socket.id] = player
       socket.broadcast.to(room).emit('addPlayer', socket.id, player)
 
+      // check if collision array exist for this map
+      // creates collision array if it does not exist
       if (!collisionArrays[room]) {
         collisionArrays[room] = new EasystarConstructor.js()
         collisionArrays[room].setGrid(collisionMap)
