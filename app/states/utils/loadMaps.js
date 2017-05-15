@@ -1,5 +1,4 @@
 /* global StackQuest, Phaser */
-
 const loadMaps = {
   common() {
     StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
@@ -22,7 +21,6 @@ const loadMaps = {
     StackQuest.game.load.image('rtsTileSheet2', 'assets/tilesets/RTS_Medieval/Tilesheet/RTS_medieval@2.png')
     StackQuest.game.load.image('completeTileSheet2', 'assets/tilesets/Topdown_Shooter/Tilesheet/tilesheet_complete_2X.png')
     StackQuest.game.load.image('sokobanTileSheet2', 'assets/tilesets/Sokoban_Pack/Tilesheet/sokoban_tilesheet@2.png')
-    this.common()
   },
 
   space() {
@@ -30,7 +28,6 @@ const loadMaps = {
     StackQuest.game.load.image('completeTileSheet2', 'assets/tilesets/Topdown_Shooter/Tilesheet/tilesheet_complete_2X.png')
     StackQuest.game.load.image('scifiTileSheet', 'assets/tilesets/RTS_Sci-fi/Tilesheet/scifi_tilesheet@2.png')
     StackQuest.game.load.image('mapPackTileSheet2', 'assets/tilesets/Map_Pack/Tilesheet/mapPack_tilesheet_2X.png')
-    this.common()
   }
 }
 

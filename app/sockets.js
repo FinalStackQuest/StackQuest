@@ -9,6 +9,7 @@ export const socket = socketio.connect()
 export const GamePlayers = {}
 export const GameEnemies = {}
 export const GameItems = {}
+export const GameGroups = {}
 
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
