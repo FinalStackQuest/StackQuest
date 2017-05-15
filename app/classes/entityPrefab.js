@@ -14,7 +14,7 @@ export default class entityPrefab extends Phaser.Sprite {
     this.attackTarget = null
     this.game = game
     this.nameHolder = game.add.text(0, 60, `${name}`, {
-      font: '14px pixel',
+      font: '14px Press Start 2P',
       fill: '#ffffff',
       stroke: '#000000',
       strokeThickness: 1
