@@ -1,4 +1,4 @@
-import {GameGroups}from '../sockets'
+import { GameGroups } from '../sockets'
 
 import entityPrefab from './entityPrefab'
 

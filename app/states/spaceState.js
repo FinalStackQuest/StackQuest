@@ -1,4 +1,4 @@
-import { socket } from '../sockets'
+import { socket, GameGroups } from '../sockets'
 import loadMaps from './utils/loadMaps'
 import createMap from './utils/createMap'
 import makeCollisionMap from './utils/makeCollisionMap'
@@ -9,7 +9,7 @@ import itemCollision from './utils/itemCollision'
 import playerCollision from './utils/playerCollision'
 import playerClass from '../classes/Player'
 import Loot from '../classes/Loot'
-import {GameGroups} from '../sockets'
+import HUD from '../classes/HUD'
 
 /* global StackQuest, Phaser */
 

@@ -17,7 +17,7 @@ export default {
   preload() {
     this.game.load.webfont('Press Start 2P', 'Press Start 2P')
 
-    loadingText = this.game.add.text(this.world.width/2, this.world.height/2, '0% / 100%', {
+    loadingText = this.game.add.text(this.world.width / 2, this.world.height / 2, '0% / 100%', {
       font: '50px Press Start 2P',
       fill: '#fff',
       align: 'center'
@@ -25,12 +25,11 @@ export default {
 
     loadingText.anchor.setTo(0.5)
 
-    for (const map in loadMaps) { 
+    for (const map in loadMaps) {
       if (loadMaps.hasOwnProperty(map)) {
         loadMaps[map].call()
       }
     }
-
   },
 
   loadUpdate() {
