@@ -3,7 +3,8 @@
     "stats": {
       "maxHp": 100,
       "attack": 8,
-      "defense": 10
+      "defense": 10,
+      "speed": 180
     },
     "frames": {
       "walk_up": [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -20,7 +21,8 @@
     "stats": {
       "maxHp": 100,
       "attack": 10,
-      "defense": 8
+      "defense": 8,
+      "speed": 200
     },
     "frames": {
       "walk_up": [0, 1, 2, 3, 4, 5, 6, 7, 8],
