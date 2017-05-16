@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
-import Character from './Character'
 import Instructions from './Instructions'
 import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
@@ -18,10 +17,7 @@ const Game = ({ loggedIn, gameExist, startGame }) =>
     {loggedIn && !gameExist &&
       <div>
         <Instructions />
-        {loggedIn.character
-          ? <button className="btn btn-primary" onClick={startGame}>Start Game</button>
-          : <Character />
-        }
+        <button className="btn btn-primary" onClick={startGame}>Start Game</button>
       </div>
     }
   </div>
@@ -45,9 +41,9 @@ class LocalContainer extends React.Component {
     // checks to make sure user and character information is updated in the store
     this.props.whoami()
     this.props.showGameDisplay(true)
+    console.log(this.props.user)
     const character = this.props.user.character
     character.userName = this.props.user.userName
-    character.stats = playerProps[character.class].stats
 
     StackQuest.game = new StackQuestGame()
     StackQuest.game.startGame(character)

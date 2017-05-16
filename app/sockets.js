@@ -11,6 +11,7 @@ export const GameEnemies = {}
 export const GameItems = {}
 export const GameGroups = {}
 
+
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
   socket.on('addPlayer', addPlayer)
@@ -31,7 +32,7 @@ const socketFunctions = socket => {
 const getPlayers = players => {
   for (const player in GamePlayers) delete GamePlayers[player]
   Object.keys(players).forEach(playerSocketId => {
-    GamePlayers[playerSocketId] = new Player(StackQuest.game, players[playerSocketId].userName, players[playerSocketId])
+    addPlayer(playerSocketId, players[playerSocketId])
   })
 }
 

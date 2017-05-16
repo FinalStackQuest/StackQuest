@@ -4,6 +4,8 @@ require('phaser')
 
 import { GameGroups, GamePlayers } from '../sockets'
 
+const textColor = '#fff'
+
 class HUD {
   constructor(game, player) {
     this.game = game
@@ -38,37 +40,31 @@ class HUD {
 
     this.HUDElement.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: textColor,
       strokeThickness: 1
     })
 
     this.HUDElement.currentHealth = this.game.add.text(30, 55, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: textColor,
       strokeThickness: 1
     })
 
     this.HUDElement.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.weapon.damage()}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: textColor,
       strokeThickness: 1
     })
 
     this.HUDElement.currentWeapon = this.game.add.text(30, 115, `WEAPON: ${this.player.weaponKey}`, {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
-      strokeThickness: 1
-    })
-
-    this.HUDElement.numPlayers = this.game.add.text(30, 115, `Players in World: ${Object.keys(GamePlayers).length + 1}`, {
-      font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: textColor,
       strokeThickness: 1
     })
 
     this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 35, `Welcome to StackQuest`, {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: textColor,
       strokeThickness: 1
     })
     this.HUDElement.currentFeed.anchor.set(0.5)
