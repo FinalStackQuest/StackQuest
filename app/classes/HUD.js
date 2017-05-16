@@ -55,6 +55,7 @@ class HUD {
     }
     // add our player object to playerScores
     playerScores.push({name: this.player.name, score: this.player.killCount})
+    console.log('playerKills', playerScores)
     // sort the array based on lootCount
     playerScores.sort((p1, p2) => p1.score < p2.score)
     // add these as text nodes to the HUD
@@ -133,19 +134,19 @@ class HUD {
       strokeThickness: 1
     })
     // We are initializing the top scoring players to be empty text nodes
-    this.HUDElement.killBoardOne = this.game.add.text(600, 175, '', {
+    this.HUDElement.killboardOne = this.game.add.text(600, 175, '', {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })
 
-    this.HUDElement.killBoardTwo = this.game.add.text(600, 205, '', {
+    this.HUDElement.killboardTwo = this.game.add.text(600, 205, '', {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
     })
 
-    this.HUDElement.killBoardThree = this.game.add.text(600, 115, '', {
+    this.HUDElement.killboardThree = this.game.add.text(600, 115, '', {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
