@@ -36,6 +36,17 @@ export const createSpaceAssets = () => {
   return map
 }
 
+export const createCaveAssets = () => {
+  if (music) music.stop()
+  music = StackQuest.game.add.audio('day')
+  music.play('', 0, 1, true)
+
+  const map = StackQuest.game.add.tilemap('caveMap')
+
+  map.addTilesetImage('tilesheet', 'browserQuestTileSheet')
+  setCollision(map)
+}
+
 const setCollision = map => {
   StackQuest.game.layers = {}
 
