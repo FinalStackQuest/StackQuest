@@ -28,6 +28,7 @@ export default class Player extends EntityPrefab {
     this.lastSpecialAttack = Date.now()
 
     this.absorbProperties(playerProperties[player.class])
+    this.stats = player.stats
 
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
@@ -216,6 +217,7 @@ export default class Player extends EntityPrefab {
       this.animations.play(`walk_${this.orientation}`)
     }
   }
+
   specialAttack() {
     if (this.cursors.space.isDown && this.cursors.click.isDown) {
       if (Date.now() - this.lastSpecialAttack > 5000) {
@@ -227,6 +229,7 @@ export default class Player extends EntityPrefab {
       }
     }
   }
+
   attack() {
     if (this.cursors.click.isDown && !this.cursors.space.isDown) {
       const targetX = this.game.input.worldX
