@@ -52,6 +52,17 @@ export const createPvpAssets = () => {
   return map
 }
 
+export const createCaveAssets = () => {
+  if (music) music.stop()
+  music = StackQuest.game.add.audio('day')
+  music.play('', 0, 1, true)
+
+  const map = StackQuest.game.add.tilemap('caveMap')
+
+  map.addTilesetImage('tilesheet', 'browserQuestTileSheet')
+  setCollision(map)
+}
+
 const setCollision = map => {
   StackQuest.game.layers = {}
 
@@ -67,6 +78,27 @@ const setCollision = map => {
         })
       })
       map.setCollision(collisionTiles, true, layer.name)
+    }
+  })
+
+  StackQuest.game.layers[map.layer.name].resizeWorld()
+}
+
+const setDeath = map => {
+  StackQuest.game.layers = {}
+
+  map.layers.forEach(layer => {
+    StackQuest.game.layers[layer.name] = map.createLayer(layer.name)
+    if (layer.properties.death) {
+      const deathTiles = []
+      layer.data.forEach(dataRow => {
+        dataRow.forEach(tile => {
+          if (tile.index > 0 && deathTiles.indexOf(tile.index) === -1) {
+            deathTiles.push(tile.index)
+          }
+        })
+      })
+      map.setCollision(deathTiles, true, layer.name)
     }
   })
 
