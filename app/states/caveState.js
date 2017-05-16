@@ -49,6 +49,7 @@ const caveState = {
     })
 
     playerObject.movePlayer()
+    playerObject.chat()
   },
 
   assignClass(charClass) {

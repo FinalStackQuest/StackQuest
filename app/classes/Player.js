@@ -30,6 +30,7 @@ export default class Player extends EntityPrefab {
     this.setAnimationFrames(this)
     this.killCount = 0
     this.lootCount = 0
+    this.loadControls = this.loadControls.bind(this)
     this.loadControls()
     this.chatToggleTime = Date.now()
 
@@ -80,6 +81,14 @@ export default class Player extends EntityPrefab {
       if (Date.now() - this.chatToggleTime > 150) {
         store.dispatch(toggleChatBox())
         this.chatToggleTime = Date.now()
+      }
+      if (store.getState().chat.showChat) {
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.W)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.S)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.D)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.A)
+      } else {
+        this.loadControls()
       }
     }
   }
