@@ -12,12 +12,12 @@ export default class Enemy extends EntityPrefab {
 
     GameGroups.enemies.add(this)
 
-    this.maxLife = stats.maxhp
     this.orientation = ''
     this.lastAttack = Date.now()
     this.anchor.set(0.5, 0.2)
 
     this.absorbProperties(enemyProperties[spriteKey])
+    this.stats.hp = stats.hp
 
     this.setAnimationFrames(this)
 
@@ -111,7 +111,7 @@ export default class Enemy extends EntityPrefab {
 
   computeLifeBar() {
     if (this.stats.hp < 0) this.stats.hp = 0
-    const percent = Math.floor((this.stats.hp / this.maxLife) * 100)
+    const percent = Math.floor((this.stats.hp / this.stats.maxhp) * 100)
     this.enemyHealthBar.setPercent(percent)
   }
 

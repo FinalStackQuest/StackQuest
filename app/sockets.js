@@ -11,7 +11,6 @@ export const GameEnemies = {}
 export const GameItems = {}
 export const GameGroups = {}
 
-
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
   socket.on('addPlayer', addPlayer)

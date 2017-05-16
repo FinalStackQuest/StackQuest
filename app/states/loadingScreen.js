@@ -1,5 +1,6 @@
-import loadAssets, {loadClassSelect} from './utils/loadAssets'
-import CustomLoader from './utils/CustomLoader'
+
+import loadAssets, { loadClassSelect } from './utils/loadAssets'
+import CustomLoader from '../utils/CustomLoader'
 
 /* global StackQuest, Phaser */
 
