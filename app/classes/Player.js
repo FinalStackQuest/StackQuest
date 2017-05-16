@@ -28,7 +28,8 @@ export default class Player extends EntityPrefab {
     this.lastSpecialAttack = Date.now()
 
     this.absorbProperties(playerProperties[player.class])
-    this.stats = player.stats
+
+    this.checkStats(player)
 
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
@@ -62,6 +63,10 @@ export default class Player extends EntityPrefab {
 
     this.pickUpItem = this.pickUpItem.bind(this)
     this.savePlayer = this.savePlayer.bind(this)
+  }
+
+  checkStats(player) {
+    if (player) this.stats = player.stats
   }
 
   equipSpecial(specialKey) {
@@ -249,17 +254,17 @@ export default class Player extends EntityPrefab {
     const itemProperty = itemProperties[item]
 
     switch (itemProperty.type) {
-    case 'attack':
-      this.stats.attack += itemProperty.buff
-      break
+      case 'attack':
+        this.stats.attack += itemProperty.buff
+        break
 
-    case 'defense':
-      this.stats.defense += itemProperty.buff
-      break
+      case 'defense':
+        this.stats.defense += itemProperty.buff
+        break
 
-    case 'loot':
-      this.lootCount += itemProperty.buff
-      break
+      case 'loot':
+        this.lootCount += itemProperty.buff
+        break
     }
 
     if (this.HUD) {
