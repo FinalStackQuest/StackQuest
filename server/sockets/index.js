@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const db = require('APP/db')
 const Character = db.model('characters')
 
@@ -51,8 +52,7 @@ const spawnEnemy = (io, state) => {
   if (Object.keys(GamePlayers[state]).length) {
     enemySpawn[state].forEach((enemy) => {
       if (!GameEnemies[state][enemy.name]) {
-        const enemyStats = Object.assign({}, enemyProperties[enemy.spriteKey].stats)
-        GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
+        GameEnemies[state][enemy.name] = Object.assign({}, enemy, _.cloneDeep(enemyProperties[enemy.spriteKey]))
         io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
       }
     })
