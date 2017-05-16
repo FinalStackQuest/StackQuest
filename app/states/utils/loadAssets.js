@@ -32,13 +32,10 @@ const loadAssets = () => {
   StackQuest.game.load.image('mapPackTileSheet2', 'assets/tilesets/Map_Pack/Tilesheet/mapPack_tilesheet_2X.png')
   StackQuest.game.load.audio('mines', ['assets/audio/Exploration3_Tha_el_Mines.mp3', 'assets/audio/Exploration3_Tha_el_Mines.ogg'])
 
+  //  Player arena assets
   StackQuest.game.load.tilemap('playerArena', 'assets/maps/playerArena.json', null, Phaser.Tilemap.TILED_JSON)
-  StackQuest.game.load.image('completeTileSheet2', 'assets/tilesets/Topdown_Shooter/Tilesheet/tilesheet_complete_2X.png')
-  StackQuest.game.load.image('scifiTileSheet', 'assets/tilesets/RTS_Sci-fi/Tilesheet/scifi_tilesheet@2.png')
-  StackQuest.game.load.image('mapPackTileSheet2', 'assets/tilesets/Map_Pack/Tilesheet/mapPack_tilesheet_2X.png')
-  StackQuest.game.load.image('mapPackTileSheet2', 'assets/tilesets/Map_Pack/Tilesheet/mapPack_tilesheet_2X.png')
-  StackQuest.game.load.image('sokobanTileSheet2', 'assets/tilesets/Sokoban_Pack/Tilesheet/sokoban_tilesheet@2.png')
-  StackQuest.game.load.audio('mines', ['assets/audio/Exploration3_Tha_el_Mines.mp3', 'assets/audio/Exploration3_Tha_el_Mines.ogg'])
+  StackQuest.game.load.image('industrial_tilesheet@2', 'assets/tilesets/Platformer/platformerPack_industrial_tilesheet@2.png')
+  StackQuest.game.load.image('towerDefense', 'assets/tilesets/Tower_Defense/towerDefense_tilesheet@2.png')
 }
 
 export const loadClassSelect = () => {
