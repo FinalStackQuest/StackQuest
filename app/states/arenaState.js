@@ -40,6 +40,8 @@ const spaceState = {
     playerObject.attack()
     playerObject.specialAttack()
     playerObject.HUD.updateNumPlayers()
+    playerObject.chat()
+
     playerCollision(playerObject)
     mapTransition(player, playerObject, 'fantasyState')
   }
