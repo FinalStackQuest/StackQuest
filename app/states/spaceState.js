@@ -5,7 +5,6 @@ import createPlayer from './utils/createPlayer'
 import enemyCollision from './utils/enemyCollision'
 import mapTransition from './utils/mapTransition'
 import itemCollision from './utils/itemCollision'
-import playerCollision from './utils/playerCollision'
 import playerClass from '../classes/Player'
 import Loot from '../classes/Loot'
 
@@ -63,8 +62,7 @@ const spaceState = {
 
     itemCollision(playerObject, itemGraveyard)
     enemyCollision(playerObject, graveyard)
-    playerCollision(playerObject)
-    mapTransition(player, playerObject, 'fantasyState')
+    mapTransition(player, playerObject)
   }
 }
 
