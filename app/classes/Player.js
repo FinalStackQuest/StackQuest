@@ -203,7 +203,7 @@ export default class Player extends EntityPrefab {
       break
 
     case 'loot':
-      this.loot += itemProperty.buff
+      this.lootCount += itemProperty.buff
       break
     }
 
@@ -228,5 +228,9 @@ export default class Player extends EntityPrefab {
     this.player.hp = this.stats.hp
 
     socket.emit('savePlayer', this.player)
+  }
+
+  update() {
+    if (this.HUD) this.HUD.updateScoreboard()
   }
 }

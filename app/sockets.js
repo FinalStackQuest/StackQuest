@@ -68,8 +68,7 @@ const fireProjectile = (socketId, xCoord, yCoord) => {
 const getEnemies = enemies => {
   for (const enemy in GameEnemies) delete GameEnemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
-    const enemy = enemies[enemyName]
-    GameEnemies[enemyName] = new Enemy(StackQuest.game, enemyName, { x: enemy.x, y: enemy.y }, enemy.spriteKey, enemy.stats)
+    addEnemy(enemies[enemyName])
   })
 }
 
@@ -98,8 +97,7 @@ const removeEnemy = enemyName => {
 const getItems = items => {
   for (const item in GameItems) delete GameItems[item]
   Object.keys(items).forEach(itemName => {
-    const item = items[itemName]
-    GameItems[itemName] = new Loot(StackQuest.game, itemName, { x: item.position.x, y: item.position.y }, item.key)
+    addItem(items[itemName])
   })
 }
 
