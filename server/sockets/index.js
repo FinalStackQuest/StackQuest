@@ -1,6 +1,8 @@
 const db = require('APP/db')
 const Character = db.model('characters')
 
+const messages = []
+
 const enemyProperties = require('APP/app/properties/enemyProperties')
 const enemySpawn = require('./enemySpawn.json')
 const GamePlayers = {}
@@ -165,6 +167,15 @@ const socketFunction = io => {
           id: player.id
         },
       })
+    })
+
+    socket.on('getMessages', () => {
+      socket.emit('getMessages', messages)
+    })
+
+    socket.on('addMessage', message => {
+      messages.push(message)
+      socket.broadcast.emit('addMessage', message)
     })
   })
 }

@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 
+/* CONSTANTS */
+const AUTHENTICATED = 'AUTHENTICATED'
+
+/* REDUCER */
 const reducer = (state = null, action) => {
   switch (action.type) {
   case AUTHENTICATED:
@@ -9,11 +13,12 @@ const reducer = (state = null, action) => {
   return state
 }
 
-const AUTHENTICATED = 'AUTHENTICATED'
+/* ACTION CREATORS */
 export const authenticated = user => ({
   type: AUTHENTICATED, user
 })
 
+/* DISPATCHERS */
 export const login = (username, password) =>
   dispatch =>
     axios.post('/api/auth/login/local',
