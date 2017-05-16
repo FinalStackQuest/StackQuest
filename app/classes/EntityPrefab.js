@@ -4,6 +4,7 @@
 require('pixi')
 require('p2')
 require('phaser')
+import _ from 'lodash'
 
 /* global Phaser */
 
@@ -72,6 +73,6 @@ export default class entityPrefab extends Phaser.Sprite {
   }
 
   absorbProperties(object) {
-    Object.assign(this, object)
+    Object.assign(this, _.cloneDeep(object))
   }
 }

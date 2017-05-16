@@ -13,8 +13,8 @@ import arenaState from './states/arenaState'
 class StackQuest extends Phaser.Game {
   // Initialize game
   constructor() {
-    const width = Math.min(window.innerWidth, 960)
-    const height = Math.min(window.innerHeight, 540)
+    const width = 960
+    const height = 540
 
     super(width, height, Phaser.AUTO, 'game-container')
     // Add all the states

@@ -1,8 +1,7 @@
 import { socket, GameGroups } from '../sockets'
 import { createCaveAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
-import createPlayer from './utils/createPlayer'
-import {assignClass} from './utils/createPlayer'
+import createPlayer, { assignClass } from './utils/createPlayer'
 import enemyCollision from './utils/enemyCollision'
 import mapTransition from './utils/mapTransition'
 import itemCollision from './utils/itemCollision'
@@ -50,6 +49,7 @@ const caveState = {
     })
 
     playerObject.movePlayer()
+    playerObject.chat()
   },
 
   assignClass(charClass) {
