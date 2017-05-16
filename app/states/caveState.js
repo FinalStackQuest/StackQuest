@@ -33,7 +33,6 @@ const caveState = {
     this.game.physics.arcade.enable(cyborg)
 
     GameGroups.players = this.game.add.group()
-    GameGroups.HUD = this.game.add.group()
     playerObject = createPlayer(player)
 
     this.physics.setBoundsToWorld(true, true, true, true, false)
