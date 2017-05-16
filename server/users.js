@@ -22,7 +22,7 @@ module.exports = require('express').Router()
             weaponName: 'Basic Weapon',
             armorName: 'Basic Armor',
             x: 783,
-            y: 716,
+            y: 718,
             currentMap: 'caveState',
             user_id: user.id
           })

@@ -39,7 +39,8 @@
     "stats": {
       "maxHp": 100,
       "attack": 1,
-      "defense": 1
+      "defense": 1,
+      "speed": 180
     },
     "frames": {
       "walk_up": [0, 1, 2, 3, 4, 5, 6, 7, 8],
