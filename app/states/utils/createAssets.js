@@ -36,6 +36,22 @@ export const createSpaceAssets = () => {
   return map
 }
 
+export const createPvpAssets = () => {
+  if (music) music.stop()
+  // music = StackQuest.game.add.audio('mines')
+  // music.play('', 0, 1, true)
+
+  const map = StackQuest.game.add.tilemap('PvpMap')
+
+  map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
+  map.addTilesetImage('scifi_tilesheet@2', 'scifiTileSheet')
+  map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
+
+  setCollision(map)
+
+  return map
+}
+
 const setCollision = map => {
   StackQuest.game.layers = {}
 
