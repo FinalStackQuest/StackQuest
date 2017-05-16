@@ -66,7 +66,7 @@ export default class Player extends EntityPrefab {
   }
 
   checkStats(player) {
-    if (player) this.stats = player.stats
+    if (player.stats) this.stats = player.stats
   }
 
   equipSpecial(specialKey) {
@@ -254,17 +254,17 @@ export default class Player extends EntityPrefab {
     const itemProperty = itemProperties[item]
 
     switch (itemProperty.type) {
-      case 'attack':
-        this.stats.attack += itemProperty.buff
-        break
+    case 'attack':
+      this.stats.attack += itemProperty.buff
+      break
 
-      case 'defense':
-        this.stats.defense += itemProperty.buff
-        break
+    case 'defense':
+      this.stats.defense += itemProperty.buff
+      break
 
-      case 'loot':
-        this.lootCount += itemProperty.buff
-        break
+    case 'loot':
+      this.lootCount += itemProperty.buff
+      break
     }
 
     if (this.HUD) {
