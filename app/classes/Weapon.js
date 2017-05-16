@@ -21,6 +21,7 @@ class Weapon extends Phaser.Weapon {
     this.setBulletAnimationFrames()
     this.bulletAnimation = 'launch'
     this.damage = this.damage.bind(this)
+    this.bulletSpeedVariance = 50
   }
 
   damage() {
@@ -36,7 +37,7 @@ class Weapon extends Phaser.Weapon {
         if (animationType === 'collide') {
           this.addBulletAnimation(animationType, frames[animationType], 16, false)
         } else {
-          this.addBulletAnimation(animationType, frames[animationType], 16, true)
+          this.addBulletAnimation(animationType, frames[animationType], frames.rate, true)
         }
       }
     }

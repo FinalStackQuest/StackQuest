@@ -1,10 +1,11 @@
 /* global StackQuest, Phaser */
-
 const loadAssets = () => {
   // common assets
   StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
   StackQuest.game.load.image('missile', 'assets/sprites/tank_bulletFly4.png')
   StackQuest.game.load.spritesheet('fireball', 'assets/sprites/fireball.png', 31, 27)
+  StackQuest.game.load.spritesheet('wizardSpecial', 'assets/sprites/lightning.png', 128, 72)
+  StackQuest.game.load.spritesheet('cyborgSpecial', 'assets/sprites/cyborgSpecial.png', 80, 81)
   StackQuest.game.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 64, 64)
   StackQuest.game.load.spritesheet('soldieralt', 'assets/tilesets/LPC Base Assets/sprites/people/soldier_altcolor.png', 64, 64)
   StackQuest.game.load.spritesheet('bat', 'assets/tilesets/LPC Base Assets/sprites/monsters/bat.png', 32, 32)

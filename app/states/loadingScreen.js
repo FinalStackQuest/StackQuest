@@ -1,5 +1,5 @@
 import loadAssets from './utils/loadAssets'
-import CustomLoader from '../utils/CustomLoader'
+import CustomLoader from './utils/CustomLoader'
 
 /* global StackQuest, Phaser */
 
