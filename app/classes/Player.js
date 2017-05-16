@@ -105,6 +105,8 @@ export default class Player extends EntityPrefab {
         this.game.input.keyboard.removeKey(Phaser.Keyboard.S)
         this.game.input.keyboard.removeKey(Phaser.Keyboard.D)
         this.game.input.keyboard.removeKey(Phaser.Keyboard.A)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.B)
       } else {
         this.loadControls()
       }
