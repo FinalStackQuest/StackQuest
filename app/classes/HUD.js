@@ -37,10 +37,10 @@ class HUD {
     // add player names and score to array
     const playerScores = []
     for (const player in GamePlayers) {
-      playerScores.push({name: GamePlayers[player].name, score: GamePlayers[player].lootCount})
+      playerScores.push({ name: GamePlayers[player].name, score: GamePlayers[player].lootCount })
     }
     // add our player object to playerScores
-    playerScores.push({name: this.player.name, score: this.player.lootCount})
+    playerScores.push({ name: this.player.name, score: this.player.lootCount })
     // sort the array based on lootCount
     playerScores.sort((p1, p2) => p1.score < p2.score)
     // add these as text nodes to the HUD
@@ -53,10 +53,10 @@ class HUD {
     // add player names and score to array
     const playerScores = []
     for (const player in GamePlayers) {
-      playerScores.push({name: GamePlayers[player].name, score: GamePlayers[player].killCount})
+      playerScores.push({ name: GamePlayers[player].name, score: GamePlayers[player].killCount })
     }
     // add our player object to playerScores
-    playerScores.push({name: this.player.name, score: this.player.killCount})
+    playerScores.push({ name: this.player.name, score: this.player.killCount })
     // sort the array based on lootCount
     playerScores.sort((p1, p2) => p1.score < p2.score)
     // add these as text nodes to the HUD
@@ -75,7 +75,7 @@ class HUD {
     this.HUDElement.killboardOne.visible = this.boardVisibility
     this.HUDElement.killboardTwo.visible = this.boardVisibility
     this.HUDElement.killboardThree.visible = this.boardVisibility
-    }
+  }
 
   updateFeed(newFeed) {
     this.HUDElement.currentFeed.setText(`${newFeed}`)
