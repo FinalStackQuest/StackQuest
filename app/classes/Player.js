@@ -25,6 +25,7 @@ export default class Player extends EntityPrefab {
 
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
+    this.killCount = 0
     this.lootCount = 0
     this.loadControls()
 

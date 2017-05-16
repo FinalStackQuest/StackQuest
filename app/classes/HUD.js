@@ -47,6 +47,22 @@ class HUD {
     if (playerScores[2]) this.HUDElement.scoreboardThree.setText(`${playerScores[2].name} : ${playerScores[2].score}`)
   }
 
+  updateKillboard() {
+    // add player names and score to array
+    const playerScores = []
+    for (const player in GamePlayers) {
+      playerScores.push({name: GamePlayers[player].name, score: GamePlayers[player].killCount})
+    }
+    // add our player object to playerScores
+    playerScores.push({name: this.player.name, score: this.player.killCount})
+    // sort the array based on lootCount
+    playerScores.sort((p1, p2) => p1.score < p2.score)
+    // add these as text nodes to the HUD
+    if (playerScores[0]) this.HUDElement.killboardOne.setText(`${playerScores[0].name} : ${playerScores[0].score}`)
+    if (playerScores[1]) this.HUDElement.killboardTwo.setText(`${playerScores[1].name} : ${playerScores[1].score}`)
+    if (playerScores[2]) this.HUDElement.killboardThree.setText(`${playerScores[2].name} : ${playerScores[2].score}`)
+  }
+
   updateFeed(newFeed) {
     this.HUDElement.currentFeed.setText(`${newFeed}`)
     setTimeout(() => this.HUDElement.currentFeed.setText(''), 4000)
@@ -106,6 +122,30 @@ class HUD {
     })
 
     this.HUDElement.scoreboardThree = this.game.add.text(600, 115, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+
+    this.HUDElement.killBoardTitle = this.game.add.text(600, 145, `Top 3 KILLAS`, {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+    // We are initializing the top scoring players to be empty text nodes
+    this.HUDElement.killBoardOne = this.game.add.text(600, 175, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+
+    this.HUDElement.killBoardTwo = this.game.add.text(600, 205, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+
+    this.HUDElement.killBoardThree = this.game.add.text(600, 115, '', {
       font: '15px Press Start 2P',
       fill: '#2a2029',
       strokeThickness: 1
