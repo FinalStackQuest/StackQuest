@@ -184,6 +184,7 @@ export default class Player extends EntityPrefab {
       this.HUD.updateHealth()
     }
     this.computeLifeBar()
+    socket.emit('updateStats', this.stats)
   }
 
   movePlayer() {
