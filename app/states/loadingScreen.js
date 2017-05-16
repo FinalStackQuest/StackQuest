@@ -1,4 +1,5 @@
 import loadAssets from './utils/loadAssets'
+import {loadClassSelect} from './utils/loadAssets'
 import CustomLoader from '../utils/CustomLoader'
 
 /* global StackQuest, Phaser */
@@ -24,6 +25,10 @@ export default {
     })
 
     loadingText.anchor.setTo(0.5)
+
+    if (!player.class) {
+      loadClassSelect()
+    }
 
     loadAssets()
   },

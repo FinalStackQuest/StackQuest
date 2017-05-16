@@ -2,6 +2,7 @@
   "soldier": {
     "stats": {
       "hp": 30,
+      "maxhp": 30,
       "attack": 29,
       "defense": 14,
       "speed": 10
@@ -17,6 +18,7 @@
   "soldieralt": {
     "stats": {
       "hp": 40,
+      "maxhp": 40,
       "attack": 35,
       "defense": 19,
       "speed": 15

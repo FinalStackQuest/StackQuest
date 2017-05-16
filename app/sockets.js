@@ -11,6 +11,7 @@ export const GameEnemies = {}
 export const GameItems = {}
 export const GameGroups = {}
 
+
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
   socket.on('addPlayer', addPlayer)
@@ -83,7 +84,7 @@ const updateEnemy = (newPos, name) => {
 
 const hitEnemy = (enemyName, damage) => {
   if (GameEnemies[enemyName]) {
-    GameEnemies[enemyName].takeDamage(damage)
+    GameEnemies[enemyName].loseHealth(damage)
   }
 }
 

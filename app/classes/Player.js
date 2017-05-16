@@ -19,7 +19,7 @@ export default class Player extends EntityPrefab {
     GameGroups.players.add(this)
     this.player = player
     this.anchor.set(0.5, 0.2)
-    this.orientation = 4 // down
+    this.orientation = 'down'
 
     this.absorbProperties(playerProperties[player.class])
 
@@ -75,25 +75,25 @@ export default class Player extends EntityPrefab {
     const xDirection = this.position.x - targetX
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-    this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (yDirection > 0) {
-      this.orientation = 2
+      this.orientation = 'up'
     } else if (yDirection < 0) {
-      this.orientation = 4
+      this.orientation = 'down'
     }
     if (xDirection > 0) {
-      this.orientation = 1
+      this.orientation = 'left'
     } else if (xDirection < 0) {
-      this.orientation = 3
+      this.orientation = 'right'
     }
 
-    this.animations.play(`walk_${this.orientationsDict[this.orientation]}`, null, true)
+    this.animations.play(`walk_${this.orientation}`, null, true)
     if (this.game) {
       this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
       this.moveTween.onComplete.add(this.completeMovement, this)
       this.moveTween.start()
     }
+    this.playerHealthBar.setPosition(targetX, targetY - 10)
   }
 
   completeMovement() {
@@ -151,28 +151,26 @@ export default class Player extends EntityPrefab {
     this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (this.cursors.up.isDown) {
-      this.body.velocity.y = -200
-      this.orientation = 2
+      this.body.velocity.y = -this.stats.speed
+      this.orientation = 'up'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
-    }
-    if (this.cursors.down.isDown) {
-      this.body.velocity.y = 200
-      this.orientation = 4
+    } else if (this.cursors.down.isDown) {
+      this.body.velocity.y = this.stats.speed
+      this.orientation = 'down'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     }
     if (this.cursors.left.isDown) {
-      this.body.velocity.x = -200
-      this.orientation = 1
+      this.body.velocity.x = -this.stats.speed
+      this.orientation = 'left'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
-    }
-    if (this.cursors.right.isDown) {
-      this.body.velocity.x = 200
-      this.orientation = 3
+    } else if (this.cursors.right.isDown) {
+      this.body.velocity.x = this.stats.speed
+      this.orientation = 'right'
       socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     }
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
-      this.animations.play(`walk_${this.orientationsDict[this.orientation]}`)
+      this.animations.play(`walk_${this.orientation}`)
     }
   }
 

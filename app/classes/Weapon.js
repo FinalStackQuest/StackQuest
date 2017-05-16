@@ -24,7 +24,12 @@ class Weapon extends Phaser.Weapon {
   }
 
   damage() {
-    return this.player.stats.attack + this.attack
+    const totalAttack = this.player.stats.attack + this.attack
+    // variation in damage
+    const variation = 0.1
+    const damageVariation = Math.floor(Math.random() * (totalAttack * variation))
+    const totalDamage = totalAttack + (Math.random() < 0.5 ? damageVariation : -damageVariation)
+    return totalDamage
   }
 
   setBulletAnimationFrames() {
