@@ -33,15 +33,15 @@ const loadAssets = () => {
   StackQuest.game.load.audio('mines', ['assets/audio/Exploration3_Tha_el_Mines.mp3', 'assets/audio/Exploration3_Tha_el_Mines.ogg'])
 
   //  Player arena assets
-  StackQuest.game.load.tilemap('playerArena', 'assets/maps/playerArena.json', null, Phaser.Tilemap.TILED_JSON)
-  StackQuest.game.load.image('industrial_tilesheet@2', 'assets/tilesets/Platformer/platformerPack_industrial_tilesheet@2.png')
+  StackQuest.game.load.tilemap('arenaMap', 'assets/maps/arenaMap.json', null, Phaser.Tilemap.TILED_JSON)
   StackQuest.game.load.image('towerDefense', 'assets/tilesets/Tower_Defense/towerDefense_tilesheet@2.png')
+  StackQuest.game.load.image('browserQuestTileSheet', 'assets/tilesets/BrowserQuest/tilesheet.png')
 }
 
 export const loadClassSelect = () => {
     // cave state assets
   StackQuest.game.load.tilemap('caveMap', 'assets/maps/caveMap.json', null, Phaser.Tilemap.TILED_JSON)
-  StackQuest.game.load.image('browserQuestTileSheet', 'assets/tilesets/BrowserQuest/tilesheet.png')
+  StackQuest.game.load.image('browserQuestTileSheet2', 'assets/tilesets/BrowserQuest/tilesheet2.png')
   StackQuest.game.load.audio('day', ['assets/audio/day.mp3', 'assets/audio/day.ogg'])
 }
 

@@ -38,19 +38,16 @@ export const createSpaceAssets = () => {
 
 export const createPvpAssets = () => {
   if (music) music.stop()
-  // music = StackQuest.game.add.audio('mines')
-  // music.play('', 0, 1, true)
+  music = StackQuest.game.add.audio('mines')
+  music.play('', 0, 1, true)
 
-  const map = StackQuest.game.add.tilemap('playerArena')
+  const map = StackQuest.game.add.tilemap('marsMap')
 
   map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
   map.addTilesetImage('scifi_tilesheet@2', 'scifiTileSheet')
   map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
   map.addTilesetImage('tilesheet', 'browserQuestTileSheet')
-  map.addTilesetImage('platformerPack_industrial_tilesheet@2', 'industrial_tilesheet@2')
   map.addTilesetImage('towerDefense_tilesheet@2', 'towerDefense')
-  map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
-
 
   setCollision(map)
 
@@ -64,7 +61,7 @@ export const createCaveAssets = () => {
 
   const map = StackQuest.game.add.tilemap('caveMap')
 
-  map.addTilesetImage('tilesheet', 'browserQuestTileSheet')
+  map.addTilesetImage('tilesheet', 'browserQuestTileSheet2')
   setCollision(map)
 }
 

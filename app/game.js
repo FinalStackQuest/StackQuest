@@ -6,7 +6,7 @@ import loadingScreen from './states/loadingScreen'
 import caveState from './states/caveState'
 import fantasyState from './states/fantasyState'
 import spaceState from './states/spaceState'
-import playerArena from './states/playerArena'
+import arenaState from './states/arenaState'
 
 /* global StackQuest, Phaser */
 
@@ -22,7 +22,7 @@ class StackQuest extends Phaser.Game {
     this.state.add('caveState', caveState)
     this.state.add('fantasyState', fantasyState)
     this.state.add('spaceState', spaceState)
-    this.state.add('playerArena', playerArena)
+    this.state.add('arenaState', arenaState)
   }
 
   // Start StackQuest Game
