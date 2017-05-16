@@ -5,6 +5,7 @@ import { socket } from 'APP/app/sockets'
 const savePlayerState = (player, playerObject, nextMap) => {
   player.currentMap = nextMap
   player.hp = playerObject.stats.hp
+  player.stats = playerObject.stats
   socket.emit('savePlayer', player)
   StackQuest.game.state.start(player.currentMap, true, false, player)
 }

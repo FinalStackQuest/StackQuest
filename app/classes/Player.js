@@ -131,7 +131,7 @@ export default class Player extends EntityPrefab {
 
     this.animations.play(`walk_${this.orientation}`, null, true)
     if (this.game) {
-      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
+      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY }, 33)
       this.moveTween.onComplete.add(this.completeMovement, this)
       this.moveTween.start()
     }
