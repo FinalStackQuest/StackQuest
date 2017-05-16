@@ -57,13 +57,14 @@ const fantasyState = {
 
     playerObject.movePlayer()
     playerObject.attack()
+    playerObject.specialAttack()
     playerObject.HUD.updateNumPlayers()
     playerObject.chat()
 
     itemCollision(playerObject, itemGraveyard)
     enemyCollision(playerObject, graveyard)
     playerCollision(playerObject)
-    mapTransition(player, playerObject, 'spaceState')
+    mapTransition(player, playerObject, 'arenaState')
   }
 }
 

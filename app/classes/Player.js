@@ -20,9 +20,12 @@ export default class Player extends EntityPrefab {
     super(game, name, { x: player.x, y: player.y }, player.class)
 
     GameGroups.players.add(this)
+
     this.player = player
     this.anchor.set(0.5, 0.2)
     this.orientation = 'down'
+
+    this.lastSpecialAttack = Date.now()
 
     this.absorbProperties(playerProperties[player.class])
 
@@ -36,6 +39,12 @@ export default class Player extends EntityPrefab {
 
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
+
+    this.bulletPool = this.game.add.group()
+
+    this.equipSpecial = this.equipSpecial.bind(this)
+    this.equipSpecial(this.specialKey)
+    this.specialAttack = this.specialAttack.bind(this)
 
     this.equipWeapon = this.equipWeapon.bind(this)
     this.equipWeapon(this.weaponKey)
@@ -54,6 +63,11 @@ export default class Player extends EntityPrefab {
     this.savePlayer = this.savePlayer.bind(this)
   }
 
+  equipSpecial(specialKey) {
+    this.special = new Weapon(this.game, this, specialKey)
+    this.special.name = specialKey
+    return true
+  }
   equipWeapon(weaponKey) {
     this.weapon = new Weapon(this.game, this, weaponKey)
     this.weapon.name = weaponKey
@@ -72,6 +86,7 @@ export default class Player extends EntityPrefab {
     this.cursors.down = this.game.input.keyboard.addKey(Phaser.Keyboard.S)
     this.cursors.right = this.game.input.keyboard.addKey(Phaser.Keyboard.D)
     this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
+    this.cursors.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
     this.cursors.board = this.game.input.keyboard.addKey(Phaser.Keyboard.B)
     this.cursors.click = this.game.input.activePointer
@@ -198,9 +213,19 @@ export default class Player extends EntityPrefab {
       this.animations.play(`walk_${this.orientation}`)
     }
   }
-
+  specialAttack() {
+    if (this.cursors.space.isDown && this.cursors.click.isDown) {
+      if (Date.now() - this.lastSpecialAttack > 5000) {
+        this.lastSpecialAttack = Date.now()
+        const targetX = this.game.input.worldX
+        const targetY = this.game.input.worldY
+        this.special.fire(null, targetX, targetY)
+        socket.emit('fireSpecial', targetX, targetY)
+      }
+    }
+  }
   attack() {
-    if (this.cursors.click.isDown) {
+    if (this.cursors.click.isDown && !this.cursors.space.isDown) {
       const targetX = this.game.input.worldX
       const targetY = this.game.input.worldY
       this.weapon.fire(null, targetX, targetY)

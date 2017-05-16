@@ -1,21 +1,16 @@
 import { socket, GameGroups } from '../sockets'
-import { createSpaceAssets } from './utils/createAssets'
+import { createPvpAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
-import enemyCollision from './utils/enemyCollision'
 import mapTransition from './utils/mapTransition'
-import itemCollision from './utils/itemCollision'
 import playerCollision from './utils/playerCollision'
 import playerClass from '../classes/Player'
-import Loot from '../classes/Loot'
 
 /* global StackQuest, Phaser */
 
 let map
   , playerObject
   , player
-  , graveyard = []
-  , itemGraveyard = []
 
 const spaceState = {
   init(character) {
@@ -25,14 +20,12 @@ const spaceState = {
   create() {
     this.physics.startSystem(Phaser.Physics.ARCADE)
 
-    map = createSpaceAssets()
+    map = createPvpAssets()
 
-    GameGroups.items = this.game.add.group()
-    GameGroups.enemies = this.game.add.group()
     GameGroups.players = this.game.add.group()
     GameGroups.HUD = this.game.add.group()
 
-    socket.emit('setupState', player, makeCollisionMap(map), 'spaceState')
+    socket.emit('setupState', player, makeCollisionMap(map), 'arenaState')
 
     playerObject = createPlayer(player)
 
@@ -43,26 +36,10 @@ const spaceState = {
     StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions)
     StackQuest.game.physics.arcade.collide(playerObject, StackQuest.game.layers.collisions_2)
 
-    graveyard.forEach(enemy => {
-      enemy.destroy()
-      socket.emit('killEnemy', enemy.name)
-    })
-    graveyard = []
-
-    itemGraveyard.forEach(item => {
-      item.destroy()
-      socket.emit('killItem', item.name)
-    })
-    itemGraveyard = []
-
     playerObject.movePlayer()
     playerObject.attack()
     playerObject.specialAttack()
     playerObject.HUD.updateNumPlayers()
-    playerObject.chat()
-
-    itemCollision(playerObject, itemGraveyard)
-    enemyCollision(playerObject, graveyard)
     playerCollision(playerObject)
     mapTransition(player, playerObject, 'fantasyState')
   }

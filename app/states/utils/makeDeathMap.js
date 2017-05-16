@@ -1,20 +1,20 @@
-const makeCollisionMap = map => {
-  const collisionArray = []
+const makeDeathMap = map => {
+  const deathArray = []
   for (let rowIdx = 0; rowIdx < map.height; rowIdx++) {
     const rowArray = []
     for (let colIdx = 0; colIdx < map.width; colIdx++) {
-      let collision = false
+      let death = false
       for (const layer of map.layers) {
         if (layer.data[rowIdx][colIdx].collides) {
-          collision = true
+          death = true
           break
         }
       }
-      rowArray.push(Number(collision))
+      rowArray.push(Number(death))
     }
-    collisionArray.push(rowArray)
+    deathArray.push(rowArray)
   }
-  return collisionArray
+  return deathArray
 }
 
-export default makeCollisionMap
+export default makeDeathMap
