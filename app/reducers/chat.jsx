@@ -16,7 +16,7 @@ const reducer = (state = initialState, action) => {
     break
 
   case CREATE_MESSAGE:
-    if (newState.messages.length > 100) newState.messages.shift()
+    if (newState.messages.length >= 100) newState.messages.shift()
     newState.messages.push(action.message)
     break
 
@@ -44,7 +44,8 @@ export const getMessages = messages =>
   }
 
 export const addMessage = message =>
-  dispatch =>
+  dispatch => {
     dispatch(createMessage(message))
+  }
 
 export default reducer

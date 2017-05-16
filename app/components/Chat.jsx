@@ -7,12 +7,24 @@ socket.on('getMessages', messages => {
   getMessages
 })
 
-const Chat = ({ gameExist, messages, message }) => (
+const Chat = ({ game, messages, message, messageChangeHandler, messageSubmitHandler }) => (
   <div className="chat-container">
-    Hi
-    {gameExist &&
+    {game &&
       <div>
-        GAME EXISTS
+        <ul>
+          {messages.map((oldMessage, i) => (
+              <li key={`message ${i + 1}`}>
+                {oldMessage}
+              </li>
+            ))}
+        </ul>
+        <form onSubmit={messageSubmitHandler}>
+          <input
+            type="text"
+            value={message}
+            onChange={messageChangeHandler}
+          />
+        </form>
       </div>
     }
   </div>
@@ -22,9 +34,11 @@ class LocalContainer extends React.Component {
   constructor() {
     super()
     this.state = {
-      messages: [],
       message: ''
     }
+
+    this.messageChangeHandler = this.messageChangeHandler.bind(this)
+    this.messageSubmitHandler = this.messageSubmitHandler.bind(this)
   }
 
   componentDidMount() {
@@ -39,15 +53,28 @@ class LocalContainer extends React.Component {
     socket.emit('getMessages')
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps)
+  messageChangeHandler(event) {
+    this.setState({ message: event.target.value })
+  }
+
+  messageSubmitHandler(event) {
+    event.preventDefault()
+    // do not allow empty string
+    if (this.state.message !== '') {
+      socket.emit('addMessage', this.state.message)
+      this.props.addMessage(this.state.message)
+      this.setState({ message: '' })
+    }
   }
 
   render() {
     return (
       <Chat
-        {...this.state}
-        gameExist={this.props.game}
+        game={this.props.game}
+        messages={this.props.chat.messages}
+        message={this.state.message}
+        messageChangeHandler={this.messageChangeHandler}
+        messageSubmitHandler={this.messageSubmitHandler}
       />
     )
   }

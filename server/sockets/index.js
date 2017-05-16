@@ -174,6 +174,7 @@ const socketFunction = io => {
     })
 
     socket.on('addMessage', message => {
+      if (messages.length >= 100) messages.shift()
       messages.push(message)
       socket.broadcast.emit('addMessage', message)
     })
