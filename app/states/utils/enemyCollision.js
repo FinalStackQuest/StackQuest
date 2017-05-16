@@ -1,6 +1,6 @@
 /* global StackQuest */
 
-import { GameEnemies } from 'APP/app/sockets'
+import { GameEnemies, socket } from 'APP/app/sockets'
 
 const enemyCollision = (playerObject, graveyard) => {
   Object.keys(GameEnemies).forEach(enemyKey => {
@@ -14,6 +14,8 @@ const enemyCollision = (playerObject, graveyard) => {
 
       if (enemy.stats.hp <= 0) {
         graveyard.push(enemy)
+        playerObject.killCount++
+        socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount, killCount: playerObject.killCount })
         delete GameEnemies[enemyKey]
       }
     })
