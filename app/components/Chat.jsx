@@ -7,9 +7,14 @@ socket.on('getMessages', messages => {
   getMessages
 })
 
-const Chat = ({ messages, message }) => (
+const Chat = ({ gameExist, messages, message }) => (
   <div className="chat-container">
     Hi
+    {gameExist &&
+      <div>
+        GAME EXISTS
+      </div>
+    }
   </div>
 )
 
@@ -42,14 +47,15 @@ class LocalContainer extends React.Component {
     return (
       <Chat
         {...this.state}
+        gameExist={this.props.game}
       />
     )
   }
 }
 
 const ChatContainer = connect(
-  ({ chat }) => { chat },
+  ({ chat, game }) => ({ chat, game }),
   { getMessages, addMessage }
-  )(Chat)
+  )(LocalContainer)
 
 export default ChatContainer

@@ -6,6 +6,7 @@ import Login from './Login'
 import WhoAmI from './WhoAmI'
 import Character from './Character'
 import Instructions from './Instructions'
+import Chat from './Chat'
 import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
 import { createCharacter } from 'APP/app/reducers/user'
@@ -13,32 +14,25 @@ import playerProps from 'APP/app/properties/playerProperties.json'
 
 /* global StackQuest */
 
-const Game = ({ loggedIn, gameExist, startGame }) =>
+const Game = ({ user, game, startGame }) =>
   <div id="game-container">
-    {loggedIn && !gameExist &&
-      <div>
+    {user && !game &&
+      <div className="start-game-container">
         <Instructions />
-        {loggedIn.character
+        {user.character
           ? <button className="btn btn-primary" onClick={startGame}>Start Game</button>
           : <Character />
         }
       </div>
     }
+    <Chat />
   </div>
 
 class LocalContainer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loggedIn: props.user,
-      gameExist: props.game
-    }
-    this.startGame = this.startGame.bind(this)
-  }
+  constructor() {
+    super()
 
-  componentWillReceiveProps({ user, game }) {
-    if (user !== this.state.loggedIn) this.setState({ loggedIn: user })
-    if (game !== this.state.gameExist) this.setState({ gameExist: game })
+    this.startGame = this.startGame.bind(this)
   }
 
   startGame() {
@@ -57,6 +51,8 @@ class LocalContainer extends React.Component {
     return (
       <Game
         {...this.state}
+        user={this.props.user}
+        game={this.props.game}
         startGame={this.startGame}
       />
     )
@@ -64,7 +60,7 @@ class LocalContainer extends React.Component {
 }
 
 const GameContainer = connect(
-  ({ auth, game }) => ({ user: auth, game: game }),
+  ({ auth, game }) => ({ user: auth, game }),
   { showGameDisplay, whoami }
 )(LocalContainer)
 
