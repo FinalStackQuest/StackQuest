@@ -57,6 +57,7 @@ const fantasyState = {
 
     playerObject.movePlayer()
     playerObject.attack()
+    playerObject.chat()
 
     itemCollision(playerObject, itemGraveyard)
     enemyCollision(playerObject, graveyard)

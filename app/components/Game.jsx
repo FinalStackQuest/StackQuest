@@ -15,7 +15,7 @@ import playerProps from 'APP/app/properties/playerProperties.json'
 /* global StackQuest */
 
 const Game = ({ user, game, startGame }) =>
-  <div id="game-container">
+  <div id="game-chat-container">
     {user && !game &&
       <div className="start-game-container">
         <Instructions />
@@ -25,7 +25,9 @@ const Game = ({ user, game, startGame }) =>
         }
       </div>
     }
-    <Chat />
+    <div id="game-container">
+      <Chat />
+    </div>
   </div>
 
 class LocalContainer extends React.Component {

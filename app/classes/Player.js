@@ -1,3 +1,6 @@
+import store from 'APP/app/store'
+import { toggleChatBox } from 'APP/app/reducers/chat'
+
 import EntityPrefab from './EntityPrefab'
 import HealthBar from './HealthBar.js'
 import Weapon from './Weapon'
@@ -27,6 +30,7 @@ export default class Player extends EntityPrefab {
     this.setAnimationFrames(this)
     this.lootCount = 0
     this.loadControls()
+    this.chatToggleTime = Date.now()
 
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
@@ -68,6 +72,15 @@ export default class Player extends EntityPrefab {
     this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
     this.cursors.click = this.game.input.activePointer
+  }
+
+  chat() {
+    if (this.cursors.chat.isDown) {
+      if (Date.now() - this.chatToggleTime > 150) {
+        store.dispatch(toggleChatBox())
+        this.chatToggleTime = Date.now()
+      }
+    }
   }
 
   moveOther(targetX, targetY) {

@@ -14,7 +14,7 @@
   background-color: black;
 }
 
-#game-container {
+.game-chat-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,6 +27,53 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#game-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  margin: auto;
+  width: 960px;
+  height: 540px;
+}
+
+.chat-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 10px;
+  left: 10px;
+}
+
+.chat-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 200px;
+  width: 540px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.message-container {
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  list-style: none;
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+}
+
+.new-message-form {
+  width: 100%;
+}
+
+.new-message-input {
+  width: 100%;
 }
 
 .register-text {
