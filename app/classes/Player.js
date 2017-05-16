@@ -25,6 +25,7 @@ export default class Player extends EntityPrefab {
 
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
+    this.killCount = 0
     this.lootCount = 0
     this.loadControls()
 
@@ -128,7 +129,7 @@ export default class Player extends EntityPrefab {
       this.recoverHp()
       this.savePlayer()
     }, 100)
-    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0, killCount: this.killCount })
 
     if (this.HUD) {
       this.HUD.updateFeed('You Died')
@@ -152,20 +153,20 @@ export default class Player extends EntityPrefab {
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -this.stats.speed
       this.orientation = 'up'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     } else if (this.cursors.down.isDown) {
       this.body.velocity.y = this.stats.speed
       this.orientation = 'down'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     }
     if (this.cursors.left.isDown) {
       this.body.velocity.x = -this.stats.speed
       this.orientation = 'left'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     } else if (this.cursors.right.isDown) {
       this.body.velocity.x = this.stats.speed
       this.orientation = 'right'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     }
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
@@ -217,7 +218,7 @@ export default class Player extends EntityPrefab {
     }
 
     socket.emit('updateStats', this.stats)
-    socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
   }
 
   savePlayer() {
@@ -229,6 +230,9 @@ export default class Player extends EntityPrefab {
   }
 
   update() {
-    if (this.HUD) this.HUD.updateScoreboard()
+    if (this.HUD) {
+      this.HUD.updateScoreboard()
+      this.HUD.updateKillboard()
+    }
   }
 }
