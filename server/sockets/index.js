@@ -17,7 +17,7 @@ const tileWidth = 32
 const tileHeight = 32
 
 const enemyMovement = (io, state) => {
-  if (Object.keys(GamePlayers[state])) {
+  if (Object.keys(GamePlayers[state]).length) {
     Object.keys(GameEnemies[state]).forEach(enemyName => {
       const enemy = GameEnemies[state][enemyName]
       const closestPlayer = findClosestPlayer(GamePlayers[state], enemy)
@@ -46,7 +46,7 @@ const enemyMovement = (io, state) => {
 }
 
 const spawnEnemy = (io, state) => {
-  if (Object.keys(GamePlayers[state])) {
+  if (Object.keys(GamePlayers[state]).length) {
     enemySpawn[state].forEach((enemy) => {
       if (!GameEnemies[state][enemy.name]) {
         const enemyStats = Object.assign({}, enemyProperties[enemy.spriteKey].stats)
@@ -82,22 +82,22 @@ const socketFunction = io => {
         socket.broadcast.to(room).emit('updatePlayer', socket.id, player)
       }
     })
+
     socket.on('updateStats', stats => {
       if (GamePlayers[room]) {
         GamePlayers[room][socket.id].stats = stats
+        socket.broadcast.to(room).emit('updateStats', socket.id, stats)
       }
-      socket.broadcast.to(room).emit('updateStats', socket.id, stats)
     })
 
     socket.on('fireProjectile', (xCoord, yCoord) => {
       socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
     })
 
-    socket.on('hitEnemy', (enemyName, damage) => {
+    socket.on('hitEnemy', (enemyName, damageTaken) => {
       if (GameEnemies[room]) {
-        const damageTaken = damage - GameEnemies[room][enemyName].stats.defense
         GameEnemies[room][enemyName].stats.hp -= damageTaken
-        socket.broadcast.to(room).emit('hitEnemy', enemyName, damage)
+        socket.broadcast.to(room).emit('hitEnemy', enemyName, damageTaken)
       }
     })
 
@@ -109,8 +109,10 @@ const socketFunction = io => {
     })
 
     socket.on('createItem', item => {
-      GameItems[room][item.name] = item
-      socket.broadcast.to(room).emit('addItem', item)
+      if (GameItems[room]) {
+        GameItems[room][item.name] = item
+        socket.broadcast.to(room).emit('addItem', item)
+      }
     })
 
     socket.on('killItem', name => {

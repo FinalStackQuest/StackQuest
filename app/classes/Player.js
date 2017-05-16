@@ -74,7 +74,6 @@ export default class Player extends EntityPrefab {
     const xDirection = this.position.x - targetX
     const yDirection = this.position.y - targetY
     const absDirection = Math.abs(xDirection) * 2 - Math.abs(yDirection)
-    this.playerHealthBar.setPosition(this.position.x, this.position.y - 10)
 
     if (yDirection > 0) {
       this.orientation = 'up'
@@ -93,6 +92,7 @@ export default class Player extends EntityPrefab {
       this.moveTween.onComplete.add(this.completeMovement, this)
       this.moveTween.start()
     }
+    this.playerHealthBar.setPosition(targetX, targetY - 10)
   }
 
   completeMovement() {
