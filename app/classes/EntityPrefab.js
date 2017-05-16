@@ -24,13 +24,6 @@ export default class entityPrefab extends Phaser.Sprite {
     this.addChild(this.nameHolder)
     game.add.existing(this)
     game.physics.arcade.enable(this)
-
-    this.orientationsDict = {
-      1: 'left',
-      2: 'up',
-      3: 'right',
-      4: 'down'
-    }
   }
 
   setAnimationFrames(targetObject) {
@@ -57,7 +50,7 @@ export default class entityPrefab extends Phaser.Sprite {
   // Start idling animation, in the appropriate orientation
   idle(force) {
     // force is a boolean to indicate if the animation should be forced to play, or if it can depend from the situation (see animate() )
-    this.animate('idle_' + this.orientationsDict[this.orientation], force)
+    this.animate('idle_' + this.orientation, force)
   }
 
   stopMovement(complete) {

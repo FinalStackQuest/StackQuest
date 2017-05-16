@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 
-const Instructions = (props) => (
+const Instructions = (props) => {
+  return (
     <div>
       <ul className="list-group">
         <li className = "list-group-item">Aim - mouse</li>
@@ -12,5 +13,6 @@ const Instructions = (props) => (
       </ul>
     </div>
   )
+}
 
 export default Instructions
