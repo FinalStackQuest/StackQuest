@@ -50,7 +50,6 @@ export const createPvpAssets = () => {
   map.addTilesetImage('towerDefense_tilesheet@2', 'towerDefense')
   map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
   map.addTilesetImage('RTS_medieval@2', 'rtsTileSheet2')
-  map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
   map.addTilesetImage('sokoban_tilesheet@2', 'sokobanTileSheet2')
 
   setCollision(map)
