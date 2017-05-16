@@ -71,24 +71,30 @@ const socketFunction = io => {
     socket.join(room)
 
     socket.on('disconnect', () => {
-      if (GamePlayers[room]) {
+      try {
         delete GamePlayers[room][socket.id]
         socket.broadcast.to(room).emit('removePlayer', socket.id)
+      } catch (e) {
+        console.log('error:', e)
       }
       console.log(socket.id, 'disconnected')
     })
 
     socket.on('updatePlayer', player => {
-      if (GamePlayers[room]) {
+      try {
         GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: player.playerPos.x, y: player.playerPos.y, lootCount: player.lootCount, killCount: player.killCount })
         socket.broadcast.to(room).emit('updatePlayer', socket.id, player)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('updateStats', stats => {
-      if (GamePlayers[room]) {
+      try {
         GamePlayers[room][socket.id].stats = stats
         socket.broadcast.to(room).emit('updateStats', socket.id, stats)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
@@ -101,38 +107,48 @@ const socketFunction = io => {
     })
 
     socket.on('hitEnemy', (enemyName, damageTaken) => {
-      if (GameEnemies[room]) {
+      try {
         GameEnemies[room][enemyName].stats.hp -= damageTaken
         socket.broadcast.to(room).emit('hitEnemy', enemyName, damageTaken)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('killEnemy', enemyName => {
-      if (GameEnemies[room]) {
+      try {
         delete GameEnemies[room][enemyName]
         socket.broadcast.to(room).emit('removeEnemy', enemyName)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('createItem', item => {
-      if (GameItems[room]) {
+      try {
         GameItems[room][item.name] = item
         socket.broadcast.to(room).emit('addItem', item)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('killItem', name => {
-      if (GameItems[room]) {
+      try {
         delete GameItems[room][name]
         socket.broadcast.to(room).emit('removeItem', name)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('setupState', (player, collisionMap, newRoom) => {
       // remove player from previous map (room)
-      if (GamePlayers[room]) {
+      try {
         delete GamePlayers[room][socket.id]
         socket.broadcast.to(room).emit('removePlayer', socket.id)
+      } catch (e) {
+        console.log('error', e)
       }
 
       // join new map
