@@ -68,7 +68,10 @@ export default class Player extends EntityPrefab {
     this.cursors.right = this.game.input.keyboard.addKey(Phaser.Keyboard.D)
     this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
+    this.cursors.board = this.game.input.keyboard.addKey(Phaser.Keyboard.B)
     this.cursors.click = this.game.input.activePointer
+
+    this.cursors.board.onDown.add(this.toggleHUDBoards, this)
   }
 
   moveOther(targetX, targetY) {
@@ -227,6 +230,12 @@ export default class Player extends EntityPrefab {
     this.player.hp = this.stats.hp
 
     socket.emit('savePlayer', this.player)
+  }
+
+  toggleHUDBoards() {
+    if (this.HUD && this.cursors.board.isDown) {
+      this.HUD.toggleBoards()
+    }
   }
 
   update() {
