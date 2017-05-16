@@ -10,6 +10,7 @@ const loadAssets = () => {
   StackQuest.game.load.spritesheet('bat', 'assets/tilesets/LPC Base Assets/sprites/monsters/bat.png', 32, 32)
   StackQuest.game.load.spritesheet('wizard', 'assets/sprites/wizard2.png', 64, 64)
   StackQuest.game.load.spritesheet('cyborg', 'assets/sprites/cyborg.png', 64, 64)
+  StackQuest.game.load.spritesheet('newbie', 'assets/tilesets/LPC Base Assets/sprites/people/male_walkcycle.png', 64, 64)
   StackQuest.game.load.spritesheet('loot', 'assets/tilesets/LPC Base Assets/sprites/monsters/eyeball.png', 32, 32)
   StackQuest.game.load.spritesheet('weapon', 'assets/sprites/sword.png', 25, 64)
   StackQuest.game.load.spritesheet('armor', 'assets/sprites/shield.png', 64, 64)
@@ -29,6 +30,13 @@ const loadAssets = () => {
   StackQuest.game.load.image('scifiTileSheet', 'assets/tilesets/RTS_Sci-fi/Tilesheet/scifi_tilesheet@2.png')
   StackQuest.game.load.image('mapPackTileSheet2', 'assets/tilesets/Map_Pack/Tilesheet/mapPack_tilesheet_2X.png')
   StackQuest.game.load.audio('mines', ['assets/audio/Exploration3_Tha_el_Mines.mp3', 'assets/audio/Exploration3_Tha_el_Mines.ogg'])
+}
+
+export const loadClassSelect = () => {
+    // cave state assets
+  StackQuest.game.load.tilemap('caveMap', 'assets/maps/caveMap.json', null, Phaser.Tilemap.TILED_JSON)
+  StackQuest.game.load.image('browserQuestTileSheet', 'assets/tilesets/BrowserQuest/tilesheet.png')
+  StackQuest.game.load.audio('day', ['assets/audio/day.mp3', 'assets/audio/day.ogg'])
 }
 
 export default loadAssets

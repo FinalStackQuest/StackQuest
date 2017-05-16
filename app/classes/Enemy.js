@@ -12,13 +12,12 @@ export default class Enemy extends EntityPrefab {
 
     GameGroups.enemies.add(this)
 
-    this.maxLife = stats.hp
+    this.maxLife = stats.maxhp
     this.orientation = ''
     this.lastAttack = Date.now()
     this.anchor.set(0.5, 0.2)
 
     this.absorbProperties(enemyProperties[spriteKey])
-    this.stats = stats
 
     this.setAnimationFrames(this)
 
@@ -29,6 +28,7 @@ export default class Enemy extends EntityPrefab {
     this.attack = this.attack.bind(this)
     this.dropLoot = this.dropLoot.bind(this)
     this.enemyHealthBar = new HealthBar(game, { x: position.x, y: position.y - 10 })
+    this.computeLifeBar()
   }
 
   move(newPos) {
@@ -67,7 +67,11 @@ export default class Enemy extends EntityPrefab {
   attack() {
     if (Date.now() - this.lastAttack > 1000) {
       this.lastAttack = Date.now()
-      return this.stats.attack
+      // variation in damage
+      const variation = 0.1
+      const damageVariation = Math.floor(Math.random() * (this.stats.attack * variation))
+      const totalDamage = this.stats.attack + (Math.random() < 0.5 ? damageVariation : -damageVariation)
+      return totalDamage
     } else {
       return 0
     }
@@ -86,9 +90,14 @@ export default class Enemy extends EntityPrefab {
       //  check if dead
       if (this.stats.hp <= 0) this.die()
     }
+  }
 
-    // return damage
-    return damageTaken
+  loseHealth(damageTaken) {
+    this.stats.hp -= damageTaken
+    const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
+    setTimeout(() => damageText.destroy(), 500)
+
+    this.computeLifeBar()
   }
 
   die() {

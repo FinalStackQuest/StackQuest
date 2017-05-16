@@ -2,6 +2,7 @@
 
 const db = require('APP/db')
 const User = db.model('users')
+const Character = db.model('characters')
 
 const { mustBeLoggedIn, forbidden } = require('./auth.filters')
 
@@ -15,7 +16,18 @@ module.exports = require('express').Router()
   .post('/',
   (req, res, next) =>
     User.create(req.body)
-      .then(user => res.status(201).json(user))
+      .then(user => {
+        Character.create({
+          hp: 100,
+          weaponName: 'Basic Weapon',
+          armorName: 'Basic Armor',
+          x: 783,
+          y: 716,
+          currentMap: 'caveState',
+          user_id: user.id
+        })
+          .then(res.status(201).json(user))
+      })
       .catch(next))
   .get('/:id',
   mustBeLoggedIn,

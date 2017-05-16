@@ -81,7 +81,7 @@ const updateEnemy = (newPos, name) => {
 
 const hitEnemy = (enemyName, damage) => {
   if (GameEnemies[enemyName]) {
-    GameEnemies[enemyName].takeDamage(damage)
+    GameEnemies[enemyName].loseHealth(damage)
   }
 }
 

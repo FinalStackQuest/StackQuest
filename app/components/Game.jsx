@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
-import Character from './Character'
 import Instructions from './Instructions'
 import Chat from './Chat'
 import { whoami } from 'APP/app/reducers/auth'
@@ -19,10 +18,7 @@ const Game = ({ user, game, startGame }) =>
     {user && !game &&
       <div className="start-game-container">
         <Instructions />
-        {user.character
-          ? <button className="btn btn-primary" onClick={startGame}>Start Game</button>
-          : <Character />
-        }
+        <button className="btn btn-primary" onClick={startGame}>Start Game</button>
       </div>
     }
     <div id="game-container">
@@ -43,7 +39,6 @@ class LocalContainer extends React.Component {
     this.props.showGameDisplay(true)
     const character = this.props.user.character
     character.userName = this.props.user.userName
-    character.stats = playerProps[character.class].stats
 
     StackQuest.game = new StackQuestGame()
     StackQuest.game.startGame(character)
