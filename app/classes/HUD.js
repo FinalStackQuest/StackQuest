@@ -55,7 +55,6 @@ class HUD {
     }
     // add our player object to playerScores
     playerScores.push({name: this.player.name, score: this.player.killCount})
-    console.log('playerKills', playerScores)
     // sort the array based on lootCount
     playerScores.sort((p1, p2) => p1.score < p2.score)
     // add these as text nodes to the HUD

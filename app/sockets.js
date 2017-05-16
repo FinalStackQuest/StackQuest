@@ -40,7 +40,6 @@ const addPlayer = (socketId, player) => {
 }
 
 const updatePlayer = (socketId, player) => {
-  console.log('GamePlayers', GamePlayers)
   GamePlayers[socketId].killCount = player.killCount
   GamePlayers[socketId].lootCount = player.lootCount
   GamePlayers[socketId].moveOther(player.playerPos.x, player.playerPos.y)
