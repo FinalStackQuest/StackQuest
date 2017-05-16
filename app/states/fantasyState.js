@@ -62,7 +62,7 @@ const fantasyState = {
 
     itemCollision(playerObject, itemGraveyard)
     enemyCollision(playerObject, graveyard)
-    mapTransition(player, playerObject, 'arenaState')
+    mapTransition(player, playerObject)
   }
 }
 

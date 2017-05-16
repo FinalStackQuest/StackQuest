@@ -43,7 +43,7 @@ const spaceState = {
     playerObject.chat()
 
     playerCollision(playerObject)
-    mapTransition(player, playerObject, 'fantasyState')
+    mapTransition(player, playerObject)
   }
 }
 
