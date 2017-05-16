@@ -41,13 +41,17 @@ export const createPvpAssets = () => {
   music = StackQuest.game.add.audio('mines')
   music.play('', 0, 1, true)
 
-  const map = StackQuest.game.add.tilemap('marsMap')
+  const map = StackQuest.game.add.tilemap('arenaMap')
 
   map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
   map.addTilesetImage('scifi_tilesheet@2', 'scifiTileSheet')
   map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
   map.addTilesetImage('tilesheet', 'browserQuestTileSheet')
   map.addTilesetImage('towerDefense_tilesheet@2', 'towerDefense')
+  map.addTilesetImage('mapPack_tilesheet_2X', 'mapPackTileSheet2')
+  map.addTilesetImage('RTS_medieval@2', 'rtsTileSheet2')
+  map.addTilesetImage('tilesheet_complete_2X', 'completeTileSheet2')
+  map.addTilesetImage('sokoban_tilesheet@2', 'sokobanTileSheet2')
 
   setCollision(map)
 
