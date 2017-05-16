@@ -61,8 +61,9 @@ class LocalContainer extends React.Component {
     event.preventDefault()
     // do not allow empty string
     if (this.state.message !== '') {
-      socket.emit('addMessage', this.state.message)
-      this.props.addMessage(this.state.message)
+      const newMessage = `${this.props.user.userName} : ${this.state.message}`
+      socket.emit('addMessage', newMessage)
+      this.props.addMessage(newMessage)
       this.setState({ message: '' })
     }
   }
@@ -81,7 +82,7 @@ class LocalContainer extends React.Component {
 }
 
 const ChatContainer = connect(
-  ({ chat, game }) => ({ chat, game }),
+  ({ auth, chat, game }) => ({ user: auth, chat, game }),
   { getMessages, addMessage }
   )(LocalContainer)
 
