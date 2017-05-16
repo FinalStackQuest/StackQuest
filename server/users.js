@@ -17,15 +17,15 @@ module.exports = require('express').Router()
   (req, res, next) =>
     User.create(req.body)
       .then(user => {
-          Character.create({
-            hp: 100,
-            weaponName: 'Basic Weapon',
-            armorName: 'Basic Armor',
-            x: 783,
-            y: 718,
-            currentMap: 'caveState',
-            user_id: user.id
-          })
+        Character.create({
+          hp: 100,
+          weaponName: 'Basic Weapon',
+          armorName: 'Basic Armor',
+          x: 783,
+          y: 716,
+          currentMap: 'caveState',
+          user_id: user.id
+        })
           .then(res.status(201).json(user))
       })
       .catch(next))

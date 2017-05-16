@@ -1,5 +1,8 @@
+const _ = require('lodash')
 const db = require('APP/db')
 const Character = db.model('characters')
+
+const messages = []
 
 const enemyProperties = require('APP/app/properties/enemyProperties')
 const enemySpawn = require('./enemySpawn.json')
@@ -49,8 +52,7 @@ const spawnEnemy = (io, state) => {
   if (Object.keys(GamePlayers[state]).length) {
     enemySpawn[state].forEach((enemy) => {
       if (!GameEnemies[state][enemy.name]) {
-        const enemyStats = Object.assign({}, enemyProperties[enemy.spriteKey].stats)
-        GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
+        GameEnemies[state][enemy.name] = Object.assign({}, enemy, _.cloneDeep(enemyProperties[enemy.spriteKey]))
         io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
       }
     })
@@ -167,6 +169,16 @@ const socketFunction = io => {
           id: player.id
         },
       })
+    })
+
+    socket.on('getMessages', () => {
+      socket.emit('getMessages', messages)
+    })
+
+    socket.on('addMessage', message => {
+      if (messages.length >= 100) messages.shift()
+      messages.push(message)
+      socket.broadcast.emit('addMessage', message)
     })
   })
 }

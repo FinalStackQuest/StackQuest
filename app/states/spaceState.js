@@ -58,6 +58,7 @@ const spaceState = {
     playerObject.movePlayer()
     playerObject.attack()
     playerObject.HUD.updateNumPlayers()
+    playerObject.chat()
 
     itemCollision(playerObject, itemGraveyard)
     enemyCollision(playerObject, graveyard)
