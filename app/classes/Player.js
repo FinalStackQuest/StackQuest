@@ -50,7 +50,7 @@ export default class Player extends EntityPrefab {
     this.specialAttack = this.specialAttack.bind(this)
 
     this.specialMove = this.specialMove.bind(this)
-
+    // this.checkTeleport = this.checkTeleport.bind(this)
     this.equipWeapon = this.equipWeapon.bind(this)
     this.equipWeapon(this.weaponKey)
     this.attack = this.attack.bind(this)
@@ -98,7 +98,7 @@ export default class Player extends EntityPrefab {
     this.cursors.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
     this.cursors.board = this.game.input.keyboard.addKey(Phaser.Keyboard.B)
-    this.cursors.transport = this.game.input.keyboard.addKey(Phaser.Keyboard.T)
+    this.cursors.transport = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT)
     this.cursors.click = this.game.input.activePointer
 
     this.cursors.board.onDown.add(this.toggleHUDBoards, this)
@@ -241,14 +241,31 @@ export default class Player extends EntityPrefab {
 
   specialMove() {
     if (this.cursors.transport.isDown && this.cursors.click.isDown) {
-      if (Date.now() - this.lastSpecialMove > 5000) {
-        this.lastSpecialMove = Date.now()
-        const x = this.game.input.mousePointer.x
-        const y = this.game.input.mousePointer.y
-        console.log('hit this function!!!')
-        console.log(`x: ${x} y: ${y}`)
+      if (Date.now() - this.lastSpecialMove > 1000) {
+        const x = this.game.input.worldX
+        const y = this.game.input.worldY
+        const newX = Math.floor(x/32)
+        const newY = Math.floor(y/32)
+        console.log('collisionMap', this.collisionMap)
+        console.log('checktelly', this.checkTeleport(newX, newY))
+        if (!this.checkTeleport(newX, newY)) return
+        if (this.checkTeleport(newX, newY) === true) {
+          this.lastSpecialMove = Date.now()
+          this.x = x
+          this.y = y
+          socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
+        }
       }
     }
+  }
+
+  checkTeleport(x, y) {
+    const tiles = [
+      [x-1, y-1], [x-1, y], [x-1, y+1],
+      [x, y-1], [x, y], [x, y+1],
+      [x+1, y-1], [x+1, y], [x+1, y+1]
+    ]
+    return tiles.every(tile => this.collisionMap[tile[0]][tile[1]] === 0)
   }
 
   attack() {

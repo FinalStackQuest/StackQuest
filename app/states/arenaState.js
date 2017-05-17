@@ -24,11 +24,11 @@ const spaceState = {
 
     GameGroups.players = this.game.add.group()
     GameGroups.HUD = this.game.add.group()
-
-    socket.emit('setupState', player, makeCollisionMap(map), 'arenaState')
+    const collisionMap = makeCollisionMap(map)
+    socket.emit('setupState', player, collisionMap, 'arenaState')
 
     playerObject = createPlayer(player)
-
+    playerObject.collisionMap = collisionMap
     this.physics.setBoundsToWorld(true, true, true, true, false)
   },
 
@@ -39,6 +39,7 @@ const spaceState = {
     playerObject.movePlayer()
     playerObject.attack()
     playerObject.specialAttack()
+    playerObject.specialMove()
     playerObject.HUD.updateNumPlayers()
     playerObject.chat()
 

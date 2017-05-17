@@ -30,11 +30,11 @@ const fantasyState = {
     GameGroups.enemies = this.game.add.group()
     GameGroups.players = this.game.add.group()
     GameGroups.HUD = this.game.add.group()
-
-    socket.emit('setupState', player, makeCollisionMap(map), 'fantasyState')
+    const collisionMap = makeCollisionMap(map)
+    socket.emit('setupState', player, collisionMap, 'fantasyState')
 
     playerObject = createPlayer(player)
-
+    playerObject.collisionMap = collisionMap
     this.physics.setBoundsToWorld(true, true, true, true, false)
   },
 
@@ -57,6 +57,7 @@ const fantasyState = {
     playerObject.movePlayer()
     playerObject.attack()
     playerObject.specialAttack()
+    playerObject.specialMove()
     playerObject.HUD.updateNumPlayers()
     playerObject.chat()
 
