@@ -1,16 +1,17 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 
 const Instructions = (props) => (
   <div>
     <ul className="list-group">
-      <li className="list-group-item">Aim - mouse</li>
-      <li className="list-group-item">Attack - Left Mouse Button</li>
-      <li className="list-group-item">Toggle Leaderboards - B</li>
-      <li className="list-group-item">Toggle Chat - TAB</li>
-      <li className="list-group-item">Up - W</li>
-      <li className="list-group-item">Left - A</li>
-      <li className="list-group-item">Down - S</li>
-      <li className="list-group-item">Right - D</li>
+      <li className="list-group-item"><b>Aim</b> - Mouse</li>
+      <li className="list-group-item"><b>Attack</b> - Click Mouse </li>
+      <li className="list-group-item"><b>Special</b> Attack - Click Mouse + Spacebar </li>
+      <li className="list-group-item"><b>Toggle Leaderboards</b> - B</li>
+      <li className="list-group-item"><b>Toggle Chat</b> - Tab</li>
+      <li className="list-group-item"><b>Up</b> - W</li>
+      <li className="list-group-item"><b>Left</b> - A</li>
+      <li className="list-group-item"><b>Down</b> - S</li>
+      <li className="list-group-item"><b>Right</b> - D</li>
     </ul>
   </div>
 )

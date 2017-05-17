@@ -5,6 +5,7 @@ import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
 import Instructions from './Instructions'
+import GamePlay from './GamePlay'
 import Chat from './Chat'
 import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
@@ -15,12 +16,12 @@ import playerProps from 'APP/app/properties/playerProperties.json'
 
 const Game = ({ user, game, startGame }) =>
   <div id="game-chat-container">
-    {user && !game &&
-      <div className="start-game-container">
+    {!game && (user
+      ? <div className="start-game-container">
         <Instructions />
         <button className="btn btn-primary" onClick={startGame}>Start Game</button>
-      </div>
-    }
+      </div> : <GamePlay />
+    )}
     <div id="game-container">
       <Chat />
     </div>
@@ -57,7 +58,7 @@ class LocalContainer extends React.Component {
 }
 
 const GameContainer = connect(
-  ({ auth, game }) => ({ user: auth, game }),
+  ({ auth, game }) => ({user: auth, game}),
   { showGameDisplay, whoami }
 )(LocalContainer)
 
