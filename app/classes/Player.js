@@ -29,6 +29,8 @@ export default class Player extends EntityPrefab {
 
     this.absorbProperties(playerProperties[player.class])
 
+    this.checkStats(player)
+
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
     this.killCount = 0
@@ -61,6 +63,10 @@ export default class Player extends EntityPrefab {
 
     this.pickUpItem = this.pickUpItem.bind(this)
     this.savePlayer = this.savePlayer.bind(this)
+  }
+
+  checkStats(player) {
+    if (player.stats) this.stats = player.stats
   }
 
   equipSpecial(specialKey) {
@@ -131,7 +137,7 @@ export default class Player extends EntityPrefab {
 
     this.animations.play(`walk_${this.orientation}`, null, true)
     if (this.game) {
-      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
+      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY }, 33)
       this.moveTween.onComplete.add(this.completeMovement, this)
       this.moveTween.start()
     }
@@ -184,6 +190,7 @@ export default class Player extends EntityPrefab {
       this.HUD.updateHealth()
     }
     this.computeLifeBar()
+    socket.emit('updateStats', this.stats)
   }
 
   movePlayer() {
@@ -215,6 +222,7 @@ export default class Player extends EntityPrefab {
       this.animations.play(`walk_${this.orientation}`)
     }
   }
+
   specialAttack() {
     if (this.cursors.space.isDown && this.cursors.click.isDown) {
       if (Date.now() - this.lastSpecialAttack > 5000) {
@@ -226,6 +234,7 @@ export default class Player extends EntityPrefab {
       }
     }
   }
+
   attack() {
     if (this.cursors.click.isDown && !this.cursors.space.isDown) {
       const targetX = this.game.input.worldX

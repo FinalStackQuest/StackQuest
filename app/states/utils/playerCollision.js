@@ -11,7 +11,6 @@ const playerCollision = (playerObject) => {
 
     //  regular weapon
     StackQuest.game.physics.arcade.overlap(projectile.bullets, enemy, (target, bullet) => {
-
       //  check if same class/faction
       if (projectile.player.key !== enemy.key) {
         bullet.kill()
@@ -31,7 +30,7 @@ const playerCollision = (playerObject) => {
 
     //  special weapon
     StackQuest.game.physics.arcade.overlap(special.bullets, enemy, (target, bullet) => {
-       //  check if same class/faction
+      //  check if same class/faction
       if (projectile.player.key !== enemy.key) {
         let damageTaken = special.damage() - (enemy.stats.defense + enemy.armor.defense)
         if (damageTaken < 0) damageTaken = 0

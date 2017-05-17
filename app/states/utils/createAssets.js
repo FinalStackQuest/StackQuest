@@ -38,7 +38,7 @@ export const createSpaceAssets = () => {
 
 export const createPvpAssets = () => {
   if (music) music.stop()
-  music = StackQuest.game.add.audio('mines')
+  music = StackQuest.game.add.audio('military')
   music.play('', 0, 1, true)
 
   const map = StackQuest.game.add.tilemap('arenaMap')
