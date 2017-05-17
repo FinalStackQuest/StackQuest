@@ -26,6 +26,7 @@ export default class Player extends EntityPrefab {
     this.orientation = 'down'
 
     this.lastSpecialAttack = Date.now()
+    this.lastSpecialMove = Date.now()
 
     this.absorbProperties(playerProperties[player.class])
 
@@ -47,6 +48,8 @@ export default class Player extends EntityPrefab {
     this.equipSpecial = this.equipSpecial.bind(this)
     this.equipSpecial(this.specialKey)
     this.specialAttack = this.specialAttack.bind(this)
+
+    this.specialMove = this.specialMove.bind(this)
 
     this.equipWeapon = this.equipWeapon.bind(this)
     this.equipWeapon(this.weaponKey)
@@ -95,6 +98,7 @@ export default class Player extends EntityPrefab {
     this.cursors.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
     this.cursors.board = this.game.input.keyboard.addKey(Phaser.Keyboard.B)
+    this.cursors.transport = this.game.input.keyboard.addKey(Phaser.Keyboard.T)
     this.cursors.click = this.game.input.activePointer
 
     this.cursors.board.onDown.add(this.toggleHUDBoards, this)
@@ -235,8 +239,20 @@ export default class Player extends EntityPrefab {
     }
   }
 
+  specialMove() {
+    if (this.cursors.transport.isDown && this.cursors.click.isDown) {
+      if (Date.now() - this.lastSpecialMove > 5000) {
+        this.lastSpecialMove = Date.now()
+        const x = this.game.input.mousePointer.x
+        const y = this.game.input.mousePointer.y
+        console.log('hit this function!!!')
+        console.log(`x: ${x} y: ${y}`)
+      }
+    }
+  }
+
   attack() {
-    if (this.cursors.click.isDown && !this.cursors.space.isDown) {
+    if (this.cursors.click.isDown && !this.cursors.space.isDown && !this.cursors.transport.isDown) {
       const targetX = this.game.input.worldX
       const targetY = this.game.input.worldY
       this.weapon.fire(null, targetX, targetY)
