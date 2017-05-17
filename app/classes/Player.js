@@ -268,6 +268,7 @@ export default class Player extends EntityPrefab {
 
     case 'hp':
       this.stats.hp += itemProperty.buff
+      if (this.stats.hp > 100) this.stats.hp = 100
       break
     }
 
