@@ -5,7 +5,7 @@ http://stackquest.herokuapp.com
 
 ### StackQuest Team
 
-Jonathan Liu
-Gabriel Rowe
-Keisuke Kido
-Anton Cataldi
+1. Jonathan Liu
+2. Gabriel Rowe
+3. Keisuke Kido
+4. Anton Cataldi

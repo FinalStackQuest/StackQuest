@@ -19,24 +19,24 @@
       "rate": 16
     }
   },
-  "wizardSpecial": {
-    "attack": 30,
-    "quantity": 1,
-    "bulletSpeed": 500,
-    "fireRate": 250,
-    "frames": {
-      "launch": [0, 1, 2, 3, 4, 5, 6, 7],
-      "rate": 100
-    }
-  },
   "cyborgSpecial": {
-    "attack": 30,
+    "attack": 15,
     "quantity": 1,
     "bulletSpeed": 500,
     "fireRate": 250,
     "frames": {
       "launch": [0, 1, 2, 3],
       "rate": 15
+    }
+  },
+  "wizardSpecial": {
+    "attack": 13,
+    "quantity": 1,
+    "bulletSpeed": 500,
+    "fireRate": 250,
+    "frames": {
+      "launch": [0, 1, 2, 3, 4, 5, 6, 7],
+      "rate": 100
     }
   }
 }
