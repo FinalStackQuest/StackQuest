@@ -57,7 +57,7 @@ export const getMessages = messages =>
   dispatch => {
     setTimeout(() => $('.message-container').animate({scrollTop: 99999}), 100)
     setTimeout(() => dispatch(addMessage('Welcome to StackQuest'), 100))
-    setTimeout(() => dispatch(addMessage('Press Tab to toggle the chat'), 100))
+    setTimeout(() => dispatch(addMessage('Press Tab to toggle the chat when the game starts'), 100))
     return dispatch(readMessages(messages))
   }
 
