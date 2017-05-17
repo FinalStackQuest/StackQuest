@@ -10,7 +10,6 @@ const createPlayer = (player) => {
     playerObject = new Player(StackQuest.game, player.userName, player)
   } else {
     playerObject = new Player(StackQuest.game, player.userName, player)
-    StackQuest.game.camera.follow(playerObject)
     playerObject.HUD = new HUD(StackQuest.game, playerObject)
   }
   StackQuest.game.camera.follow(playerObject)
