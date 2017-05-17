@@ -1,12 +1,11 @@
+body {
+  background-color: #1a1a1a;
+}
+
 .stackquest-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.root-container {
-  height: 100vh;
-  background-color: #1a1a1a;
 }
 
 .black-background {
@@ -57,6 +56,11 @@
   height: 200px;
   width: 540px;
   background: rgba(255, 255, 255, 0.5);
+}
+
+.chat-display-small {
+  height: 54px;
+  width: 540px;
 }
 
 .message-container {

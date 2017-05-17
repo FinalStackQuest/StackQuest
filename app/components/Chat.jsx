@@ -11,8 +11,8 @@ socket.on('getMessages', messages => {
 
 const Chat = ({ game, messages, message, showChat, messageChangeHandler, messageSubmitHandler }) => (
   <div className="chat-container">
-    {game && showChat &&
-      <div className="chat-display">
+    {game && showChat
+      ? <div className="chat-display">
         <ul className="message-container">
           {messages.map((oldMessage, i) => (
               <li key={`message ${i + 1}`}>
@@ -29,6 +29,15 @@ const Chat = ({ game, messages, message, showChat, messageChangeHandler, message
             onChange={messageChangeHandler}
           />
         </form>
+      </div>
+      : <div className="chat-display chat-display-small">
+        <ul className="message-container">
+          {messages.map((oldMessage, i) => (
+              <li key={`message ${i + 1}`}>
+                {oldMessage}
+              </li>
+            ))}
+        </ul>
       </div>
     }
   </div>
@@ -57,10 +66,8 @@ class LocalContainer extends React.Component {
     socket.emit('getMessages')
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.chat.showChat) {
-      setTimeout(() => $('.message-container').animate({scrollTop: 99999}), 100)
-    }
+  componentWillReceiveProps() {
+    this.scrollDown()
   }
 
   messageChangeHandler(event) {
@@ -76,6 +83,10 @@ class LocalContainer extends React.Component {
       this.props.addMessage(newMessage)
       this.setState({ message: '' })
     }
+  }
+
+  scrollDown() {
+    $('.message-container').animate({scrollTop: 99999})
   }
 
   render() {

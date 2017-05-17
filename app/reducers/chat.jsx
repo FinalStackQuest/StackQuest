@@ -1,3 +1,5 @@
+/* global $ */
+
 /* CONSTANTS */
 export const TOGGLE_CHAT = 'TOGGLE_CHAT'
 export const READ_MESSAGES = 'READ_MESSAGES'
@@ -5,7 +7,7 @@ export const CREATE_MESSAGE = 'CREATE_MESSAGE'
 
 /* REDUCER */
 const initialState = {
-  showChat: true,
+  showChat: false,
   messages: []
 }
 
@@ -52,9 +54,17 @@ export const toggleChatBox = () =>
   dispatch => dispatch(toggleChat())
 
 export const getMessages = messages =>
-  dispatch => dispatch(readMessages(messages))
+  dispatch => {
+    setTimeout(() => $('.message-container').animate({scrollTop: 99999}), 100)
+    setTimeout(() => dispatch(addMessage('Welcome to StackQuest'), 100))
+    setTimeout(() => dispatch(addMessage('Press Tab to toggle the chat when the game starts'), 100))
+    return dispatch(readMessages(messages))
+  }
 
 export const addMessage = message =>
-  dispatch => dispatch(createMessage(message))
+  dispatch => {
+    setTimeout(() => $('.message-container').animate({scrollTop: 99999}), 100)
+    return dispatch(createMessage(message))
+  }
 
 export default reducer

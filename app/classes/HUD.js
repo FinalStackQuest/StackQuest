@@ -2,7 +2,9 @@ require('pixi')
 require('p2')
 require('phaser')
 
+import store from 'APP/app/store'
 import { GameGroups, GamePlayers } from '../sockets'
+import { addMessage } from 'APP/app/reducers/chat'
 
 const textColor = '#fff'
 
@@ -30,7 +32,7 @@ class HUD {
   }
 
   updateNumPlayers() {
-    this.HUDElement.numPlayers.setText(`Players in World: ${Object.keys(GamePlayers).length + 1}`)
+    this.HUDElement.numPlayers.setText(`Players in Map: ${Object.keys(GamePlayers).length + 1}`)
   }
 
   updateScoreboard() {
@@ -78,14 +80,12 @@ class HUD {
   }
 
   updateFeed(newFeed) {
-    this.HUDElement.currentFeed.setText(`${newFeed}`)
-    setTimeout(() => this.HUDElement.currentFeed.setText(''), 4000)
+    store.dispatch(addMessage(newFeed))
   }
 
   initHUD() {
     const gameX = this.game.width
     const gameY = this.game.height
-    // const sortedPlayers = GamePlayers.sort()
 
     this.HUDElement.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, {
       font: '15px Press Start 2P',
@@ -174,13 +174,6 @@ class HUD {
       strokeThickness: 1
     })
     this.HUDElement.killboardThree.visible = this.boardVisibility
-
-    this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 35, `Welcome to StackQuest`, {
-      font: '15px Press Start 2P',
-      fill: textColor,
-      strokeThickness: 1
-    })
-    this.HUDElement.currentFeed.anchor.set(0.5)
 
     for (const elements in this.HUDElement) {
       GameGroups.HUD.add(this.HUDElement[elements])
