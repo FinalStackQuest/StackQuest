@@ -32,7 +32,7 @@ class HUD {
   }
 
   updateNumPlayers() {
-    this.HUDElement.numPlayers.setText(`Players in World: ${Object.keys(GamePlayers).length + 1}`)
+    this.HUDElement.numPlayers.setText(`Players in Map: ${Object.keys(GamePlayers).length + 1}`)
   }
 
   updateScoreboard() {
@@ -178,9 +178,6 @@ class HUD {
     for (const elements in this.HUDElement) {
       GameGroups.HUD.add(this.HUDElement[elements])
     }
-
-    // store.dispatch(addMessage('Welcome to StackQuest'))
-    // store.dispatch(addMessage('Press Tab to toggle the chat'))
   }
 }
 
