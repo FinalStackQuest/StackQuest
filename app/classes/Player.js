@@ -266,7 +266,7 @@ export default class Player extends EntityPrefab {
       this.lootCount += itemProperty.buff
       break
 
-    case 'health':
+    case 'hp':
       this.stats.hp += itemProperty.buff
       break
     }
@@ -274,8 +274,12 @@ export default class Player extends EntityPrefab {
     if (this.HUD) {
       let text = `Acquired ${item}`
 
-      if (itemProperty.type === 'attack' || itemProperty.type === 'defense' || itemProperty.type === 'health') {
+      if (itemProperty.type === 'attack' || itemProperty.type === 'defense') {
         this.HUD.updateStats()
+        text += `, ${itemProperty.type}+${itemProperty.buff} `
+      } else if (itemProperty.type === 'hp') {
+        this.computeLifeBar()
+        this.HUD.updateHealth()
         text += `, ${itemProperty.type}+${itemProperty.buff} `
       }
 
