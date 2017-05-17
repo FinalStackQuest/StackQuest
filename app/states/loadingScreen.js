@@ -1,6 +1,6 @@
 import loadAssets, { loadClassSelect } from './utils/loadAssets'
 import CustomLoader from './utils/CustomLoader'
-// code runs 
+
 import screenShake from '../phaser-screen-shake/ScreenShake'
 
 /* global StackQuest, Phaser */
