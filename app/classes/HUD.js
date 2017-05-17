@@ -80,8 +80,6 @@ class HUD {
   }
 
   updateFeed(newFeed) {
-    // this.HUDElement.currentFeed.setText(`${newFeed}`)
-    // setTimeout(() => this.HUDElement.currentFeed.setText(''), 4000)
     store.dispatch(addMessage(newFeed))
   }
 
@@ -177,17 +175,12 @@ class HUD {
     })
     this.HUDElement.killboardThree.visible = this.boardVisibility
 
-    // this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 35, `Welcome to StackQuest`, {
-    //   font: '15px Press Start 2P',
-    //   fill: textColor,
-    //   strokeThickness: 1
-    // })
-
-    // this.HUDElement.currentFeed.anchor.set(0.5)
-
     for (const elements in this.HUDElement) {
       GameGroups.HUD.add(this.HUDElement[elements])
     }
+
+    // store.dispatch(addMessage('Welcome to StackQuest'))
+    // store.dispatch(addMessage('Press Tab to toggle the chat'))
   }
 }
 
