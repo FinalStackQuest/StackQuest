@@ -25,6 +25,8 @@ const enemyCollision = (playerObject, graveyard) => {
 
       if (enemy.stats.hp <= 0) {
         graveyard.push(enemy)
+        playerObject.killCount++
+        socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount, killCount: playerObject.killCount })
         delete GameEnemies[enemyKey]
       }
     })
