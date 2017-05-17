@@ -1,5 +1,7 @@
 import loadAssets, { loadClassSelect } from './utils/loadAssets'
 import CustomLoader from './utils/CustomLoader'
+// code runs 
+import screenShake from '../phaser-screen-shake/ScreenShake'
 
 /* global StackQuest, Phaser */
 
@@ -37,6 +39,7 @@ export default {
   },
 
   create() {
+    this.game.plugins.screenShake = this.game.plugins.add(screenShake)
     this.state.start(nextState, true, false, player)
   }
 }

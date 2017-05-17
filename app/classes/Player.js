@@ -159,6 +159,8 @@ export default class Player extends EntityPrefab {
         this.HUD.updateHealth()
       }
 
+      console.log(this.game.plugins.screenShake)
+      this.game.plugins.screenShake.shake(3, this)
       socket.emit('updateStats', this.stats)
 
       this.computeLifeBar()
