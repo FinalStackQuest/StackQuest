@@ -1,7 +1,15 @@
 import { socket, GameGroups } from '../sockets'
 import { createCaveAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
+<<<<<<< HEAD
 import createPlayer from './utils/createPlayer'
+=======
+import createPlayer, { assignClass } from './utils/createPlayer'
+import enemyCollision from './utils/enemyCollision'
+import mapTransition from './utils/mapTransition'
+import itemCollision from './utils/itemCollision'
+import playerCollision from './utils/playerCollision'
+>>>>>>> 5cccb9d97278bf1ce1c66d9c0d1f7853fb5b262c
 import playerClass from '../classes/Player'
 import playerProperties from '../properties/playerProperties.json'
 
@@ -50,6 +58,7 @@ const caveState = {
     })
 
     playerObject.movePlayer()
+    playerObject.chat()
 
     if (!toggleChoice && playerObject.position.y < 500) {
       const charClass = playerObject.position.x < 783 ? 'wizard' : 'cyborg'

@@ -1,10 +1,11 @@
 /* global StackQuest, Phaser */
-
 const loadAssets = () => {
   // common assets
   StackQuest.game.load.image('bullet', 'assets/sprites/tank_bulletFly4.png')
   StackQuest.game.load.image('missile', 'assets/sprites/tank_bulletFly4.png')
   StackQuest.game.load.spritesheet('fireball', 'assets/sprites/fireball.png', 31, 27)
+  StackQuest.game.load.spritesheet('wizardSpecial', 'assets/sprites/lightning.png', 128, 72)
+  StackQuest.game.load.spritesheet('cyborgSpecial', 'assets/sprites/cyborgSpecial.png', 80, 81)
   StackQuest.game.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 64, 64)
   StackQuest.game.load.spritesheet('soldieralt', 'assets/tilesets/LPC Base Assets/sprites/people/soldier_altcolor.png', 64, 64)
   StackQuest.game.load.spritesheet('bat', 'assets/tilesets/LPC Base Assets/sprites/monsters/bat.png', 32, 32)
@@ -30,12 +31,18 @@ const loadAssets = () => {
   StackQuest.game.load.image('scifiTileSheet', 'assets/tilesets/RTS_Sci-fi/Tilesheet/scifi_tilesheet@2.png')
   StackQuest.game.load.image('mapPackTileSheet2', 'assets/tilesets/Map_Pack/Tilesheet/mapPack_tilesheet_2X.png')
   StackQuest.game.load.audio('mines', ['assets/audio/Exploration3_Tha_el_Mines.mp3', 'assets/audio/Exploration3_Tha_el_Mines.ogg'])
+
+  //  Player arena assets
+  StackQuest.game.load.tilemap('arenaMap', 'assets/maps/arenaMap.json', null, Phaser.Tilemap.TILED_JSON)
+  StackQuest.game.load.image('towerDefense', 'assets/tilesets/Tower_Defense/towerDefense_tilesheet@2.png')
+  StackQuest.game.load.image('browserQuestTileSheet', 'assets/tilesets/BrowserQuest/tilesheet.png')
+  StackQuest.game.load.audio('military', ['assets/audio/Exploration2_Military_Base.mp3', 'assets/audio/Exploration2_Military_Base.ogg'])
 }
 
 export const loadClassSelect = () => {
-    // cave state assets
+  // cave state assets
   StackQuest.game.load.tilemap('caveMap', 'assets/maps/caveMap.json', null, Phaser.Tilemap.TILED_JSON)
-  StackQuest.game.load.image('browserQuestTileSheet', 'assets/tilesets/BrowserQuest/tilesheet.png')
+  StackQuest.game.load.image('browserQuestTileSheet2', 'assets/tilesets/BrowserQuest/tilesheet2.png')
   StackQuest.game.load.audio('day', ['assets/audio/day.mp3', 'assets/audio/day.ogg'])
 }
 

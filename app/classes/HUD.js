@@ -12,8 +12,8 @@ class HUD {
 
     this.player = player
     this.HUDElement = {}
+    this.boardVisibility = false
     this.initHUD()
-
     GameGroups.HUD.setAll('fixedToCamera', true)
   }
 
@@ -37,16 +37,44 @@ class HUD {
     // add player names and score to array
     const playerScores = []
     for (const player in GamePlayers) {
-      playerScores.push({name: GamePlayers[player].name, score: GamePlayers[player].lootCount})
+      playerScores.push({ name: GamePlayers[player].name, score: GamePlayers[player].lootCount })
     }
     // add our player object to playerScores
-    playerScores.push({name: this.player.name, score: this.player.lootCount})
+    playerScores.push({ name: this.player.name, score: this.player.lootCount })
     // sort the array based on lootCount
     playerScores.sort((p1, p2) => p1.score < p2.score)
     // add these as text nodes to the HUD
     if (playerScores[0]) this.HUDElement.scoreboardOne.setText(`${playerScores[0].name} : ${playerScores[0].score}`)
     if (playerScores[1]) this.HUDElement.scoreboardTwo.setText(`${playerScores[1].name} : ${playerScores[1].score}`)
     if (playerScores[2]) this.HUDElement.scoreboardThree.setText(`${playerScores[2].name} : ${playerScores[2].score}`)
+  }
+
+  updateKillboard() {
+    // add player names and score to array
+    const playerScores = []
+    for (const player in GamePlayers) {
+      playerScores.push({ name: GamePlayers[player].name, score: GamePlayers[player].killCount })
+    }
+    // add our player object to playerScores
+    playerScores.push({ name: this.player.name, score: this.player.killCount })
+    // sort the array based on lootCount
+    playerScores.sort((p1, p2) => p1.score < p2.score)
+    // add these as text nodes to the HUD
+    if (playerScores[0]) this.HUDElement.killboardOne.setText(`${playerScores[0].name} : ${playerScores[0].score}`)
+    if (playerScores[1]) this.HUDElement.killboardTwo.setText(`${playerScores[1].name} : ${playerScores[1].score}`)
+    if (playerScores[2]) this.HUDElement.killboardThree.setText(`${playerScores[2].name} : ${playerScores[2].score}`)
+  }
+
+  toggleBoards() {
+    this.boardVisibility = !this.boardVisibility
+    this.HUDElement.scoreboardTitle.visible = this.boardVisibility
+    this.HUDElement.scoreboardOne.visible = this.boardVisibility
+    this.HUDElement.scoreboardTwo.visible = this.boardVisibility
+    this.HUDElement.scoreboardThree.visible = this.boardVisibility
+    this.HUDElement.killBoardTitle.visible = this.boardVisibility
+    this.HUDElement.killboardOne.visible = this.boardVisibility
+    this.HUDElement.killboardTwo.visible = this.boardVisibility
+    this.HUDElement.killboardThree.visible = this.boardVisibility
   }
 
   updateFeed(newFeed) {
@@ -94,24 +122,58 @@ class HUD {
       fill: textColor,
       strokeThickness: 1
     })
+    this.HUDElement.scoreboardTitle.visible = this.boardVisibility
+
     // We are initializing the top scoring players to be empty text nodes
     this.HUDElement.scoreboardOne = this.game.add.text(600, 55, '', {
       font: '15px Press Start 2P',
       fill: textColor,
       strokeThickness: 1
     })
+    this.HUDElement.scoreboardOne.visible = this.boardVisibility
 
     this.HUDElement.scoreboardTwo = this.game.add.text(600, 85, '', {
       font: '15px Press Start 2P',
       fill: textColor,
       strokeThickness: 1
     })
+    this.HUDElement.scoreboardTwo.visible = this.boardVisibility
 
     this.HUDElement.scoreboardThree = this.game.add.text(600, 115, '', {
       font: '15px Press Start 2P',
       fill: textColor,
       strokeThickness: 1
     })
+    this.HUDElement.scoreboardThree.visible = this.boardVisibility
+
+    this.HUDElement.killBoardTitle = this.game.add.text(600, 145, `Top 3 KILLAS`, {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+    // We are initializing the top scoring players to be empty text nodes
+    this.HUDElement.killBoardTitle.visible = this.boardVisibility
+
+    this.HUDElement.killboardOne = this.game.add.text(600, 175, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+    this.HUDElement.killboardOne.visible = this.boardVisibility
+
+    this.HUDElement.killboardTwo = this.game.add.text(600, 205, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+    this.HUDElement.killboardTwo.visible = this.boardVisibility
+
+    this.HUDElement.killboardThree = this.game.add.text(600, 115, '', {
+      font: '15px Press Start 2P',
+      fill: '#2a2029',
+      strokeThickness: 1
+    })
+    this.HUDElement.killboardThree.visible = this.boardVisibility
 
     this.HUDElement.currentFeed = this.game.add.text(gameX / 2, gameY - 35, `Welcome to StackQuest`, {
       font: '15px Press Start 2P',

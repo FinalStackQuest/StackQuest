@@ -1,3 +1,6 @@
+import store from 'APP/app/store'
+import { toggleChatBox } from 'APP/app/reducers/chat'
+
 import EntityPrefab from './EntityPrefab'
 import HealthBar from './HealthBar.js'
 import Weapon from './Weapon'
@@ -17,19 +20,33 @@ export default class Player extends EntityPrefab {
     super(game, name, { x: player.x, y: player.y }, player.class)
 
     GameGroups.players.add(this)
+
     this.player = player
     this.anchor.set(0.5, 0.2)
     this.orientation = 'down'
 
+    this.lastSpecialAttack = Date.now()
+
     this.absorbProperties(playerProperties[player.class])
+
+    this.checkStats(player)
 
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
+    this.killCount = 0
     this.lootCount = 0
+    this.loadControls = this.loadControls.bind(this)
     this.loadControls()
+    this.chatToggleTime = Date.now()
 
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
+
+    this.bulletPool = this.game.add.group()
+
+    this.equipSpecial = this.equipSpecial.bind(this)
+    this.equipSpecial(this.specialKey)
+    this.specialAttack = this.specialAttack.bind(this)
 
     this.equipWeapon = this.equipWeapon.bind(this)
     this.equipWeapon(this.weaponKey)
@@ -48,6 +65,15 @@ export default class Player extends EntityPrefab {
     this.savePlayer = this.savePlayer.bind(this)
   }
 
+  checkStats(player) {
+    if (player.stats) this.stats = player.stats
+  }
+
+  equipSpecial(specialKey) {
+    this.special = new Weapon(this.game, this, specialKey)
+    this.special.name = specialKey
+    return true
+  }
   equipWeapon(weaponKey) {
     this.weapon = new Weapon(this.game, this, weaponKey)
     this.weapon.name = weaponKey
@@ -66,8 +92,31 @@ export default class Player extends EntityPrefab {
     this.cursors.down = this.game.input.keyboard.addKey(Phaser.Keyboard.S)
     this.cursors.right = this.game.input.keyboard.addKey(Phaser.Keyboard.D)
     this.cursors.left = this.game.input.keyboard.addKey(Phaser.Keyboard.A)
+    this.cursors.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     this.cursors.chat = this.game.input.keyboard.addKey(Phaser.Keyboard.TAB)
+    this.cursors.board = this.game.input.keyboard.addKey(Phaser.Keyboard.B)
     this.cursors.click = this.game.input.activePointer
+
+    this.cursors.board.onDown.add(this.toggleHUDBoards, this)
+  }
+
+  chat() {
+    if (this.cursors.chat.isDown) {
+      if (Date.now() - this.chatToggleTime > 150) {
+        store.dispatch(toggleChatBox())
+        this.chatToggleTime = Date.now()
+      }
+      if (store.getState().chat.showChat) {
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.W)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.S)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.D)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.A)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR)
+        this.game.input.keyboard.removeKey(Phaser.Keyboard.B)
+      } else {
+        this.loadControls()
+      }
+    }
   }
 
   moveOther(targetX, targetY) {
@@ -88,7 +137,7 @@ export default class Player extends EntityPrefab {
 
     this.animations.play(`walk_${this.orientation}`, null, true)
     if (this.game) {
-      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY })
+      this.moveTween = this.game.add.tween(this.position).to({ x: targetX, y: targetY }, 33)
       this.moveTween.onComplete.add(this.completeMovement, this)
       this.moveTween.start()
     }
@@ -128,7 +177,7 @@ export default class Player extends EntityPrefab {
       this.recoverHp()
       this.savePlayer()
     }, 100)
-    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0 })
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0, killCount: this.killCount })
 
     if (this.HUD) {
       this.HUD.updateFeed('You Died')
@@ -141,6 +190,7 @@ export default class Player extends EntityPrefab {
       this.HUD.updateHealth()
     }
     this.computeLifeBar()
+    socket.emit('updateStats', this.stats)
   }
 
   movePlayer() {
@@ -152,20 +202,20 @@ export default class Player extends EntityPrefab {
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -this.stats.speed
       this.orientation = 'up'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     } else if (this.cursors.down.isDown) {
       this.body.velocity.y = this.stats.speed
       this.orientation = 'down'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     }
     if (this.cursors.left.isDown) {
       this.body.velocity.x = -this.stats.speed
       this.orientation = 'left'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     } else if (this.cursors.right.isDown) {
       this.body.velocity.x = this.stats.speed
       this.orientation = 'right'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
     }
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
@@ -173,8 +223,20 @@ export default class Player extends EntityPrefab {
     }
   }
 
+  specialAttack() {
+    if (this.cursors.space.isDown && this.cursors.click.isDown) {
+      if (Date.now() - this.lastSpecialAttack > 5000) {
+        this.lastSpecialAttack = Date.now()
+        const targetX = this.game.input.worldX
+        const targetY = this.game.input.worldY
+        this.special.fire(null, targetX, targetY)
+        socket.emit('fireSpecial', targetX, targetY)
+      }
+    }
+  }
+
   attack() {
-    if (this.cursors.click.isDown) {
+    if (this.cursors.click.isDown && !this.cursors.space.isDown) {
       const targetX = this.game.input.worldX
       const targetY = this.game.input.worldY
       this.weapon.fire(null, targetX, targetY)
@@ -217,7 +279,7 @@ export default class Player extends EntityPrefab {
     }
 
     socket.emit('updateStats', this.stats)
-    socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount })
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
   }
 
   savePlayer() {
@@ -228,7 +290,16 @@ export default class Player extends EntityPrefab {
     socket.emit('savePlayer', this.player)
   }
 
+  toggleHUDBoards() {
+    if (this.HUD && this.cursors.board.isDown) {
+      this.HUD.toggleBoards()
+    }
+  }
+
   update() {
-    if (this.HUD) this.HUD.updateScoreboard()
+    if (this.HUD) {
+      this.HUD.updateScoreboard()
+      this.HUD.updateKillboard()
+    }
   }
 }

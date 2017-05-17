@@ -1,5 +1,8 @@
+const _ = require('lodash')
 const db = require('APP/db')
 const Character = db.model('characters')
+
+const messages = []
 
 const enemyProperties = require('APP/app/properties/enemyProperties')
 const enemySpawn = require('./enemySpawn.json')
@@ -49,8 +52,7 @@ const spawnEnemy = (io, state) => {
   if (Object.keys(GamePlayers[state]).length) {
     enemySpawn[state].forEach((enemy) => {
       if (!GameEnemies[state][enemy.name]) {
-        const enemyStats = Object.assign({}, enemyProperties[enemy.spriteKey].stats)
-        GameEnemies[state][enemy.name] = Object.assign({}, enemy, { stats: enemyStats })
+        GameEnemies[state][enemy.name] = Object.assign({}, enemy, _.cloneDeep(enemyProperties[enemy.spriteKey]))
         io.sockets.to(state).emit('addEnemy', GameEnemies[state][enemy.name])
       }
     })
@@ -69,24 +71,30 @@ const socketFunction = io => {
     socket.join(room)
 
     socket.on('disconnect', () => {
-      if (GamePlayers[room]) {
+      try {
         delete GamePlayers[room][socket.id]
         socket.broadcast.to(room).emit('removePlayer', socket.id)
+      } catch (e) {
+        console.log('error:', e)
       }
       console.log(socket.id, 'disconnected')
     })
 
     socket.on('updatePlayer', player => {
-      if (GamePlayers[room]) {
-        GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: player.playerPos.x, y: player.playerPos.y, lootCount: player.lootCount })
+      try {
+        GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: player.playerPos.x, y: player.playerPos.y, lootCount: player.lootCount, killCount: player.killCount })
         socket.broadcast.to(room).emit('updatePlayer', socket.id, player)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('updateStats', stats => {
-      if (GamePlayers[room]) {
+      try {
         GamePlayers[room][socket.id].stats = stats
         socket.broadcast.to(room).emit('updateStats', socket.id, stats)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
@@ -94,39 +102,53 @@ const socketFunction = io => {
       socket.broadcast.to(room).emit('fireProjectile', socket.id, xCoord, yCoord)
     })
 
+    socket.on('fireSpecial', (xCoord, yCoord) => {
+      socket.broadcast.to(room).emit('fireSpecial', socket.id, xCoord, yCoord)
+    })
+
     socket.on('hitEnemy', (enemyName, damageTaken) => {
-      if (GameEnemies[room]) {
+      try {
         GameEnemies[room][enemyName].stats.hp -= damageTaken
         socket.broadcast.to(room).emit('hitEnemy', enemyName, damageTaken)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('killEnemy', enemyName => {
-      if (GameEnemies[room]) {
+      try {
         delete GameEnemies[room][enemyName]
         socket.broadcast.to(room).emit('removeEnemy', enemyName)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('createItem', item => {
-      if (GameItems[room]) {
+      try {
         GameItems[room][item.name] = item
         socket.broadcast.to(room).emit('addItem', item)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('killItem', name => {
-      if (GameItems[room]) {
+      try {
         delete GameItems[room][name]
         socket.broadcast.to(room).emit('removeItem', name)
+      } catch (e) {
+        console.log('error', e)
       }
     })
 
     socket.on('setupState', (player, collisionMap, newRoom) => {
       // remove player from previous map (room)
-      if (GamePlayers[room]) {
+      try {
         delete GamePlayers[room][socket.id]
         socket.broadcast.to(room).emit('removePlayer', socket.id)
+      } catch (e) {
+        console.log('error', e)
       }
 
       // join new map
@@ -167,6 +189,16 @@ const socketFunction = io => {
           id: player.id
         },
       })
+    })
+
+    socket.on('getMessages', () => {
+      socket.emit('getMessages', messages)
+    })
+
+    socket.on('addMessage', message => {
+      if (messages.length >= 100) messages.shift()
+      messages.push(message)
+      socket.broadcast.emit('addMessage', message)
     })
   })
 }

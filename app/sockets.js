@@ -11,13 +11,13 @@ export const GameEnemies = {}
 export const GameItems = {}
 export const GameGroups = {}
 
-
 const socketFunctions = socket => {
   socket.on('getPlayers', getPlayers)
   socket.on('addPlayer', addPlayer)
   socket.on('updatePlayer', updatePlayer)
   socket.on('removePlayer', removePlayer)
   socket.on('fireProjectile', fireProjectile)
+  socket.on('fireSpecial', fireSpecial)
   socket.on('getEnemies', getEnemies)
   socket.on('addEnemy', addEnemy)
   socket.on('updateEnemy', updateEnemy)
@@ -41,6 +41,8 @@ const addPlayer = (socketId, player) => {
 }
 
 const updatePlayer = (socketId, player) => {
+  GamePlayers[socketId].killCount = player.killCount
+  GamePlayers[socketId].lootCount = player.lootCount
   GamePlayers[socketId].moveOther(player.playerPos.x, player.playerPos.y)
 }
 
@@ -62,6 +64,12 @@ const updateStats = (socketId, stats) => {
 const fireProjectile = (socketId, xCoord, yCoord) => {
   if (GamePlayers[socketId]) {
     GamePlayers[socketId].weapon.fire(null, xCoord, yCoord)
+  }
+}
+
+const fireSpecial = (socketId, xCoord, yCoord) => {
+  if (GamePlayers[socketId]) {
+    GamePlayers[socketId].special.fire(null, xCoord, yCoord)
   }
 }
 
