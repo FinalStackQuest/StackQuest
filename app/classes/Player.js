@@ -149,27 +149,31 @@ export default class Player extends EntityPrefab {
   }
 
   takeDamage(damage) {
-    let damageTaken = damage - (this.stats.defense + this.armor.defense)
-    if (damageTaken < 1) damageTaken = 1
-    this.stats.hp -= damageTaken
-    const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
-    setTimeout(() => damageText.destroy(), 500)
+    if (damage) {
+      let damageTaken = damage - (this.stats.defense + this.armor.defense)
+      if (damageTaken < 1) damageTaken = 1
+      this.stats.hp -= damageTaken
+      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
+      setTimeout(() => damageText.destroy(), 500)
 
-    if (this.HUD) {
-      this.HUD.updateHealth()
-      this.game.plugins.screenShake.shake(3, this)
-    }
-    socket.emit('updateStats', this.stats)
+      if (this.HUD) {
+        this.HUD.updateHealth()
+        this.game.plugins.screenShake.shake(3, this)
+      }
+      socket.emit('updateStats', this.stats)
 
-    this.computeLifeBar()
+      this.computeLifeBar()
       //  check if dead
-    if (this.stats.hp <= 0) this.respawn()
+      if (this.stats.hp <= 0) this.respawn()
+    }
   }
 
   respawn() {
     //  make them move to set location
-    this.position.x = 500
-    this.position.y = 500
+    const spawnPoints = [[500, 500]]
+    const randomSpawn = Math.floor(Math.random() * spawnPoints.length)
+    this.position.x = spawnPoints[randomSpawn][0]
+    this.position.y = spawnPoints[randomSpawn][1]
 
     // Revive
     setTimeout(() => {

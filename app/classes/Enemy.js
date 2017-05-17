@@ -72,8 +72,6 @@ export default class Enemy extends EntityPrefab {
       const damageVariation = Math.floor(Math.random() * (this.stats.attack * variation))
       const totalDamage = this.stats.attack + (Math.random() < 0.5 ? damageVariation : -damageVariation)
       return totalDamage
-    } else {
-      return 0
     }
   }
 
