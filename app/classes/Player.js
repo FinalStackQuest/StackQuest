@@ -170,7 +170,7 @@ export default class Player extends EntityPrefab {
 
   respawn() {
     //  make them move to set location
-    const spawnPoints = [[500, 500]]
+    const spawnPoints = [[500, 500], [1500, 1500], [500, 1500]]
     const randomSpawn = Math.floor(Math.random() * spawnPoints.length)
     this.position.x = spawnPoints[randomSpawn][0]
     this.position.y = spawnPoints[randomSpawn][1]
