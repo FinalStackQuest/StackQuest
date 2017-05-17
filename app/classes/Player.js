@@ -157,10 +157,8 @@ export default class Player extends EntityPrefab {
 
       if (this.HUD) {
         this.HUD.updateHealth()
+        this.game.plugins.screenShake.shake(3, this)
       }
-
-      console.log(this.game.plugins.screenShake)
-      this.game.plugins.screenShake.shake(3, this)
       socket.emit('updateStats', this.stats)
 
       this.computeLifeBar()
