@@ -1,15 +1,7 @@
 import { socket, GameGroups } from '../sockets'
 import { createCaveAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
-<<<<<<< HEAD
 import createPlayer from './utils/createPlayer'
-=======
-import createPlayer, { assignClass } from './utils/createPlayer'
-import enemyCollision from './utils/enemyCollision'
-import mapTransition from './utils/mapTransition'
-import itemCollision from './utils/itemCollision'
-import playerCollision from './utils/playerCollision'
->>>>>>> 5cccb9d97278bf1ce1c66d9c0d1f7853fb5b262c
 import playerClass from '../classes/Player'
 import playerProperties from '../properties/playerProperties.json'
 
@@ -104,14 +96,14 @@ const caveState = {
     const side = charClass === 'wizard' ? 'right' : 'left'
     directions.setText(`          Interested in being a ${charClass}?
       Check its base statistics on the ${side}
-      If you are set, approach that ${charClass}!`)
+      If you are ready, approach that ${charClass}!`)
     toggleChoice = true
   },
 
   defineClassSpecs(charClass) {
     const targetX = charClass === 'wizard' ? 663 : 243
     const classProps = playerProperties[charClass]
-    classSpecs = this.game.add.text(targetX, 140,
+    classSpecs = this.game.add.text(targetX, 150,
       `
       class: ${charClass}
       hp: ${classProps.stats.maxHp}

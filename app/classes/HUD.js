@@ -148,7 +148,7 @@ class HUD {
 
     this.HUDElement.killBoardTitle = this.game.add.text(600, 145, `Top 3 KILLAS`, {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: 'textColor',
       strokeThickness: 1
     })
     // We are initializing the top scoring players to be empty text nodes
@@ -156,21 +156,21 @@ class HUD {
 
     this.HUDElement.killboardOne = this.game.add.text(600, 175, '', {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: 'textColor',
       strokeThickness: 1
     })
     this.HUDElement.killboardOne.visible = this.boardVisibility
 
     this.HUDElement.killboardTwo = this.game.add.text(600, 205, '', {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: 'textColor',
       strokeThickness: 1
     })
     this.HUDElement.killboardTwo.visible = this.boardVisibility
 
     this.HUDElement.killboardThree = this.game.add.text(600, 115, '', {
       font: '15px Press Start 2P',
-      fill: '#2a2029',
+      fill: 'textColor',
       strokeThickness: 1
     })
     this.HUDElement.killboardThree.visible = this.boardVisibility
