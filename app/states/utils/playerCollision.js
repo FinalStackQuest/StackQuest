@@ -21,13 +21,6 @@ const playerCollision = (playerObject) => {
       }
     })
 
-    StackQuest.game.physics.arcade.overlap(enemy.weapon.bullets, playerObject, (target, bullet) => {
-      if (playerObject.key !== enemy.key) {
-        bullet.kill()
-        playerObject.takeDamage(enemy.weapon.damage())
-      }
-    })
-
     //  special weapon
     StackQuest.game.physics.arcade.overlap(special.bullets, enemy, (target, bullet) => {
       //  check if same class/faction
@@ -39,8 +32,14 @@ const playerCollision = (playerObject) => {
       }
     })
 
+    StackQuest.game.physics.arcade.overlap(enemy.weapon.bullets, playerObject, (target, bullet) => {
+      if (playerObject.key !== enemy.key) {
+        bullet.kill()
+        playerObject.takeDamage(enemy.weapon.damage())
+      }
+    })
+
     StackQuest.game.physics.arcade.overlap(enemy.special.bullets, playerObject, (target, bullet) => {
-      // bullet.kill()
       if (playerObject.key !== enemy.key) {
         playerObject.takeDamage(enemy.special.damage())
       }
