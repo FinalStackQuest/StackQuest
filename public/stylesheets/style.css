@@ -59,6 +59,11 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
+.chat-display-small {
+  height: 54px;
+  width: 540px;
+}
+
 .message-container {
   overflow-y: auto;
   overflow-wrap: break-word;

@@ -9,14 +9,15 @@ socket.on('getMessages', messages => {
   getMessages
 })
 
-const Chat = ({ game, messages, message, showChat, messageChangeHandler, messageSubmitHandler }) => (
+const Chat = ({ game, messages, message, showChat, messageChangeHandler, messageSubmitHandler, scrollDown }) => (
   <div className="chat-container">
-    {game && showChat &&
-      <div className="chat-display">
+    {game && showChat
+      ? <div className="chat-display">
         <ul className="message-container">
           {messages.map((oldMessage, i) => (
               <li key={`message ${i + 1}`}>
                 {oldMessage}
+                {scrollDown()}
               </li>
             ))}
         </ul>
@@ -29,6 +30,16 @@ const Chat = ({ game, messages, message, showChat, messageChangeHandler, message
             onChange={messageChangeHandler}
           />
         </form>
+      </div>
+      : <div className="chat-display chat-display-small">
+        <ul className="message-container">
+          {messages.map((oldMessage, i) => (
+              <li key={`message ${i + 1}`}>
+                {oldMessage}
+                {scrollDown()}
+              </li>
+            ))}
+        </ul>
       </div>
     }
   </div>
@@ -43,6 +54,7 @@ class LocalContainer extends React.Component {
 
     this.messageChangeHandler = this.messageChangeHandler.bind(this)
     this.messageSubmitHandler = this.messageSubmitHandler.bind(this)
+    this.scrollDown = this.scrollDown.bind(this)
   }
 
   componentDidMount() {
@@ -55,12 +67,6 @@ class LocalContainer extends React.Component {
     })
 
     socket.emit('getMessages')
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.chat.showChat) {
-      setTimeout(() => $('.message-container').animate({scrollTop: 99999}), 100)
-    }
   }
 
   messageChangeHandler(event) {
@@ -78,6 +84,10 @@ class LocalContainer extends React.Component {
     }
   }
 
+  scrollDown() {
+    $('.message-container').animate({scrollTop: 99999})
+  }
+
   render() {
     return (
       <Chat
@@ -87,6 +97,7 @@ class LocalContainer extends React.Component {
         message={this.state.message}
         messageChangeHandler={this.messageChangeHandler}
         messageSubmitHandler={this.messageSubmitHandler}
+        scrollDown={this.scrollDown}
       />
     )
   }

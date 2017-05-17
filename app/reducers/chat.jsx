@@ -5,7 +5,7 @@ export const CREATE_MESSAGE = 'CREATE_MESSAGE'
 
 /* REDUCER */
 const initialState = {
-  showChat: true,
+  showChat: false,
   messages: []
 }
 

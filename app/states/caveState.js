@@ -111,10 +111,10 @@ const caveState = {
       defense: ${classProps.stats.defense}
       speed: ${classProps.stats.speed}
       weapon: ${classProps.weaponKey}`, {
-      font: '17px Press Start 2P',
-      fill: '#fff',
-      strokeThickness: 1
-    })
+        font: '17px Press Start 2P',
+        fill: '#fff',
+        strokeThickness: 1
+      })
     classSpecs.anchor.set(0.5)
     classSpecs.fixedToCamera = true
   }
