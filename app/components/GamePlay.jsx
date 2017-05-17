@@ -7,7 +7,6 @@ const GamePlay = ({game, user}) => (
   </div>
 )
 
-
 const GamePlayContainer = connect(({ game, auth }) => ({ game, user: auth }))(GamePlay)
 
 export default GamePlayContainer
