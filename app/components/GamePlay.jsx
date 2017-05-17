@@ -1,13 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
 
-const GamePlay = ({game}) => (
+const GamePlay = ({game, user}) => (
   <div className='gameplay-container'>
-    {!game && <img className='game-play' src='gameplay.png' />}
+    {!game && !user && <img className='game-play' src='gameplay.png' />}
   </div>
 )
 
 
-const GamePlayContainer = connect(({ game }) => ({ game }))(GamePlay)
+const GamePlayContainer = connect(({ game, auth }) => ({ game, user: auth }))(GamePlay)
 
 export default GamePlayContainer

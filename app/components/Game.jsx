@@ -16,14 +16,13 @@ import playerProps from 'APP/app/properties/playerProperties.json'
 
 const Game = ({ user, game, startGame }) =>
   <div id="game-chat-container">
-    {user && !game &&
-      <div className="start-game-container">
+    {!game && (user
+      ? <div className="start-game-container">
         <Instructions />
         <button className="btn btn-primary" onClick={startGame}>Start Game</button>
-      </div>
-    }
+      </div> : <GamePlay />
+    )}
     <div id="game-container">
-      <GamePlay />
       <Chat />
     </div>
   </div>
@@ -59,7 +58,7 @@ class LocalContainer extends React.Component {
 }
 
 const GameContainer = connect(
-  ({ auth, game }) => ({ user: auth, game }),
+  ({ auth, game }) => ({user: auth, game}),
   { showGameDisplay, whoami }
 )(LocalContainer)
 
