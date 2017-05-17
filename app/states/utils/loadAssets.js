@@ -36,10 +36,11 @@ const loadAssets = () => {
   StackQuest.game.load.tilemap('arenaMap', 'assets/maps/arenaMap.json', null, Phaser.Tilemap.TILED_JSON)
   StackQuest.game.load.image('towerDefense', 'assets/tilesets/Tower_Defense/towerDefense_tilesheet@2.png')
   StackQuest.game.load.image('browserQuestTileSheet', 'assets/tilesets/BrowserQuest/tilesheet.png')
+  StackQuest.game.load.audio('military', ['assets/audio/Exploration2_Military_Base.mp3', 'assets/audio/Exploration2_Military_Base.ogg'])
 }
 
 export const loadClassSelect = () => {
-    // cave state assets
+  // cave state assets
   StackQuest.game.load.tilemap('caveMap', 'assets/maps/caveMap.json', null, Phaser.Tilemap.TILED_JSON)
   StackQuest.game.load.image('browserQuestTileSheet2', 'assets/tilesets/BrowserQuest/tilesheet2.png')
   StackQuest.game.load.audio('day', ['assets/audio/day.mp3', 'assets/audio/day.ogg'])
