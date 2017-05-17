@@ -9,7 +9,7 @@ const loadAssets = () => {
   StackQuest.game.load.spritesheet('soldier', 'assets/tilesets/LPC Base Assets/sprites/people/soldier.png', 64, 64)
   StackQuest.game.load.spritesheet('soldieralt', 'assets/tilesets/LPC Base Assets/sprites/people/soldier_altcolor.png', 64, 64)
   StackQuest.game.load.spritesheet('bat', 'assets/tilesets/LPC Base Assets/sprites/monsters/bat.png', 32, 32)
-  StackQuest.game.load.spritesheet('wizard', 'assets/sprites/wizard2.png', 64, 64)
+  StackQuest.game.load.spritesheet('wizard', 'assets/sprites/wizard.png', 64, 64)
   StackQuest.game.load.spritesheet('cyborg', 'assets/sprites/cyborg.png', 64, 64)
   StackQuest.game.load.spritesheet('newbie', 'assets/tilesets/LPC Base Assets/sprites/people/male_walkcycle.png', 64, 64)
   StackQuest.game.load.spritesheet('loot', 'assets/tilesets/LPC Base Assets/sprites/monsters/eyeball.png', 32, 32)

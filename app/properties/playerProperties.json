@@ -3,7 +3,7 @@
     "stats": {
       "maxHp": 100,
       "attack": 8,
-      "defense": 10,
+      "defense": 12,
       "speed": 180
     },
     "frames": {
