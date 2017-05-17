@@ -13,6 +13,6 @@
 	},
 	"health": {
 		"type": "hp",
-		"buff": 2
+		"buff": 20
 	}
 }
