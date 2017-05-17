@@ -23,10 +23,6 @@ class HUD {
     this.HUDElement.currentHealth.setText(`HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`)
   }
 
-  updateWeapon() {
-    this.HUDElement.currentWeapon.setText(`WEAPON: ${this.player.weaponKey}`)
-  }
-
   updateStats() {
     this.HUDElement.currentStats.setText(`ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`)
   }
@@ -87,31 +83,19 @@ class HUD {
     const gameX = this.game.width
     const gameY = this.game.height
 
-    this.HUDElement.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, {
+    this.HUDElement.currentHealth = this.game.add.text(30, 25, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, {
       font: '15px Press Start 2P',
       fill: textColor,
       strokeThickness: 1
     })
 
-    this.HUDElement.currentHealth = this.game.add.text(30, 55, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, {
+    this.HUDElement.currentStats = this.game.add.text(30, 55, `ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
       font: '15px Press Start 2P',
       fill: textColor,
       strokeThickness: 1
     })
 
-    this.HUDElement.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, {
-      font: '15px Press Start 2P',
-      fill: textColor,
-      strokeThickness: 1
-    })
-
-    this.HUDElement.currentWeapon = this.game.add.text(30, 115, `WEAPON: ${this.player.weaponKey}`, {
-      font: '15px Press Start 2P',
-      fill: textColor,
-      strokeThickness: 1
-    })
-
-    this.HUDElement.numPlayers = this.game.add.text(30, 145, `Players in World: ${Object.keys(GamePlayers).length + 1}`, {
+    this.HUDElement.numPlayers = this.game.add.text(30, 85, `Players in World: ${Object.keys(GamePlayers).length + 1}`, {
       font: '15px Press Start 2P',
       fill: textColor,
       strokeThickness: 1
@@ -146,9 +130,9 @@ class HUD {
     })
     this.HUDElement.scoreboardThree.visible = this.boardVisibility
 
-    this.HUDElement.killBoardTitle = this.game.add.text(600, 145, `Top 3 KILLAS`, {
+    this.HUDElement.killBoardTitle = this.game.add.text(600, 145, `Top 3 HUNTERS`, {
       font: '15px Press Start 2P',
-      fill: 'textColor',
+      fill: textColor,
       strokeThickness: 1
     })
     // We are initializing the top scoring players to be empty text nodes
@@ -156,21 +140,21 @@ class HUD {
 
     this.HUDElement.killboardOne = this.game.add.text(600, 175, '', {
       font: '15px Press Start 2P',
-      fill: 'textColor',
+      fill: textColor,
       strokeThickness: 1
     })
     this.HUDElement.killboardOne.visible = this.boardVisibility
 
     this.HUDElement.killboardTwo = this.game.add.text(600, 205, '', {
       font: '15px Press Start 2P',
-      fill: 'textColor',
+      fill: textColor,
       strokeThickness: 1
     })
     this.HUDElement.killboardTwo.visible = this.boardVisibility
 
     this.HUDElement.killboardThree = this.game.add.text(600, 115, '', {
       font: '15px Press Start 2P',
-      fill: 'textColor',
+      fill: textColor,
       strokeThickness: 1
     })
     this.HUDElement.killboardThree.visible = this.boardVisibility
