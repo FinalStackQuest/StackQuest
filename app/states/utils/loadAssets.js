@@ -15,6 +15,7 @@ const loadAssets = () => {
   StackQuest.game.load.spritesheet('loot', 'assets/tilesets/LPC Base Assets/sprites/monsters/eyeball.png', 32, 32)
   StackQuest.game.load.spritesheet('weapon', 'assets/sprites/sword.png', 25, 64)
   StackQuest.game.load.spritesheet('armor', 'assets/sprites/shield.png', 64, 64)
+  StackQuest.game.load.spritesheet('health', 'assets/sprites/potion.png', 64, 64)
 
   // fantasy state assets
   StackQuest.game.load.tilemap('fantasyMap', 'assets/maps/fantasyMap.json', null, Phaser.Tilemap.TILED_JSON)

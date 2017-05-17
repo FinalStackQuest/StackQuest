@@ -265,12 +265,16 @@ export default class Player extends EntityPrefab {
     case 'loot':
       this.lootCount += itemProperty.buff
       break
+
+    case 'health':
+      this.stats.hp += itemProperty.buff
+      break
     }
 
     if (this.HUD) {
       let text = `Acquired ${item}`
 
-      if (itemProperty.type === 'attack' || itemProperty.type === 'defense') {
+      if (itemProperty.type === 'attack' || itemProperty.type === 'defense' || itemProperty.type === 'health') {
         this.HUD.updateStats()
         text += `, ${itemProperty.type}+${itemProperty.buff} `
       }

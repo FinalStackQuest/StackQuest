@@ -10,5 +10,9 @@
 	"loot": {
 		"type": "loot",
 		"buff": 1
+	},
+	"health": {
+		"type": "hp",
+		"buff": 2
 	}
 }
