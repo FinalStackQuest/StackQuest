@@ -66,6 +66,10 @@ class LocalContainer extends React.Component {
     socket.emit('getMessages')
   }
 
+  componentWillReceiveProps() {
+    this.scrollDown()
+  }
+
   messageChangeHandler(event) {
     this.setState({ message: event.target.value })
   }
@@ -79,6 +83,10 @@ class LocalContainer extends React.Component {
       this.props.addMessage(newMessage)
       this.setState({ message: '' })
     }
+  }
+
+  scrollDown() {
+    $('.message-container').animate({scrollTop: 99999})
   }
 
   render() {
