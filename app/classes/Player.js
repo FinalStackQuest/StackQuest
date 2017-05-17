@@ -149,22 +149,21 @@ export default class Player extends EntityPrefab {
   }
 
   takeDamage(damage) {
-    const damageTaken = damage - (this.stats.defense + this.armor.defense)
-    if (damageTaken > 0) {
-      this.stats.hp -= damageTaken
-      const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
-      setTimeout(() => damageText.destroy(), 500)
+    let damageTaken = damage - (this.stats.defense + this.armor.defense)
+    if (damageTaken < 1) damageTaken = 1
+    this.stats.hp -= damageTaken
+    const damageText = StackQuest.game.add.text(this.x + Math.random() * 20, this.y + Math.random() * 20, damageTaken, { font: '20px Press Start 2P', fill: '#ffa500' })
+    setTimeout(() => damageText.destroy(), 500)
 
-      if (this.HUD) {
-        this.HUD.updateHealth()
-        this.game.plugins.screenShake.shake(3, this)
-      }
-      socket.emit('updateStats', this.stats)
-
-      this.computeLifeBar()
-      //  check if dead
-      if (this.stats.hp <= 0) this.respawn()
+    if (this.HUD) {
+      this.HUD.updateHealth()
+      this.game.plugins.screenShake.shake(3, this)
     }
+    socket.emit('updateStats', this.stats)
+
+    this.computeLifeBar()
+      //  check if dead
+    if (this.stats.hp <= 0) this.respawn()
   }
 
   respawn() {
