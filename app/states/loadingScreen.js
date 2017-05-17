@@ -1,7 +1,7 @@
 import loadAssets, { loadClassSelect } from './utils/loadAssets'
 import CustomLoader from './utils/CustomLoader'
 
-import screenShake from '../phaser-screen-shake/ScreenShake'
+import screenShake from '../plugins/ScreenShake'
 
 /* global StackQuest, Phaser */
 
