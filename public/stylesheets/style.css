@@ -2,6 +2,17 @@ body {
   background-color: #1a1a1a;
 }
 
+.gameplay-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-play {
+  height: 540px;
+  width: 960px;
+}
+
 .stackquest-logo {
   display: flex;
   align-items: center;

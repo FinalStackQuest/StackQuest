@@ -5,6 +5,7 @@ import StackQuestGame from '../game'
 import Login from './Login'
 import WhoAmI from './WhoAmI'
 import Instructions from './Instructions'
+import GamePlay from './GamePlay'
 import Chat from './Chat'
 import { whoami } from 'APP/app/reducers/auth'
 import { showGameDisplay } from 'APP/app/reducers/game'
@@ -22,6 +23,7 @@ const Game = ({ user, game, startGame }) =>
       </div>
     }
     <div id="game-container">
+      <GamePlay />
       <Chat />
     </div>
   </div>

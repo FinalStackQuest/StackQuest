@@ -30,14 +30,7 @@ const Chat = ({ game, messages, message, showChat, messageChangeHandler, message
           />
         </form>
       </div>
-      : <div className="chat-display chat-display-small">
-        <ul className="message-container">
-          {messages.map((oldMessage, i) => (
-              <li key={`message ${i + 1}`}>
-                {oldMessage}
-              </li>
-            ))}
-        </ul>
+      : <div>
       </div>
     }
   </div>
