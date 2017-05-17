@@ -26,7 +26,7 @@ const playerCollision = (playerObject) => {
       //  check if same class/faction
       if (projectile.player.key !== enemy.key) {
         let damageTaken = special.damage() - (enemy.stats.defense + enemy.armor.defense)
-        if (damageTaken < 0) damageTaken = 0
+        if (damageTaken < 1) damageTaken = 1
         const damageText = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
         setTimeout(() => damageText.destroy(), 500)
       }

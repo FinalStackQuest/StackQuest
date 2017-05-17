@@ -72,8 +72,6 @@ export default class Enemy extends EntityPrefab {
       const damageVariation = Math.floor(Math.random() * (this.stats.attack * variation))
       const totalDamage = this.stats.attack + (Math.random() < 0.5 ? damageVariation : -damageVariation)
       return totalDamage
-    } else {
-      return 0
     }
   }
 
@@ -117,7 +115,7 @@ export default class Enemy extends EntityPrefab {
 
   dropLoot() {
     const chance = Math.floor(Math.random() * 100)
-    if (chance < 20) {
+    if (chance < 40) {
       const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
       const itemTypes = ['weapon', 'armor', 'loot', 'health']
       const itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)]
