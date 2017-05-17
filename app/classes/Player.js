@@ -265,6 +265,10 @@ export default class Player extends EntityPrefab {
     case 'loot':
       this.lootCount += itemProperty.buff
       break
+
+    case 'hp':
+      this.stats.hp += itemProperty.buff
+      break
     }
 
     if (this.HUD) {
@@ -272,6 +276,10 @@ export default class Player extends EntityPrefab {
 
       if (itemProperty.type === 'attack' || itemProperty.type === 'defense') {
         this.HUD.updateStats()
+        text += `, ${itemProperty.type}+${itemProperty.buff} `
+      } else if (itemProperty.type === 'hp') {
+        this.computeLifeBar()
+        this.HUD.updateHealth()
         text += `, ${itemProperty.type}+${itemProperty.buff} `
       }
 
