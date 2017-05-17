@@ -1,5 +1,10 @@
 body {
   background-color: #1a1a1a;
+  font-family: 'Press Start 2P'
+}
+
+.nav-container {
+  width: 95%;
 }
 
 .gameplay-container {

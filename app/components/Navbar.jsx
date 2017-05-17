@@ -7,9 +7,9 @@ import WhoAmI from './WhoAmI'
 const Navbar = ({ user }) => (
   <nav className="navbar navbar-inverse">
     <div className="container-fluid">
-      <div className="container">
+      <div className="nav-container">
         <div className="navbar-header">
-          <a className="navbar-brand" href="/">StackQuest</a>
+          <a className="navbar-brand" href="/"> StackQuest</a>
         </div>
         <ul className="nav navbar-nav navbar-right">
           {user
