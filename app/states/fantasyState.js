@@ -1,4 +1,4 @@
-import { socket, GameGroups } from '../sockets'
+import { socket } from '../sockets'
 import { createFantasyAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
@@ -7,6 +7,7 @@ import mapTransition from './utils/mapTransition'
 import itemCollision from './utils/itemCollision'
 import playerClass from '../classes/Player'
 import Loot from '../classes/Loot'
+import Game from '../classes/Game'
 
 /* global StackQuest, Phaser */
 
@@ -26,10 +27,10 @@ const fantasyState = {
 
     map = createFantasyAssets()
 
-    GameGroups.items = this.game.add.group()
-    GameGroups.enemies = this.game.add.group()
-    GameGroups.players = this.game.add.group()
-    GameGroups.HUD = this.game.add.group()
+    Game.GameGroups.items = this.game.add.group()
+    Game.GameGroups.enemies = this.game.add.group()
+    Game.GameGroups.players = this.game.add.group()
+    Game.GameGroups.HUD = this.game.add.group()
 
     socket.emit('setupState', player, makeCollisionMap(map), 'fantasyState')
 
@@ -64,6 +65,7 @@ const fantasyState = {
     enemyCollision(playerObject, graveyard)
     mapTransition(player, playerObject)
   }
+
 }
 
 export default fantasyState

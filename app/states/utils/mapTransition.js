@@ -6,6 +6,9 @@ const savePlayerState = (player, playerObject, nextMap) => {
   player.currentMap = nextMap
   player.hp = playerObject.stats.hp
   player.stats = playerObject.stats
+  player.killCount = playerObject.killCount
+  player.lootCount = playerObject.lootCount
+  player.pvpCount = playerObject.pvpCount
   socket.emit('savePlayer', player)
   StackQuest.game.state.start(player.currentMap, true, false, player)
 }

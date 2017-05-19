@@ -5,23 +5,31 @@ import EntityPrefab from './EntityPrefab'
 import HealthBar from './HealthBar.js'
 import Weapon from './Weapon'
 import HUD from './HUD'
+import Game from './Game'
 
 import armorProperties from '../properties/armorProperties.json'
 import playerProperties from '../properties/playerProperties.json'
 import itemProperties from '../properties/itemProperties.json'
 
-import { socket, GameGroups } from '../sockets'
+import { socket } from '../sockets'
 
 /* global StackQuest, Phaser */
+let playerObj
 
 // client side class for Playable Characters
 export default class Player extends EntityPrefab {
-  constructor(game, name, player) {
+  constructor(game, name, player, socketId) {
     super(game, name, { x: player.x, y: player.y }, player.class)
 
-    GameGroups.players.add(this)
+    Game.GameGroups.players.add(this)
+    console.log(socketId)
+    Game.GamePlayers[socketId] = this
+    console.log(Game.GamePlayers, socketId)
 
+    this.socketId = socketId
     this.player = player
+    this.lastAttackerId = null
+
     this.anchor.set(0.5, 0.2)
     this.orientation = 'down'
 
@@ -33,16 +41,16 @@ export default class Player extends EntityPrefab {
 
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
-    this.killCount = 0
-    this.lootCount = 0
+    this.killCount = player.killCount || 0
+    this.lootCount = player.lootCount || 0
+    this.pvpCount = player.pvpCount || 0
+
     this.loadControls = this.loadControls.bind(this)
     this.loadControls()
     this.chatToggleTime = Date.now()
 
     this.movePlayer = this.movePlayer.bind(this)
     this.moveOther = this.moveOther.bind(this)
-
-    this.bulletPool = this.game.add.group()
 
     this.equipSpecial = this.equipSpecial.bind(this)
     this.equipSpecial(this.specialKey)
@@ -148,7 +156,11 @@ export default class Player extends EntityPrefab {
     this.animations.stop()
   }
 
-  takeDamage(damage) {
+  takeDamage(damage, enemySocketId) {
+    if (enemySocketId) {
+      this.lastAttackerId = enemySocketId
+    }
+
     const damageTaken = damage - (this.stats.defense + this.armor.defense)
     if (damageTaken > 0) {
       this.stats.hp -= damageTaken
@@ -172,12 +184,16 @@ export default class Player extends EntityPrefab {
     this.position.x = 500
     this.position.y = 500
 
+    if (this.lastAttackerId) {
+      socket.emit('killPlayer', this.lastAttackerId)
+    }
+
     // Revive
     setTimeout(() => {
       this.recoverHp()
       this.savePlayer()
     }, 100)
-    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0, killCount: this.killCount })
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: 0, killCount: this.killCount, pvpCount: this.pvpCount })
 
     if (this.HUD) {
       this.HUD.updateFeed('You Died')
@@ -202,23 +218,24 @@ export default class Player extends EntityPrefab {
     if (this.cursors.up.isDown) {
       this.body.velocity.y = -this.stats.speed
       this.orientation = 'up'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount, pvpCount: this.pvpCount })
     } else if (this.cursors.down.isDown) {
       this.body.velocity.y = this.stats.speed
       this.orientation = 'down'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount, pvpCount: this.pvpCount })
     }
     if (this.cursors.left.isDown) {
       this.body.velocity.x = -this.stats.speed
       this.orientation = 'left'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount, pvpCount: this.pvpCount })
     } else if (this.cursors.right.isDown) {
       this.body.velocity.x = this.stats.speed
       this.orientation = 'right'
-      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
+      socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount, pvpCount: this.pvpCount })
     }
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
+      console.log(Game.GamePlayers)
       this.animations.play(`walk_${this.orientation}`)
     }
   }
@@ -282,19 +299,24 @@ export default class Player extends EntityPrefab {
         this.computeLifeBar()
         this.HUD.updateHealth()
         text += `, ${itemProperty.type}+${itemProperty.buff} `
+      } else if (itemProperty.type === 'loot') {
+        this.HUD.updateCount()
       }
 
       this.HUD.updateFeed(text)
     }
 
     socket.emit('updateStats', this.stats)
-    socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount })
+    socket.emit('updatePlayer', { playerPos: this.position, lootCount: this.lootCount, killCount: this.killCount, pvpCount: this.pvpCount })
   }
 
   savePlayer() {
     this.player.x = this.x
     this.player.y = this.y
     this.player.hp = this.stats.hp
+    this.player.killCount = this.killCount
+    this.player.lootCount = this.lootCount
+    this.player.pvpCount = this.pvpCount
 
     socket.emit('savePlayer', this.player)
   }
@@ -305,10 +327,4 @@ export default class Player extends EntityPrefab {
     }
   }
 
-  update() {
-    if (this.HUD) {
-      this.HUD.updateScoreboard()
-      this.HUD.updateKillboard()
-    }
-  }
 }

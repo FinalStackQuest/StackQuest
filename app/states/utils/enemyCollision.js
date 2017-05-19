@@ -1,10 +1,11 @@
 /* global StackQuest */
 
-import { GameEnemies, socket } from 'APP/app/sockets'
+import { socket } from 'APP/app/sockets'
+import Game from 'APP/app/classes/Game'
 
 const enemyCollision = (playerObject, graveyard) => {
-  Object.keys(GameEnemies).forEach(enemyKey => {
-    const enemy = GameEnemies[enemyKey]
+  Object.keys(Game.GameEnemies).forEach(enemyKey => {
+    const enemy = Game.GameEnemies[enemyKey]
     const projectile = playerObject.weapon
     const special = playerObject.special
 
@@ -15,8 +16,9 @@ const enemyCollision = (playerObject, graveyard) => {
       if (enemy.stats.hp <= 0) {
         graveyard.push(enemy)
         playerObject.killCount++
+        playerObject.HUD.updateCount()
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount, killCount: playerObject.killCount })
-        delete GameEnemies[enemyKey]
+        delete Game.GameEnemies[enemyKey]
       }
     })
 
@@ -26,8 +28,9 @@ const enemyCollision = (playerObject, graveyard) => {
       if (enemy.stats.hp <= 0) {
         graveyard.push(enemy)
         playerObject.killCount++
+        playerObject.HUD.updateCount()
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount, killCount: playerObject.killCount })
-        delete GameEnemies[enemyKey]
+        delete Game.GameEnemies[enemyKey]
       }
     })
 
