@@ -12,7 +12,7 @@ const socketFunctions = socket => {
   socket.on('addPlayer', addPlayer)
   socket.on('updatePlayer', updatePlayer)
   socket.on('removePlayer', removePlayer)
-  socket.on('defeatedPlayer', defeatedPlayer)
+  socket.on('defeatPlayer', defeatPlayer)
   socket.on('fireProjectile', fireProjectile)
   socket.on('fireSpecial', fireSpecial)
   socket.on('getEnemies', getEnemies)
@@ -56,10 +56,10 @@ const removePlayer = socketId => {
   delete Game.GamePlayers[socketId]
 }
 
-const defeatedPlayer = () => {
-  const currentPlayer = Game.GamePlayers[Game.currentPlayerId]
-  currentPlayer.pvpCount ++
-  currentPlayer.HUD.updateCount()
+const defeatPlayer = () => {
+  console.log('defeated player')
+  Game.currentPlayer.pvpCount ++
+  Game.currentPlayer.HUD.updateCount()
 }
 
 const updateStats = (socketId, stats) => {
@@ -130,7 +130,7 @@ const removeItem = itemName => {
 
 const updateLeaderBoard = topPlayers => {
   const currentPlayer = Game.currentPlayer
-  if (currentPlayer.HUD) {
+  if (currentPlayer && currentPlayer.HUD) {
     currentPlayer.HUD.updateLeaderBoard(topPlayers)
   }
 }

@@ -22,9 +22,7 @@ export default class Player extends EntityPrefab {
     super(game, name, { x: player.x, y: player.y }, player.class)
 
     Game.GameGroups.players.add(this)
-    console.log(socketId)
     Game.GamePlayers[socketId] = this
-    console.log(Game.GamePlayers, socketId)
 
     this.socketId = socketId
     this.player = player
@@ -41,6 +39,7 @@ export default class Player extends EntityPrefab {
 
     this.stats.hp = player.hp
     this.setAnimationFrames(this)
+
     this.killCount = player.killCount || 0
     this.lootCount = player.lootCount || 0
     this.pvpCount = player.pvpCount || 0
@@ -158,6 +157,7 @@ export default class Player extends EntityPrefab {
 
   takeDamage(damage, enemySocketId) {
     if (enemySocketId) {
+      console.log(enemySocketId)
       this.lastAttackerId = enemySocketId
     }
 
@@ -235,7 +235,6 @@ export default class Player extends EntityPrefab {
     }
 
     if (this.body.velocity.x + this.body.velocity.y !== 0) {
-      console.log(Game.GamePlayers)
       this.animations.play(`walk_${this.orientation}`)
     }
   }

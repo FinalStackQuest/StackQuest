@@ -16,6 +16,7 @@ class HUD {
   constructor(game, player) {
     this.game = game
 
+    this.scoreCategories = ['pvpCount', 'killCount', 'lootCount']
     this.player = player
     this.HUDElements = {}
     this.boardVisibility = false
@@ -100,7 +101,6 @@ class HUD {
     }
 
     for (const category of categories) {
-      console.log(`${prefix[category]} ${this.player[category]}`)
       const text = this.game.add.text(xCoord, yCoord, `${prefix[category]} ${this.player[category]}`, textConfig)
       text.visible = !this.boardVisibility
 

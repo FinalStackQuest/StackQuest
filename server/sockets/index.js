@@ -71,7 +71,7 @@ const updateLeaderBoard = (io) => {
   const categories = Object.keys(GameTopPlayers)
   if (players.length > 0) {
     categories.forEach(category => {
-      GameTopPlayers[category] = players.sort((p1, p2) => p1[category] > p2[category]).slice(0, 3)
+      GameTopPlayers[category] = players.sort((p1, p2) => p1[category] < p2[category]).slice(0, 3)
     })
     io.sockets.emit('updateLeaderBoard', GameTopPlayers)
   }
