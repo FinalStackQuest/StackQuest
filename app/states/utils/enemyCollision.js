@@ -4,8 +4,8 @@ import { socket } from 'APP/app/sockets'
 import Game from 'APP/app/classes/Game'
 
 const enemyCollision = (playerObject, graveyard) => {
-  Object.keys(Game.GameEnemies).forEach(enemyKey => {
-    const enemy = Game.GameEnemies[enemyKey]
+  Object.keys(Game.enemies).forEach(enemyKey => {
+    const enemy = Game.enemies[enemyKey]
     const projectile = playerObject.weapon
     const special = playerObject.special
 
@@ -18,7 +18,7 @@ const enemyCollision = (playerObject, graveyard) => {
         playerObject.killCount++
         playerObject.HUD.updateCount()
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount, killCount: playerObject.killCount })
-        delete Game.GameEnemies[enemyKey]
+        delete Game.enemies[enemyKey]
       }
     })
 
@@ -30,7 +30,7 @@ const enemyCollision = (playerObject, graveyard) => {
         playerObject.killCount++
         playerObject.HUD.updateCount()
         socket.emit('updatePlayer', { playerPos: playerObject.position, lootCount: playerObject.lootCount, killCount: playerObject.killCount })
-        delete Game.GameEnemies[enemyKey]
+        delete Game.enemies[enemyKey]
       }
     })
 

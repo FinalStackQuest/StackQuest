@@ -21,8 +21,8 @@ export default class Player extends EntityPrefab {
   constructor(game, name, player, socketId) {
     super(game, name, { x: player.x, y: player.y }, player.class)
 
-    Game.GameGroups.players.add(this)
-    Game.GamePlayers[socketId] = this
+    Game.groups.players.add(this)
+    Game.players[socketId] = this
 
     this.socketId = socketId
     this.player = player

@@ -23,8 +23,8 @@ const spaceState = {
 
     map = createPvpAssets()
 
-    Game.GameGroups.players = this.game.add.group()
-    Game.GameGroups.HUD = this.game.add.group()
+    Game.groups.players = this.game.add.group()
+    Game.groups.HUD = this.game.add.group()
 
     socket.emit('setupState', player, makeCollisionMap(map), 'arenaState')
 

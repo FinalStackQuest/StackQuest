@@ -27,10 +27,10 @@ const spaceState = {
 
     map = createSpaceAssets()
 
-    Game.GameGroups.items = this.game.add.group()
-    Game.GameGroups.enemies = this.game.add.group()
-    Game.GameGroups.players = this.game.add.group()
-    Game.GameGroups.HUD = this.game.add.group()
+    Game.groups.items = this.game.add.group()
+    Game.groups.enemies = this.game.add.group()
+    Game.groups.players = this.game.add.group()
+    Game.groups.HUD = this.game.add.group()
 
     socket.emit('setupState', player, makeCollisionMap(map), 'spaceState')
 

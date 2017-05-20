@@ -4,8 +4,8 @@ import Loot from 'APP/app/classes/Loot'
 import Game from 'APP/app/classes/Game'
 
 const playerCollision = (playerObject) => {
-  Object.keys(Game.GamePlayers).forEach(playerKey => {
-    const enemy = Game.GamePlayers[playerKey]
+  Object.keys(Game.players).forEach(playerKey => {
+    const enemy = Game.players[playerKey]
     const projectile = playerObject.weapon
     const special = playerObject.special
 

@@ -25,7 +25,7 @@ class HUD {
     this.initCountBoard()
     this.initLeaderBoard()
 
-    Game.GameGroups.HUD.setAll('fixedToCamera', true)
+    Game.groups.HUD.setAll('fixedToCamera', true)
   }
 
   updateHealth() {
@@ -40,7 +40,7 @@ class HUD {
   }
 
   updateNumPlayers() {
-    this.HUDElements.numPlayers.setText(`Players in Map: ${Object.keys(Game.GamePlayers).length + 1}`)
+    this.HUDElements.numPlayers.setText(`Players in Map: ${Object.keys(Game.players).length + 1}`)
   }
 
   updateCount() {
@@ -79,10 +79,10 @@ class HUD {
     this.HUDElements.currentHealth = this.game.add.text(30, 55, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, textConfig)
     this.HUDElements.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, textConfig)
     this.HUDElements.currentWeapon = this.game.add.text(30, 115, `WEAPON: ${this.player.weaponKey}`, textConfig)
-    this.HUDElements.numPlayers = this.game.add.text(30, 145, `Players in World: ${Object.keys(Game.GamePlayers).length + 1}`, textConfig)
+    this.HUDElements.numPlayers = this.game.add.text(30, 145, `Players in World: ${Object.keys(Game.players).length + 1}`, textConfig)
 
     for (const elements in this.HUDElements) {
-      Game.GameGroups.HUD.add(this.HUDElements[elements])
+      Game.groups.HUD.add(this.HUDElements[elements])
     }
   }
 
@@ -105,7 +105,7 @@ class HUD {
       text.visible = !this.boardVisibility
 
       countBoard[category] = text
-      Game.GameGroups.HUD.add(text)
+      Game.groups.HUD.add(text)
 
       yCoord += increment
     }
@@ -133,7 +133,7 @@ class HUD {
       titleText.visible = this.boardVisibility
 
       leaderBoard[`${category}Title`] = titleText
-      Game.GameGroups.HUD.add(titleText)
+      Game.groups.HUD.add(titleText)
 
       leaderBoard[category] = []
       yCoord += increment
@@ -143,7 +143,7 @@ class HUD {
         textHolder.visible = this.boardVisibility
 
         leaderBoard[category].push(textHolder)
-        Game.GameGroups.HUD.add(textHolder)
+        Game.groups.HUD.add(textHolder)
         yCoord += increment
       }
     }

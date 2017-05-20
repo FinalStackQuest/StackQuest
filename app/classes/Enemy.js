@@ -11,8 +11,8 @@ export default class Enemy extends EntityPrefab {
   constructor(game, name, position, spriteKey, stats) {
     super(game, name, position, spriteKey)
 
-    Game.GameGroups.enemies.add(this)
-    Game.GameEnemies[name] = this
+    Game.groups.enemies.add(this)
+    Game.enemies[name] = this
 
     this.orientation = ''
     this.lastAttack = Date.now()

@@ -31,7 +31,7 @@ const caveState = {
     this.game.physics.arcade.enable(wizard)
     this.game.physics.arcade.enable(cyborg)
 
-    Game.GameGroups.players = this.game.add.group()
+    Game.groups.players = this.game.add.group()
     playerObject = createPlayer(player)
 
     this.createDirections()

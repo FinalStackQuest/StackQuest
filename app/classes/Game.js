@@ -1,10 +1,10 @@
 
 class Game {
 	constructor () {
-		this.GamePlayers = {}
-		this.GameEnemies = {}
-		this.GameItems = {}
-		this.GameGroups = {}
+		this.players = {}
+		this.enemies = {}
+		this.items = {}
+		this.groups = {}
 		this.currentPlayer = null
 		this.currentPlayerId = null
 	}
