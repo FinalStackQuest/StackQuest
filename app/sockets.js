@@ -32,7 +32,7 @@ const getCurrentPlayerId = ({playerId}) => {
 }
 
 const getPlayers = players => {
-    for (const player in Game.GamePlayers) Game.currentPlayerId !== player && delete Game.GamePlayers[player]
+    for (const player in Game.players) Game.currentPlayerId !== player && delete Game.players[player]
     Object.keys(players).forEach(playerSocketId => {
       addPlayer(playerSocketId, players[playerSocketId])
     })
@@ -43,17 +43,17 @@ const addPlayer = (socketId, player) => {
 }
 
 const updatePlayer = (socketId, player) => {
-  Game.GamePlayers[socketId].killCount = player.killCount
-  Game.GamePlayers[socketId].lootCount = player.lootCount
-  Game.GamePlayers[socketId].moveOther(player.playerPos.x, player.playerPos.y)
+  Game.players[socketId].killCount = player.killCount
+  Game.players[socketId].lootCount = player.lootCount
+  Game.players[socketId].moveOther(player.playerPos.x, player.playerPos.y)
 }
 
 const removePlayer = socketId => {
-  if (Game.GamePlayers[socketId]) {
-    Game.GamePlayers[socketId].playerHealthBar.kill()
-    Game.GamePlayers[socketId].destroy()
+  if (Game.players[socketId]) {
+    Game.players[socketId].playerHealthBar.kill()
+    Game.players[socketId].destroy()
   }
-  delete Game.GamePlayers[socketId]
+  delete Game.players[socketId]
 }
 
 const defeatPlayer = () => {
@@ -63,26 +63,26 @@ const defeatPlayer = () => {
 }
 
 const updateStats = (socketId, stats) => {
-  if (Game.GamePlayers[socketId]) {
-    Game.GamePlayers[socketId].stats = stats
-    Game.GamePlayers[socketId].computeLifeBar()
+  if (Game.players[socketId]) {
+    Game.players[socketId].stats = stats
+    Game.players[socketId].computeLifeBar()
   }
 }
 
 const fireProjectile = (socketId, xCoord, yCoord) => {
-  if (Game.GamePlayers[socketId]) {
-    Game.GamePlayers[socketId].weapon.fire(null, xCoord, yCoord)
+  if (Game.players[socketId]) {
+    Game.players[socketId].weapon.fire(null, xCoord, yCoord)
   }
 }
 
 const fireSpecial = (socketId, xCoord, yCoord) => {
-  if (Game.GamePlayers[socketId]) {
-    Game.GamePlayers[socketId].special.fire(null, xCoord, yCoord)
+  if (Game.players[socketId]) {
+    Game.players[socketId].special.fire(null, xCoord, yCoord)
   }
 }
 
 const getEnemies = enemies => {
-  for (const enemy in Game.GameEnemies) delete Game.GameEnemies[enemy]
+  for (const enemy in Game.enemies) delete Game.enemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
     addEnemy(enemies[enemyName])
   })
@@ -93,25 +93,25 @@ const addEnemy = enemy => {
 }
 
 const updateEnemy = (newPos, name) => {
-  if (Game.GameEnemies[name]) Game.GameEnemies[name].move(newPos)
+  if (Game.enemies[name]) Game.enemies[name].move(newPos)
 }
 
 const hitEnemy = (enemyName, damage) => {
-  if (Game.GameEnemies[enemyName]) {
-    Game.GameEnemies[enemyName].loseHealth(damage)
+  if (Game.enemies[enemyName]) {
+    Game.enemies[enemyName].loseHealth(damage)
   }
 }
 
 const removeEnemy = enemyName => {
-  if (Game.GameEnemies[enemyName]) {
-    Game.GameEnemies[enemyName].enemyHealthBar.kill()
-    Game.GameEnemies[enemyName].destroy()
+  if (Game.enemies[enemyName]) {
+    Game.enemies[enemyName].enemyHealthBar.kill()
+    Game.enemies[enemyName].destroy()
   }
-  delete Game.GameEnemies[enemyName]
+  delete Game.enemies[enemyName]
 }
 
 const getItems = items => {
-  for (const item in Game.GameItems) delete Game.GameItems[item]
+  for (const item in Game.items) delete Game.items[item]
   Object.keys(items).forEach(itemName => {
     addItem(items[itemName])
   })
@@ -122,10 +122,10 @@ const addItem = item => {
 }
 
 const removeItem = itemName => {
-  if (Game.GameItems[itemName]) {
-    Game.GameItems[itemName].destroy()
+  if (Game.items[itemName]) {
+    Game.items[itemName].destroy()
   }
-  delete Game.GameItems[itemName]
+  delete Game.items[itemName]
 }
 
 const updateLeaderBoard = topPlayers => {
