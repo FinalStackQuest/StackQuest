@@ -15,12 +15,16 @@ import { addMessage } from 'APP/app/reducers/chat'
 class HUD {
   constructor(game, player) {
     this.game = game
+    this.player = player
 
     this.scoreCategories = ['pvpCount', 'killCount', 'lootCount']
-    this.player = player
-    this.HUDElements = {}
     this.boardVisibility = false
-    this.initHUD()
+    this.HUDElements = {}
+
+    this.initPlayerStats()
+    this.initCountBoard()
+    this.initLeaderBoard()
+
     Game.GameGroups.HUD.setAll('fixedToCamera', true)
   }
 
@@ -31,7 +35,6 @@ class HUD {
   updateWeapon() {
     this.HUDElements.currentWeapon.setText(`WEAPON: ${this.player.weaponKey}`)
   }
-
   updateStats() {
     this.HUDElements.currentStats.setText(`ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`)
   }
@@ -56,6 +59,10 @@ class HUD {
     }
   }
 
+  updateFeed(newFeed) {
+    store.dispatch(addMessage(newFeed))
+  }
+
   toggleBoards() {
     this.boardVisibility = !this.boardVisibility
 
@@ -66,11 +73,7 @@ class HUD {
     }
   }
 
-  updateFeed(newFeed) {
-    store.dispatch(addMessage(newFeed))
-  }
-
-  initHUD() {
+  initPlayerStats() {
 
     this.HUDElements.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, textConfig)
     this.HUDElements.currentHealth = this.game.add.text(30, 55, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, textConfig)
@@ -81,9 +84,6 @@ class HUD {
     for (const elements in this.HUDElements) {
       Game.GameGroups.HUD.add(this.HUDElements[elements])
     }
-
-    this.HUDElements.countBoard = this.initCountBoard()
-    this.HUDElements.leaderBoard = this.initLeaderBoard()
   }
 
   initCountBoard() {
@@ -110,7 +110,7 @@ class HUD {
       yCoord += increment
     }
 
-    return countBoard
+    this.HUDElements.countBoard = countBoard
   }
 
   initLeaderBoard() {
@@ -147,7 +147,8 @@ class HUD {
         yCoord += increment
       }
     }
-    return leaderBoard
+
+    this.HUDElements.leaderBoard = leaderBoard
   }
 
 }

@@ -1,5 +1,21 @@
 body {
   background-color: #1a1a1a;
+  font-family: 'Press Start 2P'
+}
+
+.nav-container {
+  width: 95%;
+}
+
+.gameplay-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-play {
+  height: 540px;
+  width: 960px;
 }
 
 .stackquest-logo {
