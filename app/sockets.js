@@ -43,8 +43,7 @@ const addPlayer = (socketId, player) => {
 }
 
 const updatePlayer = (socketId, player) => {
-  Game.players[socketId].killCount = player.killCount
-  Game.players[socketId].lootCount = player.lootCount
+  Game.players[socketId].pvpCount = player.pvpCount
   Game.players[socketId].moveOther(player.playerPos.x, player.playerPos.y)
 }
 
