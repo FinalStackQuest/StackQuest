@@ -57,7 +57,6 @@ const removePlayer = socketId => {
 }
 
 const defeatPlayer = () => {
-  console.log('defeated player')
   Game.currentPlayer.pvpCount ++
   Game.currentPlayer.HUD.updateCount()
 }
