@@ -121,8 +121,8 @@ export default class Enemy extends EntityPrefab {
       const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
       const itemTypes = ['weapon', 'armor', 'loot', 'health']
       const itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)]
-      Game.GameItems[newItemName] = new Loot(StackQuest.game, itemType, { x: this.x, y: this.y }, itemType)
-      const newItem = Game.GameItems[newItemName]
+      Game.items[newItemName] = new Loot(StackQuest.game, itemType, { x: this.x, y: this.y }, itemType)
+      const newItem = Game.items[newItemName]
       socket.emit('createItem', { name: newItem.name, position: newItem.position, key: newItem.key })
     }
   }

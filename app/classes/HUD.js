@@ -17,15 +17,33 @@ class HUD {
     this.game = game
     this.player = player
 
-    this.scoreCategories = ['pvpCount', 'killCount', 'lootCount']
     this.boardVisibility = false
     this.HUDElements = {}
+    this.setScoreCategories()
 
     this.initPlayerStats()
     this.initCountBoard()
     this.initLeaderBoard()
 
     Game.groups.HUD.setAll('fixedToCamera', true)
+  }
+
+  setScoreCategories() {
+    this.scoreCategories = ['pvpCount', 'killCount', 'lootCount']
+    this.categoryTexts =  {
+      pvpCount: {
+        title: 'Top 3 PVP Players',
+        prefix: 'Players Defeated:'
+      }, 
+      killCount: {
+        title: 'Top 3 Hunters',
+        prefix: 'Monsters Defeated:'
+      }, 
+      lootCount: {
+        title: 'Top 3 Greediest',
+        prefix: 'Loot Count:'
+      }
+    }
   }
 
   updateHealth() {
@@ -50,7 +68,9 @@ class HUD {
   }
 
   updateLeaderBoard(topPlayers) {
-    for (const category of this.scoreCategories) {
+    const categories = Object.keys(this.scoreCategories)
+
+    for (const category of categories) {
       const categoryLeaders = topPlayers[category]  
       categoryLeaders.forEach((player, i) => {
         const playerName = player.userName.length < 16 ? player.userName : player.userName.slice(0, 16)
@@ -66,7 +86,9 @@ class HUD {
   toggleBoards() {
     this.boardVisibility = !this.boardVisibility
 
-    for (const category of this.scoreCategories) {
+    const categories = Object.keys(this.scoreCategories)
+
+    for (const category of categories) {
       this.HUDElements.countBoard[category].visible = !this.boardVisibility
       this.HUDElements.leaderBoard[`${category}Title`].visible = this.boardVisibility
       this.HUDElements.leaderBoard[category].forEach(textNode => textNode.visible = this.boardVisibility, this)
@@ -93,15 +115,10 @@ class HUD {
     let yCoord = 25
       , increment = 30
 
-    const categories = this.scoreCategories
-    const prefix = {
-      pvpCount: 'Players Defeated:',
-      killCount: 'Monsters Defeated:',
-      lootCount: 'Loot Count:'
-    }
+    const categories = Object.keys(this.scoreCategories)
 
     for (const category of categories) {
-      const text = this.game.add.text(xCoord, yCoord, `${prefix[category]} ${this.player[category]}`, textConfig)
+      const text = this.game.add.text(xCoord, yCoord, `${this.scoreCategories[category].prefix} ${this.player[category]}`, textConfig)
       text.visible = !this.boardVisibility
 
       countBoard[category] = text
@@ -121,15 +138,10 @@ class HUD {
       , increment = 30
       , rankingSize = 3
 
-    const categories = this.scoreCategories
-    const titles = {
-      pvpCount: 'Top 3 PVP Players',
-      killCount: 'Top 3 Hunters',
-      lootCount: 'Top 3 Greediest'
-    }
+    const categories = Object.keys(this.scoreCategories)
 
     for (const category of categories) {
-      const titleText = this.game.add.text(xCoord, yCoord, titles[category], textConfig)
+      const titleText = this.game.add.text(xCoord, yCoord, this.scoreCategories[category].title, textConfig)
       titleText.visible = this.boardVisibility
 
       leaderBoard[`${category}Title`] = titleText
