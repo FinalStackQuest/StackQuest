@@ -40,7 +40,7 @@ class HUD {
   }
 
   updateNumPlayers() {
-    this.HUDElements.numPlayers.setText(`Players in Map: ${Object.keys(Game.players).length + 1}`)
+    this.HUDElements.numPlayers.setText(`Players in Map: ${Object.keys(Game.players).length}`)
   }
 
   updateCount() {
