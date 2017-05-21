@@ -79,7 +79,7 @@ class HUD {
     this.HUDElements.currentHealth = this.game.add.text(30, 55, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, textConfig)
     this.HUDElements.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, textConfig)
     this.HUDElements.currentWeapon = this.game.add.text(30, 115, `WEAPON: ${this.player.weaponKey}`, textConfig)
-    this.HUDElements.numPlayers = this.game.add.text(30, 145, `Players in World: ${Object.keys(Game.players).length + 1}`, textConfig)
+    this.HUDElements.numPlayers = this.game.add.text(30, 145, `Players in World: ${Object.keys(Game.players).length}`, textConfig)
 
     for (const elements in this.HUDElements) {
       Game.groups.HUD.add(this.HUDElements[elements])
