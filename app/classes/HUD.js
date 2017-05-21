@@ -29,8 +29,7 @@ class HUD {
   }
 
   setScoreCategories() {
-    this.scoreCategories = ['pvpCount', 'killCount', 'lootCount']
-    this.categoryTexts =  {
+    this.scoreCategories =  {
       pvpCount: {
         title: 'Top 3 PVP Players',
         prefix: 'Players Defeated:'
