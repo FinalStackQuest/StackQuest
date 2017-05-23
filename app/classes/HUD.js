@@ -6,11 +6,11 @@ import store from 'APP/app/store'
 import Game from './Game'
 import { addMessage } from 'APP/app/reducers/chat'
 
- const textConfig = {
-    font: '15px Press Start 2P',
-    fill: '#fff',
-    strokeThickness: 1
-  }
+const textConfig = {
+  font: '15px Press Start 2P',
+  fill: '#fff',
+  strokeThickness: 1
+}
 
 class HUD {
   constructor(game, player) {
@@ -29,15 +29,15 @@ class HUD {
   }
 
   setScoreCategories() {
-    this.scoreCategories =  {
+    this.scoreCategories = {
       pvpCount: {
         title: 'Top 3 PVP Players',
         prefix: 'Players Defeated:'
-      }, 
+      },
       killCount: {
         title: 'Top 3 Hunters',
         prefix: 'Monsters Defeated:'
-      }, 
+      },
       lootCount: {
         title: 'Top 3 Greediest',
         prefix: 'Loot Count:'
@@ -70,7 +70,7 @@ class HUD {
     const categories = Object.keys(this.scoreCategories)
 
     for (const category of categories) {
-      const categoryLeaders = topPlayers[category]  
+      const categoryLeaders = topPlayers[category]
       categoryLeaders.forEach((player, i) => {
         const playerName = player.userName.length < 16 ? player.userName : player.userName.slice(0, 16)
         this.HUDElements.leaderBoard[category][i].setText(`${playerName} : ${player[category]}`)
@@ -95,7 +95,6 @@ class HUD {
   }
 
   initPlayerStats() {
-
     this.HUDElements.playerName = this.game.add.text(30, 25, `NAME: ${this.player.name}`, textConfig)
     this.HUDElements.currentHealth = this.game.add.text(30, 55, `HP: ${this.player.stats.hp}/${this.player.stats.maxHp}`, textConfig)
     this.HUDElements.currentStats = this.game.add.text(30, 85, `ATK: ${this.player.stats.attack + this.player.weapon.attack}/DEF: ${this.player.stats.defense + this.player.armor.defense}`, textConfig)
@@ -110,9 +109,9 @@ class HUD {
   initCountBoard() {
     const countBoard = {}
 
+    const increment = 30
     const xCoord = 600
     let yCoord = 25
-      , increment = 30
 
     const categories = Object.keys(this.scoreCategories)
 
@@ -132,10 +131,10 @@ class HUD {
   initLeaderBoard() {
     const leaderBoard = {}
 
+    const increment = 30
+    const rankingSize = 3
     const xCoord = 600
     let yCoord = 25
-      , increment = 30
-      , rankingSize = 3
 
     const categories = Object.keys(this.scoreCategories)
 
@@ -161,7 +160,6 @@ class HUD {
 
     this.HUDElements.leaderBoard = leaderBoard
   }
-
 }
 
 export default HUD

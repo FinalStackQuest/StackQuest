@@ -155,7 +155,6 @@ export default class Player extends EntityPrefab {
     this.animations.stop()
   }
 
-
   takeDamage(damage, enemySocketId) {
     if (damage) {
       let damageTaken = damage - (this.stats.defense + this.armor.defense)
@@ -328,5 +327,4 @@ export default class Player extends EntityPrefab {
       this.HUD.toggleBoards()
     }
   }
-
 }
