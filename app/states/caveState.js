@@ -1,9 +1,10 @@
-import { socket, GameGroups } from '../sockets'
+import { socket } from '../sockets'
 import { createCaveAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
 import playerClass from '../classes/Player'
 import playerProperties from '../properties/playerProperties.json'
+import Game from '../classes/Game'
 
 /* global StackQuest, Phaser */
 
@@ -30,7 +31,7 @@ const caveState = {
     this.game.physics.arcade.enable(wizard)
     this.game.physics.arcade.enable(cyborg)
 
-    GameGroups.players = this.game.add.group()
+    Game.groups.players = this.game.add.group()
     playerObject = createPlayer(player)
 
     this.createDirections()

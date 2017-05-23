@@ -27,4 +27,7 @@ module.exports = db => db.define('characters', {
   },
   currentMap: STRING,
   class: ENUM('wizard', 'cyborg'),
+  lootCount: INTEGER,
+  killCount: INTEGER,
+  pvpCount: INTEGER,
 })

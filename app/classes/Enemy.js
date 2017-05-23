@@ -1,8 +1,9 @@
 import EntityPrefab from './EntityPrefab'
 import HealthBar from './HealthBar.js'
-import { socket, GameItems, GameGroups } from '../sockets'
+import { socket } from '../sockets'
 import enemyProperties from '../properties/enemyProperties.json'
 import Loot from 'APP/app/classes/Loot'
+import Game from './Game'
 
 /* global StackQuest, Phaser */
 
@@ -10,7 +11,8 @@ export default class Enemy extends EntityPrefab {
   constructor(game, name, position, spriteKey, stats) {
     super(game, name, position, spriteKey)
 
-    GameGroups.enemies.add(this)
+    Game.groups.enemies.add(this)
+    Game.enemies[name] = this
 
     this.orientation = ''
     this.lastAttack = Date.now()
@@ -119,8 +121,8 @@ export default class Enemy extends EntityPrefab {
       const newItemName = Math.random().toString(36).substr(2, 5) // need this in order to create a random item name
       const itemTypes = ['weapon', 'armor', 'loot', 'health']
       const itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)]
-      GameItems[newItemName] = new Loot(StackQuest.game, itemType, { x: this.x, y: this.y }, itemType)
-      const newItem = GameItems[newItemName]
+      Game.items[newItemName] = new Loot(StackQuest.game, itemType, { x: this.x, y: this.y }, itemType)
+      const newItem = Game.items[newItemName]
       socket.emit('createItem', { name: newItem.name, position: newItem.position, key: newItem.key })
     }
   }

@@ -1,11 +1,11 @@
 /* global StackQuest */
 
-import { GamePlayers } from 'APP/app/sockets'
 import Loot from 'APP/app/classes/Loot'
+import Game from 'APP/app/classes/Game'
 
 const playerCollision = (playerObject) => {
-  Object.keys(GamePlayers).forEach(playerKey => {
-    const enemy = GamePlayers[playerKey]
+  Object.keys(Game.players).forEach(playerKey => {
+    const enemy = Game.players[playerKey]
     const projectile = playerObject.weapon
     const special = playerObject.special
 
@@ -18,6 +18,10 @@ const playerCollision = (playerObject) => {
         if (damageTaken < 0) damageTaken = 0
         const damageText = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
         setTimeout(() => damageText.destroy(), 500)
+        if(enemy.stats.hp < 0) {
+          playerObject.pvpCount ++
+          playerObject.HUD.updateCount()
+        }
       }
     })
 
@@ -29,19 +33,23 @@ const playerCollision = (playerObject) => {
         if (damageTaken < 1) damageTaken = 1
         const damageText = StackQuest.game.add.text(enemy.x + Math.random() * 20, enemy.y + Math.random() * 20, damageTaken, { font: '32px Times New Roman', fill: '#ffa500' })
         setTimeout(() => damageText.destroy(), 500)
+        if(enemy.stats.hp < 0) {
+          playerObject.pvpCount ++
+          playerObject.HUD.updateCount()
+        }
       }
     })
 
     StackQuest.game.physics.arcade.overlap(enemy.weapon.bullets, playerObject, (target, bullet) => {
       if (playerObject.key !== enemy.key) {
         bullet.kill()
-        playerObject.takeDamage(enemy.weapon.damage())
+        playerObject.takeDamage(enemy.weapon.damage(), enemy.socketId)
       }
     })
 
     StackQuest.game.physics.arcade.overlap(enemy.special.bullets, playerObject, (target, bullet) => {
       if (playerObject.key !== enemy.key) {
-        playerObject.takeDamage(enemy.special.damage())
+        playerObject.takeDamage(enemy.special.damage(), enemy.socketId)
       }
     })
   })

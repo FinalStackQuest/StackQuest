@@ -2,20 +2,17 @@ import socketio from 'socket.io-client'
 import Enemy from './classes/Enemy'
 import Player from './classes/Player'
 import Loot from './classes/Loot'
-
+import Game from './classes/Game'
 /* global StackQuest */
-
 export const socket = socketio.connect()
-export const GamePlayers = {}
-export const GameEnemies = {}
-export const GameItems = {}
-export const GameGroups = {}
 
 const socketFunctions = socket => {
+  socket.on('connected', getCurrentPlayerId)
   socket.on('getPlayers', getPlayers)
   socket.on('addPlayer', addPlayer)
   socket.on('updatePlayer', updatePlayer)
   socket.on('removePlayer', removePlayer)
+  socket.on('defeatPlayer', defeatPlayer)
   socket.on('fireProjectile', fireProjectile)
   socket.on('fireSpecial', fireSpecial)
   socket.on('getEnemies', getEnemies)
@@ -27,97 +24,113 @@ const socketFunctions = socket => {
   socket.on('addItem', addItem)
   socket.on('removeItem', removeItem)
   socket.on('updateStats', updateStats)
+  socket.on('updateLeaderBoard', updateLeaderBoard)
+}
+
+const getCurrentPlayerId = ({playerId}) => {
+  Game.currentPlayerId = playerId
 }
 
 const getPlayers = players => {
-  for (const player in GamePlayers) delete GamePlayers[player]
-  Object.keys(players).forEach(playerSocketId => {
-    addPlayer(playerSocketId, players[playerSocketId])
-  })
+    for (const player in Game.players) Game.currentPlayerId !== player && delete Game.players[player]
+    Object.keys(players).forEach(playerSocketId => {
+      addPlayer(playerSocketId, players[playerSocketId])
+    })
 }
 
 const addPlayer = (socketId, player) => {
-  GamePlayers[socketId] = new Player(StackQuest.game, player.userName, player)
+  new Player(StackQuest.game, player.userName, player, socketId)
 }
 
 const updatePlayer = (socketId, player) => {
-  GamePlayers[socketId].killCount = player.killCount
-  GamePlayers[socketId].lootCount = player.lootCount
-  GamePlayers[socketId].moveOther(player.playerPos.x, player.playerPos.y)
+  Game.players[socketId].pvpCount = player.pvpCount
+  Game.players[socketId].moveOther(player.playerPos.x, player.playerPos.y)
 }
 
 const removePlayer = socketId => {
-  if (GamePlayers[socketId]) {
-    GamePlayers[socketId].playerHealthBar.kill()
-    GamePlayers[socketId].destroy()
+  if (Game.players[socketId]) {
+    Game.players[socketId].playerHealthBar.kill()
+    Game.players[socketId].destroy()
   }
-  delete GamePlayers[socketId]
+  delete Game.players[socketId]
+}
+
+const defeatPlayer = () => {
+  Game.currentPlayer.pvpCount ++
+  Game.currentPlayer.HUD.updateCount()
 }
 
 const updateStats = (socketId, stats) => {
-  if (GamePlayers[socketId]) {
-    GamePlayers[socketId].stats = stats
-    GamePlayers[socketId].computeLifeBar()
+  if (Game.players[socketId]) {
+    Game.players[socketId].stats = stats
+    Game.players[socketId].computeLifeBar()
   }
 }
 
 const fireProjectile = (socketId, xCoord, yCoord) => {
-  if (GamePlayers[socketId]) {
-    GamePlayers[socketId].weapon.fire(null, xCoord, yCoord)
+  if (Game.players[socketId]) {
+    Game.players[socketId].weapon.fire(null, xCoord, yCoord)
   }
 }
 
 const fireSpecial = (socketId, xCoord, yCoord) => {
-  if (GamePlayers[socketId]) {
-    GamePlayers[socketId].special.fire(null, xCoord, yCoord)
+  if (Game.players[socketId]) {
+    Game.players[socketId].special.fire(null, xCoord, yCoord)
   }
 }
 
 const getEnemies = enemies => {
-  for (const enemy in GameEnemies) delete GameEnemies[enemy]
+  for (const enemy in Game.enemies) delete Game.enemies[enemy]
   Object.keys(enemies).forEach(enemyName => {
     addEnemy(enemies[enemyName])
   })
 }
 
 const addEnemy = enemy => {
-  GameEnemies[enemy.name] = new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.spriteKey, enemy.stats)
+  new Enemy(StackQuest.game, enemy.name, { x: enemy.x, y: enemy.y }, enemy.spriteKey, enemy.stats)
 }
 
 const updateEnemy = (newPos, name) => {
-  if (GameEnemies[name]) GameEnemies[name].move(newPos)
+  if (Game.enemies[name]) Game.enemies[name].move(newPos)
 }
 
 const hitEnemy = (enemyName, damage) => {
-  if (GameEnemies[enemyName]) {
-    GameEnemies[enemyName].loseHealth(damage)
+  if (Game.enemies[enemyName]) {
+    Game.enemies[enemyName].loseHealth(damage)
   }
 }
 
 const removeEnemy = enemyName => {
-  if (GameEnemies[enemyName]) {
-    GameEnemies[enemyName].enemyHealthBar.kill()
-    GameEnemies[enemyName].destroy()
+  if (Game.enemies[enemyName]) {
+    Game.enemies[enemyName].enemyHealthBar.kill()
+    Game.enemies[enemyName].destroy()
   }
-  delete GameEnemies[enemyName]
+  delete Game.enemies[enemyName]
 }
 
 const getItems = items => {
-  for (const item in GameItems) delete GameItems[item]
+  for (const item in Game.items) delete Game.items[item]
   Object.keys(items).forEach(itemName => {
     addItem(items[itemName])
   })
 }
 
 const addItem = item => {
-  GameItems[item.name] = new Loot(StackQuest.game, item.name, { x: item.position.x, y: item.position.y }, item.key)
+  new Loot(StackQuest.game, item.name, { x: item.position.x, y: item.position.y }, item.key)
 }
 
 const removeItem = itemName => {
-  if (GameItems[itemName]) {
-    GameItems[itemName].destroy()
+  if (Game.items[itemName]) {
+    Game.items[itemName].destroy()
   }
-  delete GameItems[itemName]
+  delete Game.items[itemName]
+}
+
+const updateLeaderBoard = topPlayers => {
+  const currentPlayer = Game.currentPlayer
+  if (currentPlayer && currentPlayer.HUD) {
+    currentPlayer.HUD.updateLeaderBoard(topPlayers)
+  }
 }
 
 socketFunctions(socket)

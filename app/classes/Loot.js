@@ -1,4 +1,4 @@
-import { GameGroups } from '../sockets'
+import Game from './Game'
 
 import EntityPrefab from './EntityPrefab'
 
@@ -8,7 +8,9 @@ export default class Loot extends EntityPrefab {
   constructor(game, name, position, spriteKey) {
     super(game, name, position, spriteKey)
 
-    GameGroups.items.add(this)
+    Game.items[name] = this
+
+    Game.groups.items.add(this)
     this.type = spriteKey
   }
 }

@@ -12,6 +12,12 @@ const GameItems = {}
 const collisionArrays = {}
 const isUpdating = {}
 
+const GameTopPlayers = {
+  pvpCount: [],
+  killCount: [],
+  lootCount: [],
+}
+
 const EasystarConstructor = require('easystarjs')
 
 const findClosestPlayer = require('./utils').findClosestPlayer
@@ -59,9 +65,22 @@ const spawnEnemy = (io, state) => {
   }
 }
 
+const updateLeaderBoard = (io) => {
+  let players = []
+  Object.keys(GamePlayers).forEach(state => players = players.concat(Object.values(GamePlayers[state])))
+  const categories = Object.keys(GameTopPlayers)
+  if (players.length > 0) {
+    categories.forEach(category => {
+      GameTopPlayers[category] = players.sort((p1, p2) => p1[category] < p2[category]).slice(0, 3)
+    })
+    io.sockets.emit('updateLeaderBoard', GameTopPlayers)
+  }
+}
+
 const runIntervals = (io, state) => {
   setInterval(() => enemyMovement(io, state), 33)
   setInterval(() => spawnEnemy(io, state), 10000)
+  setInterval(() => updateLeaderBoard(io), 10000)
 }
 
 const socketFunction = io => {
@@ -69,6 +88,8 @@ const socketFunction = io => {
     console.log('got a connection', socket.id)
     let room = 'world'
     socket.join(room)
+
+    socket.emit('connected', {playerId: socket.id})
 
     socket.on('disconnect', () => {
       try {
@@ -82,7 +103,7 @@ const socketFunction = io => {
 
     socket.on('updatePlayer', player => {
       try {
-        GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: player.playerPos.x, y: player.playerPos.y, lootCount: player.lootCount, killCount: player.killCount })
+        GamePlayers[room][socket.id] = Object.assign({}, GamePlayers[room][socket.id], { x: player.playerPos.x, y: player.playerPos.y, lootCount: player.lootCount, killCount: player.killCount, pvpCount: player.pvpCount })
         socket.broadcast.to(room).emit('updatePlayer', socket.id, player)
       } catch (e) {
         console.log('error', e)
@@ -119,6 +140,14 @@ const socketFunction = io => {
       try {
         delete GameEnemies[room][enemyName]
         socket.broadcast.to(room).emit('removeEnemy', enemyName)
+      } catch (e) {
+        console.log('error', e)
+      }
+    })
+
+    socket.on('killPlayer', playerId => {
+      try {
+        io.to(playerId).emit('defeatPlayer')
       } catch (e) {
         console.log('error', e)
       }
@@ -181,6 +210,7 @@ const socketFunction = io => {
         isUpdating[room] = true
         runIntervals(io, room)
       }
+      updateLeaderBoard(io)
     })
 
     socket.on('savePlayer', player => {

@@ -1,10 +1,11 @@
-import { socket, GameGroups } from '../sockets'
+import { socket } from '../sockets'
 import { createPvpAssets } from './utils/createAssets'
 import makeCollisionMap from './utils/makeCollisionMap'
 import createPlayer from './utils/createPlayer'
 import mapTransition from './utils/mapTransition'
 import playerCollision from './utils/playerCollision'
 import playerClass from '../classes/Player'
+import Game from '../classes/Game'
 
 /* global StackQuest, Phaser */
 
@@ -22,8 +23,8 @@ const spaceState = {
 
     map = createPvpAssets()
 
-    GameGroups.players = this.game.add.group()
-    GameGroups.HUD = this.game.add.group()
+    Game.groups.players = this.game.add.group()
+    Game.groups.HUD = this.game.add.group()
 
     socket.emit('setupState', player, makeCollisionMap(map), 'arenaState')
 
