@@ -5,7 +5,7 @@
 // import {spy} from 'sinon'
 // chai.use(require('sinon-chai'))
 
-// import {Login} from './Login'
+// import {Login} from 'APP/app/components/Login'
 
 // /* global describe it beforeEach */
 // describe('<Login />', () => {

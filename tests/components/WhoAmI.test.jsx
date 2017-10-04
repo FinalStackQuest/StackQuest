@@ -6,7 +6,7 @@
 // chai.use(require('sinon-chai'))
 // import {createStore} from 'redux'
 
-// import WhoAmIContainer, {WhoAmI} from './WhoAmI'
+// import WhoAmIContainer, {WhoAmI} from 'APP/app/components/WhoAmI'
 
 // /* global describe it beforeEach */
 // describe('<WhoAmI/>', () => {
