@@ -3,7 +3,6 @@ const request = require('supertest')
     , db = require('APP/db')
     , app = require('APP/app/server/start')
 
-
 console.log('db is:', db.User)
 /* global describe it before afterEach */
 
