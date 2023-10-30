@@ -15,7 +15,7 @@ StackQuest is a multiplayer game modeled after Mozilla's BrowserQuest built usin
 1. Jonathan Liu
 2. Gabriel Rowe
 3. Keisuke Kido
-4. Anton Cataldi
+4. Anton C
 
 ### Demo
 
